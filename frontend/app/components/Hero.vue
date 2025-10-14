@@ -6,9 +6,9 @@
                     <div class="inline-block">
                         <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium"> Smart Financial Management </span>
                     </div>
-                    <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
                         Take Control of Your
-                        <span class="text-indigo-600"> Finances</span>
+                        <span class="text-indigo-600"> {{ displayText }}<span class="animate-pulse">|</span> </span>
                     </h1>
                     <p class="text-xl text-gray-600 leading-relaxed">Track expenses, manage budgets, and achieve your savings goals with Expenso. The modern way to manage your money across all your accounts.</p>
                     <div class="flex flex-col sm:flex-row gap-4">
@@ -80,3 +80,58 @@
         </div>
     </section>
 </template>
+
+<script setup>
+    import { ref, onMounted, onUnmounted } from "vue";
+
+    const words = ["Finances", "Goals", "Expenses", "Money"];
+    const displayText = ref("");
+    const currentWordIndex = ref(0);
+    const currentCharIndex = ref(0);
+    const isDeleting = ref(false);
+    let typingTimeout = null;
+
+    const typeWriter = () => {
+        const currentWord = words[currentWordIndex.value];
+
+        if (!isDeleting.value) {
+            // Typing forward
+            displayText.value = currentWord.substring(0, currentCharIndex.value + 1);
+            currentCharIndex.value++;
+
+            if (currentCharIndex.value === currentWord.length) {
+                // Pause at end of word
+                typingTimeout = setTimeout(() => {
+                    isDeleting.value = true;
+                    typeWriter();
+                }, 2000);
+                return;
+            }
+
+            typingTimeout = setTimeout(typeWriter, 100);
+        } else {
+            // Deleting backward
+            displayText.value = currentWord.substring(0, currentCharIndex.value - 1);
+            currentCharIndex.value--;
+
+            if (currentCharIndex.value === 0) {
+                isDeleting.value = false;
+                currentWordIndex.value = (currentWordIndex.value + 1) % words.length;
+                typingTimeout = setTimeout(typeWriter, 500);
+                return;
+            }
+
+            typingTimeout = setTimeout(typeWriter, 50);
+        }
+    };
+
+    onMounted(() => {
+        typeWriter();
+    });
+
+    onUnmounted(() => {
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+        }
+    });
+</script>
