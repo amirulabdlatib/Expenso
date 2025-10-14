@@ -14,10 +14,10 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#features" class="text-gray-600 hover:text-indigo-600 transition-colors">Features</a>
-                    <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 transition-colors">How It Works</a>
-                    <a href="#testimonials" class="text-gray-600 hover:text-indigo-600 transition-colors">Testimonials</a>
-                    <a href="#contact" class="text-gray-600 hover:text-indigo-600 transition-colors">Contact Us</a>
+                    <a @click.prevent="scrollToSection('features')" href="#features" class="text-gray-600 hover:text-indigo-600 transition-colors cursor-pointer">Features</a>
+                    <a @click.prevent="scrollToSection('how-it-works')" href="#how-it-works" class="text-gray-600 hover:text-indigo-600 transition-colors cursor-pointer">How It Works</a>
+                    <a @click.prevent="scrollToSection('testimonials')" href="#testimonials" class="text-gray-600 hover:text-indigo-600 transition-colors cursor-pointer">Testimonials</a>
+                    <a @click.prevent="scrollToSection('contact')" href="#contact" class="text-gray-600 hover:text-indigo-600 transition-colors cursor-pointer">Contact Us</a>
                 </div>
 
                 <!-- Desktop Auth Buttons -->
@@ -44,10 +44,10 @@
         <!-- Mobile Menu -->
         <div v-if="isOpen" class="md:hidden border-t border-gray-200 bg-white">
             <div class="px-4 py-4 space-y-3">
-                <a @click="isOpen = false" href="#features" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors"> Features </a>
-                <a @click="isOpen = false" href="#how-it-works" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors"> How It Works </a>
-                <a @click="isOpen = false" href="#testimonials" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors"> Testimonials </a>
-                <a @click="isOpen = false" href="#contact" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors"> Contact Us </a>
+                <a @click="scrollToSection('features')" href="#features" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> Features </a>
+                <a @click="scrollToSection('how-it-works')" href="#how-it-works" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> How It Works </a>
+                <a @click="scrollToSection('testimonials')" href="#testimonials" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> Testimonials </a>
+                <a @click="scrollToSection('contact')" href="#contact" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> Contact Us </a>
 
                 <div class="pt-4 border-t border-gray-200 space-y-2">
                     <NuxtLink to="/login" class="block w-full text-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium"> Login </NuxtLink>
@@ -63,7 +63,21 @@
 
     const isOpen = ref(false);
 
-    const closeMenu = () => {
-        isOpen.value = false;
+    // Smooth scroll to section with offset for navbar
+    const scrollToSection = (sectionId) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            const navbarHeight = 64; // Height of navbar (h-16 = 4rem = 64px)
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - navbarHeight;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth",
+            });
+
+            // Close mobile menu after clicking
+            isOpen.value = false;
+        }
     };
 </script>
