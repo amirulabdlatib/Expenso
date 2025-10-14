@@ -14,7 +14,6 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#features" class="text-gray-600 hover:text-indigo-600 transition-colors">Features</a>
                     <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 transition-colors">How It Works</a>
-                    <a href="#pricing" class="text-gray-600 hover:text-indigo-600 transition-colors">Pricing</a>
                 </div>
 
                 <div class="flex items-center space-x-4">
