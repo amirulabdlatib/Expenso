@@ -9,6 +9,12 @@
         <!-- How It Works Section -->
         <HowItWorks />
 
+        <!-- Testimonials Section -->
+        <Testimonials />
+
+        <!-- Contact Us Section -->
+        <ContactUs />
+
         <!-- CTA Section -->
         <CTA />
     </div>

@@ -19,7 +19,7 @@
                     <h3 class="font-semibold text-gray-900 mb-4">Product</h3>
                     <ul class="space-y-2 text-sm">
                         <li><a href="#" class="text-gray-600 hover:text-indigo-600">Features</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-indigo-600">Pricing</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-indigo-600">Testimonials</a></li>
                         <li><a href="#" class="text-gray-600 hover:text-indigo-600">Security</a></li>
                     </ul>
                 </div>
