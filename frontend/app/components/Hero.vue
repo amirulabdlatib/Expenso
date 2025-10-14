@@ -7,8 +7,7 @@
                         <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium"> Smart Financial Management </span>
                     </div>
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-                        Take Control of Your
-                        <span class="text-indigo-600"> {{ displayText }}<span class="animate-pulse">|</span> </span>
+                        <span class="text-indigo-600"> {{ displayText }}<span class="animate-pulse">|</span> </span> Management
                     </h1>
                     <p class="text-xl text-gray-600 leading-relaxed">Track expenses, manage budgets, and achieve your savings goals with Expenso. The modern way to manage your money across all your accounts.</p>
                     <div class="flex flex-col sm:flex-row gap-4">
@@ -84,7 +83,7 @@
 <script setup>
     import { ref, onMounted, onUnmounted } from "vue";
 
-    const words = ["Finances", "Goals", "Expenses", "Transactions", "Money"];
+    const words = ["Finances", "Expenses", "Transactions", "Money"];
     const displayText = ref("");
     const currentWordIndex = ref(0);
     const currentCharIndex = ref(0);
