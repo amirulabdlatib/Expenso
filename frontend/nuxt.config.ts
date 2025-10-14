@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
     compatibilityDate: "2025-07-15",
     devtools: { enabled: true },
-    modules: ["nuxt-auth-sanctum"],
+    modules: ["nuxt-auth-sanctum", "@nuxtjs/google-fonts"],
     css: ["~/assets/css/main.css"],
 
     vite: {
@@ -13,5 +13,12 @@ export default defineNuxtConfig({
 
     sanctum: {
         baseUrl: process.env.NUXT_BACKEND_API_URL,
+    },
+
+    googleFonts: {
+        families: {
+            "DM Sans": [400, 500, 600, 700],
+        },
+        display: "swap",
     },
 });
