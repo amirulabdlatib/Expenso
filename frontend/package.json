@@ -14,5 +14,8 @@
     "nuxt-auth-sanctum": "^1.4.0",
     "vue": "^3.5.22",
     "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.2"
   }
 }

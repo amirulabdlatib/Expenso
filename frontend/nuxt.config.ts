@@ -5,6 +5,6 @@ export default defineNuxtConfig({
     modules: ["nuxt-auth-sanctum"],
 
     sanctum: {
-        baseUrl: "http://localhost:8000",
+        baseUrl: process.env.NUXT_BACKEND_API_URL,
     },
 });
