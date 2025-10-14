@@ -12,9 +12,6 @@
         <!-- Testimonials Section -->
         <Testimonials />
 
-        <!-- FAQ Section -->
-        <FAQ />
-
         <!-- Contact Us Section -->
         <ContactUs />
 
