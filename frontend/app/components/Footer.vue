@@ -18,8 +18,8 @@
                 <div data-aos="fade-up" data-aos-delay="100">
                     <h3 class="font-semibold text-gray-900 mb-4">Product</h3>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#features" class="text-gray-600 hover:text-indigo-600 transition-colors">Features</a></li>
-                        <li><a href="#testimonials" class="text-gray-600 hover:text-indigo-600 transition-colors">Testimonials</a></li>
+                        <li><NuxtLink to="/#features" class="text-gray-600 hover:text-indigo-600 transition-colors">Features</NuxtLink></li>
+                        <li><NuxtLink to="/#testimonials" class="text-gray-600 hover:text-indigo-600 transition-colors">Testimonials</NuxtLink></li>
                         <li><a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors">Security</a></li>
                     </ul>
                 </div>
@@ -29,7 +29,7 @@
                     <ul class="space-y-2 text-sm">
                         <li><a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors">About</a></li>
                         <li><a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors">Blog</a></li>
-                        <li><a href="#contact" class="text-gray-600 hover:text-indigo-600 transition-colors">Contact</a></li>
+                        <li><NuxtLink to="/#contact" class="text-gray-600 hover:text-indigo-600 transition-colors">Contact</NuxtLink></li>
                     </ul>
                 </div>
 
