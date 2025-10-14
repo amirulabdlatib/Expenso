@@ -2,7 +2,7 @@
     <section class="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-gray-50 pt-20 pb-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
+                <div class="space-y-8" data-aos="fade-right">
                     <div class="inline-block">
                         <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium"> Smart Financial Management </span>
                     </div>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="relative">
+                <div class="relative" data-aos="fade-left" data-aos-delay="200">
                     <div class="bg-white rounded-2xl shadow-2xl p-8 transform hover:scale-105 transition-transform">
                         <div class="space-y-6">
                             <div class="flex items-center justify-between pb-4 border-b">
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="absolute -bottom-6 -right-6 bg-indigo-600 text-white p-4 rounded-lg shadow-lg">
+                    <div class="absolute -bottom-6 -right-6 bg-indigo-600 text-white p-4 rounded-lg shadow-lg" data-aos="zoom-in" data-aos-delay="400">
                         <p class="text-sm">Savings Goal</p>
                         <div class="flex items-center space-x-2 mt-2">
                             <div class="w-24 h-2 bg-indigo-400 rounded-full overflow-hidden">
@@ -84,7 +84,7 @@
 <script setup>
     import { ref, onMounted, onUnmounted } from "vue";
 
-    const words = ["Finances", "Goals", "Expenses", "Money"];
+    const words = ["Finances", "Goals", "Expenses", "Transactions", "Money"];
     const displayText = ref("");
     const currentWordIndex = ref(0);
     const currentCharIndex = ref(0);

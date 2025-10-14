@@ -1,14 +1,14 @@
 <template>
     <section id="testimonials" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Testimonials</h2>
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">What Our Users Say</h2>
                 <p class="text-xl text-gray-600">Join thousands of satisfied users managing their finances better</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Testimonial 1 -->
-                <div class="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+                <div data-aos="fade-right" data-aos-delay="0" class="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
                     <div class="flex items-center mb-4">
                         <svg v-for="i in 5" :key="i" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -25,7 +25,7 @@
                 </div>
 
                 <!-- Testimonial 2 -->
-                <div class="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+                <div data-aos="fade-up" data-aos-delay="200" class="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
                     <div class="flex items-center mb-4">
                         <svg v-for="i in 5" :key="i" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -42,7 +42,7 @@
                 </div>
 
                 <!-- Testimonial 3 -->
-                <div class="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
+                <div data-aos="fade-left" data-aos-delay="400" class="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow">
                     <div class="flex items-center mb-4">
                         <svg v-for="i in 5" :key="i" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -60,7 +60,7 @@
             </div>
 
             <!-- Stats Section -->
-            <div class="grid md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-gray-200">
+            <div data-aos="fade-up" data-aos-delay="200" class="grid md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-gray-200">
                 <div class="text-center">
                     <p class="text-4xl font-bold text-indigo-600 mb-2">10K+</p>
                     <p class="text-gray-600">Active Users</p>

@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-start">
                 <!-- Contact Information -->
-                <div>
+                <div data-aos="fade-right">
                     <h2 class="text-4xl font-bold text-gray-900 mb-4">Get in Touch</h2>
                     <p class="text-xl text-gray-600 mb-8">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
 
@@ -78,7 +78,7 @@
                 </div>
 
                 <!-- Contact Form -->
-                <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div data-aos="fade-left" class="bg-white rounded-2xl shadow-lg p-8">
                     <form @submit.prevent="handleSubmit" class="space-y-6">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-900 mb-2"> Name </label>
