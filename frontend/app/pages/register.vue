@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full">
             <!-- Logo and Header -->
-            <div class="text-center mb-8" data-aos="fade-down">
+            <div class="text-center mb-8">
                 <NuxtLink to="/" class="inline-flex items-center justify-center space-x-2 mb-6">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
@@ -16,7 +16,7 @@
             </div>
 
             <!-- Register Form -->
-            <div class="bg-white rounded-2xl shadow-xl p-8" data-aos="zoom-in" data-aos-delay="100">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
                 <form @submit.prevent="handleRegister" class="space-y-6">
                     <!-- Name Field -->
                     <div>
@@ -165,7 +165,7 @@
             </div>
 
             <!-- Sign In Link -->
-            <p class="mt-6 text-center text-sm text-gray-600" data-aos="fade-up" data-aos-delay="200">
+            <p class="mt-6 text-center text-sm text-gray-600">
                 Already have an account?
                 <NuxtLink to="/login" class="text-indigo-600 hover:text-indigo-700 font-medium"> Sign in </NuxtLink>
             </p>
