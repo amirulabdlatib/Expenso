@@ -139,10 +139,6 @@
                             <Icon name="heroicons:cog-6-tooth" class="w-5 h-5" />
                             <span>Settings</span>
                         </NuxtLink>
-                        <NuxtLink to="/appearance" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                            <Icon name="heroicons:paint-brush" class="w-5 h-5" />
-                            <span>Appearance</span>
-                        </NuxtLink>
                         <hr class="my-2 border-gray-200" />
                         <button @click="logout" class="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                             <Icon name="heroicons:arrow-right-on-rectangle" class="w-5 h-5" />
