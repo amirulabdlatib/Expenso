@@ -15,10 +15,6 @@
                             <option value="quarter">This Quarter</option>
                             <option value="year">This Year</option>
                         </select>
-                        <button class="flex items-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
-                            <Icon name="heroicons:arrow-down-tray" class="w-5 h-5" />
-                            <span>Export</span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -28,7 +24,7 @@
                 <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 opacity-80" />
-                        <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">+12.5%</span>
+                        <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">+12.5%</span>
                     </div>
                     <p class="text-sm opacity-80 mb-1">Total Income</p>
                     <p class="text-3xl font-bold">{{ formatCurrency(6750.0) }}</p>
@@ -38,7 +34,7 @@
                 <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:arrow-trending-down" class="w-8 h-8 opacity-80" />
-                        <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">-8.3%</span>
+                        <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">-8.3%</span>
                     </div>
                     <p class="text-sm opacity-80 mb-1">Total Expenses</p>
                     <p class="text-3xl font-bold">{{ formatCurrency(4596.4) }}</p>
@@ -48,7 +44,7 @@
                 <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:banknotes" class="w-8 h-8 opacity-80" />
-                        <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">+32.1%</span>
+                        <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">+32.1%</span>
                     </div>
                     <p class="text-sm opacity-80 mb-1">Net Savings</p>
                     <p class="text-3xl font-bold">{{ formatCurrency(2153.6) }}</p>
@@ -58,7 +54,7 @@
                 <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:chart-pie" class="w-8 h-8 opacity-80" />
-                        <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">68%</span>
+                        <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">68%</span>
                     </div>
                     <p class="text-sm opacity-80 mb-1">Savings Rate</p>
                     <p class="text-3xl font-bold">32%</p>
