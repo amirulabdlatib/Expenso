@@ -27,4 +27,14 @@
     definePageMeta({
         layout: "public",
     });
+
+    useHead({
+        title: "Expenso - Never Lose Track of Your Money Again",
+        meta: [
+            {
+                name: "description",
+                content: "Stop wondering where your money goes. Expenso helps you track every ringgit, set budgets, and reach your savings goals. 100% free, forever.",
+            },
+        ],
+    });
 </script>
