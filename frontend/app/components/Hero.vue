@@ -7,7 +7,8 @@
                         <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium"> Smart Financial Management </span>
                     </div>
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-                        <span class="text-indigo-600"> {{ displayText }}<span class="animate-pulse">|</span> </span> Management
+                        Manage
+                        <span class="text-indigo-600"> {{ displayText }}<span class="animate-pulse">|</span> </span>
                     </h1>
                     <p class="text-xl text-gray-600 leading-relaxed">Track expenses, manage budgets, and achieve your savings goals with Expenso. The modern way to manage your money across all your accounts.</p>
                     <div class="flex flex-col sm:flex-row gap-4">
