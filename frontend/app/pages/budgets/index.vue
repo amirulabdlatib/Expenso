@@ -16,7 +16,6 @@
                         </select>
                         <NuxtLink to="/budgets/create" class="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                             <Icon name="heroicons:plus" class="w-5 h-5" />
-                            <span class="font-medium">Create Budget</span>
                         </NuxtLink>
                     </div>
                 </div>
@@ -189,7 +188,6 @@
                 <p class="text-gray-600 mb-6">Create your first budget to start tracking your spending</p>
                 <NuxtLink to="/budgets/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                     <Icon name="heroicons:plus" class="w-5 h-5" />
-                    <span>Create Budget</span>
                 </NuxtLink>
             </div>
 

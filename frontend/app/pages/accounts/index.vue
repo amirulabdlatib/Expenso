@@ -10,7 +10,6 @@
                     </div>
                     <NuxtLink to="/accounts/create" class="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                         <Icon name="heroicons:plus" class="w-5 h-5" />
-                        <span class="font-medium">Add Account</span>
                     </NuxtLink>
                 </div>
             </div>
@@ -147,7 +146,6 @@
                 <p class="text-gray-600 mb-6">Add your first account to start tracking your finances</p>
                 <NuxtLink to="/accounts/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                     <Icon name="heroicons:plus" class="w-5 h-5" />
-                    <span>Add Account</span>
                 </NuxtLink>
             </div>
         </div>
