@@ -88,18 +88,14 @@
             <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-xl font-bold text-gray-900">Recent Transactions</h2>
-                    <NuxtLink to="/transactions" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
-                        View All →
-                    </NuxtLink>
+                    <NuxtLink to="/transactions" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> View All → </NuxtLink>
                 </div>
 
                 <div class="space-y-4">
                     <!-- Transaction Item -->
                     <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-2xl">
-                                ☕
-                            </div>
+                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-2xl">☕</div>
                             <div>
                                 <p class="font-medium text-gray-900">Starbucks Coffee</p>
                                 <p class="text-sm text-gray-500">Food & Dining • Today, 10:30 AM</p>
@@ -110,9 +106,7 @@
 
                     <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">
-                                🚗
-                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">🚗</div>
                             <div>
                                 <p class="font-medium text-gray-900">Petrol Station</p>
                                 <p class="text-sm text-gray-500">Transport • Yesterday, 8:00 PM</p>
@@ -123,9 +117,7 @@
 
                     <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">
-                                💰
-                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">💰</div>
                             <div>
                                 <p class="font-medium text-gray-900">Monthly Salary</p>
                                 <p class="text-sm text-gray-500">Income • Oct 1, 2025</p>
@@ -136,9 +128,7 @@
 
                     <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-2xl">
-                                🛒
-                            </div>
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-2xl">🛒</div>
                             <div>
                                 <p class="font-medium text-gray-900">Grocery Shopping</p>
                                 <p class="text-sm text-gray-500">Shopping • Oct 12, 2025</p>
@@ -149,9 +139,7 @@
 
                     <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">
-                                📱
-                            </div>
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">📱</div>
                             <div>
                                 <p class="font-medium text-gray-900">Phone Bill</p>
                                 <p class="text-sm text-gray-500">Bills • Oct 10, 2025</p>
@@ -166,9 +154,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-xl font-bold text-gray-900">Budget Overview</h2>
-                    <NuxtLink to="/budgets" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
-                        Manage →
-                    </NuxtLink>
+                    <NuxtLink to="/budgets" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> Manage → </NuxtLink>
                 </div>
 
                 <div class="space-y-6">
@@ -236,9 +222,7 @@
         <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-bold text-gray-900">Active Savings Goals</h2>
-                <NuxtLink to="/goals" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
-                    View All →
-                </NuxtLink>
+                <NuxtLink to="/goals" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> View All → </NuxtLink>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -296,11 +280,11 @@
 </template>
 
 <script setup>
-definePageMeta({
-    layout: "default",
-});
+    definePageMeta({
+        layout: "default",
+    });
 
-useHead({
-    title: "Dashboard - Expenso",
-});
+    useHead({
+        title: "Dashboard - Expenso",
+    });
 </script>
