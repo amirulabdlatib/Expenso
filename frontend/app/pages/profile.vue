@@ -32,7 +32,7 @@
                         </div>
                         <div class="flex items-center justify-center md:justify-start space-x-3 mt-6">
                             <NuxtLink to="/settings" class="px-6 py-2 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"> Edit Profile </NuxtLink>
-                            <button class="px-6 py-2 bg-white bg-opacity-20 text-white rounded-lg hover:bg-opacity-30 transition-colors font-medium">Share Profile</button>
+                            <NuxtLink to="/settings" class="px-6 py-2 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"> Share </NuxtLink>
                         </div>
                     </div>
                 </div>
