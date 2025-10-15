@@ -243,6 +243,10 @@
 <script setup>
     import { ref, computed } from "vue";
 
+    useHead({
+        title: "Goals - Expenso",
+    });
+
     // State
     const filterStatus = ref("all");
     const sortBy = ref("progress");

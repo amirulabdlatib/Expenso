@@ -227,6 +227,10 @@
 <script setup>
     import { ref, computed } from "vue";
 
+    useHead({
+        title: "Budgets - Expenso",
+    });
+
     // State
     const selectedPeriod = ref("current");
     const searchQuery = ref("");

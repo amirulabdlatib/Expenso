@@ -199,6 +199,10 @@
 <script setup>
     import { ref, computed } from "vue";
 
+    useHead({
+        title: "Transactions - Expenso",
+    });
+
     // Dummy Data
     const transactions = ref([
         {

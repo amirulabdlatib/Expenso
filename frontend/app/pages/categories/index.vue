@@ -115,6 +115,10 @@
 <script setup>
     import { ref, computed } from "vue";
 
+    useHead({
+        title: "Categories - Expenso",
+    });
+
     // Dummy Data
     const expenseCategories = ref([
         {
