@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed top-4 right-4 z-50 space-y-3 max-w-sm w-full px-4 sm:px-0">
+    <div class="fixed top-20 sm:top-4 right-4 z-[60] space-y-3 max-w-sm w-full px-4 sm:px-0">
         <TransitionGroup name="toast">
             <div v-for="toast in toasts" :key="toast.id" :class="['flex items-start gap-3 p-4 rounded-lg shadow-lg border backdrop-blur-sm', 'transform transition-all duration-300 ease-in-out', toastStyles[toast.type]]">
                 <!-- Icon -->
