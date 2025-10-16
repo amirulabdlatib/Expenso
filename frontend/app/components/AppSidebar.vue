@@ -10,6 +10,7 @@
             <nav class="flex-1 px-3 py-4 space-y-1">
                 <!-- Dashboard -->
                 <NuxtLink
+                    @click="handleLinkClick"
                     to="/dashboard"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
@@ -25,6 +26,7 @@
 
                 <!-- Transactions -->
                 <NuxtLink
+                    @click="handleLinkClick"
                     to="/transactions"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
@@ -41,6 +43,7 @@
 
                 <!-- Accounts -->
                 <NuxtLink
+                    @click="handleLinkClick"
                     to="/accounts"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
@@ -56,6 +59,7 @@
 
                 <!-- Analytics -->
                 <NuxtLink
+                    @click="handleLinkClick"
                     to="/analytics"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
@@ -70,6 +74,7 @@
 
                 <!-- Budgets -->
                 <NuxtLink
+                    @click="handleLinkClick"
                     to="/budgets"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
@@ -85,6 +90,7 @@
 
                 <!-- Savings Goals -->
                 <NuxtLink
+                    @click="handleLinkClick"
                     to="/goals"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
@@ -99,6 +105,7 @@
 
                 <!-- Categories -->
                 <NuxtLink
+                    @click="handleLinkClick"
                     to="/categories"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
@@ -114,7 +121,12 @@
             <!-- Bottom Actions -->
             <div class="border-t border-gray-200 p-3 space-y-1">
                 <!-- Settings -->
-                <NuxtLink to="/settings" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors group" active-class="bg-gray-100" :title="isCollapsed && !isMobile ? 'Settings' : ''">
+                <NuxtLink
+                    @click="handleLinkClick"
+                    to="/settings"
+                    class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors group"
+                    active-class="bg-gray-100"
+                    :title="isCollapsed && !isMobile ? 'Settings' : ''">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path
                             d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
@@ -124,7 +136,12 @@
                 </NuxtLink>
 
                 <!-- Help -->
-                <NuxtLink to="/help" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors group" active-class="bg-gray-100" :title="isCollapsed && !isMobile ? 'Help' : ''">
+                <NuxtLink
+                    @click="handleLinkClick"
+                    to="/help"
+                    class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors group"
+                    active-class="bg-gray-100"
+                    :title="isCollapsed && !isMobile ? 'Help' : ''">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10" />
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -143,6 +160,13 @@
     const isOpen = ref(true);
     const isCollapsed = ref(false);
     const isMobile = ref(false);
+
+    const handleLinkClick = () => {
+        // Close sidebar on mobile when clicking any link
+        if (isMobile.value) {
+            closeSidebar();
+        }
+    };
 
     const toggleCollapse = () => {
         if (!isMobile.value) {

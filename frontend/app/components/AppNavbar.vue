@@ -46,24 +46,24 @@
 
                     <!-- Quick Add Dropdown -->
                     <div v-if="showQuickAdd" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                        <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                        <button @click="closeAllDropdowns" class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
                             <Icon name="heroicons:arrow-trending-down" class="w-5 h-5 text-red-500" />
                             <span class="text-gray-700">Add Expense</span>
                         </button>
-                        <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                        <button @click="closeAllDropdowns" class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
                             <Icon name="heroicons:arrow-trending-up" class="w-5 h-5 text-green-500" />
                             <span class="text-gray-700">Add Income</span>
                         </button>
-                        <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                        <button @click="closeAllDropdowns" class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
                             <Icon name="heroicons:arrow-path" class="w-5 h-5 text-blue-500" />
                             <span class="text-gray-700">Transfer Money</span>
                         </button>
                         <hr class="my-2 border-gray-200" />
-                        <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                        <button @click="closeAllDropdowns" class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
                             <Icon name="heroicons:building-library" class="w-5 h-5 text-indigo-500" />
                             <span class="text-gray-700">Add Account</span>
                         </button>
-                        <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
+                        <button @click="closeAllDropdowns" class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3">
                             <Icon name="heroicons:flag" class="w-5 h-5 text-purple-500" />
                             <span class="text-gray-700">Create Goal</span>
                         </button>
@@ -84,10 +84,10 @@
                     <div v-if="showNotifications" class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
                         <div class="p-4 border-b border-gray-200 flex items-center justify-between">
                             <h3 class="font-semibold text-gray-900">Notifications</h3>
-                            <button class="text-sm text-indigo-600 hover:text-indigo-700">Mark all read</button>
+                            <button @click="closeAllDropdowns" class="text-sm text-indigo-600 hover:text-indigo-700">Mark all read</button>
                         </div>
                         <div class="max-h-96 overflow-y-auto">
-                            <div class="p-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                            <div @click="closeAllDropdowns" class="p-4 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer">
                                 <div class="flex items-start space-x-3">
                                     <Icon name="heroicons:exclamation-triangle" class="w-6 h-6 text-yellow-500" />
                                     <div class="flex-1">
@@ -97,7 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-4 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                            <div @click="closeAllDropdowns" class="p-4 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer">
                                 <div class="flex items-start space-x-3">
                                     <Icon name="heroicons:trophy" class="w-6 h-6 text-green-500" />
                                     <div class="flex-1">
@@ -109,7 +109,7 @@
                             </div>
                         </div>
                         <div class="p-3 text-center border-t border-gray-200">
-                            <button class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+                            <button @click="closeAllDropdowns" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
                                 View All Notifications
                                 <Icon name="heroicons:arrow-right" class="w-4 h-4 inline ml-1" />
                             </button>
@@ -131,15 +131,15 @@
                             <p class="text-sm font-semibold text-gray-900">Ahmad Syafiq</p>
                             <p class="text-xs text-gray-500 mt-1">ahmad@email.com</p>
                         </div>
-                        <NuxtLink to="/dashboard" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <NuxtLink @click="closeAllDropdowns" to="/dashboard" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <Icon name="heroicons:home" class="w-5 h-5" />
                             <span>Dashboard</span>
                         </NuxtLink>
-                        <NuxtLink to="/profile" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <NuxtLink @click="closeAllDropdowns" to="/profile" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <Icon name="heroicons:user" class="w-5 h-5" />
                             <span>View Profile</span>
                         </NuxtLink>
-                        <NuxtLink to="/settings" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <NuxtLink @click="closeAllDropdowns" to="/settings" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <Icon name="heroicons:cog-6-tooth" class="w-5 h-5" />
                             <span>Settings</span>
                         </NuxtLink>
@@ -162,6 +162,12 @@
     const showNotifications = ref(false);
     const showUserMenu = ref(false);
     const isCollapsed = ref(false);
+
+    const closeAllDropdowns = () => {
+        showQuickAdd.value = false;
+        showNotifications.value = false;
+        showUserMenu.value = false;
+    };
 
     const toggleSidebar = () => {
         const event = new CustomEvent("toggle-sidebar");
@@ -192,15 +198,17 @@
     };
 
     const logout = () => {
-        console.log("Logging out...");
-        navigateTo("/");
+        const { success } = useToast();
+        success("Logged out successfully!");
+
+        setTimeout(() => {
+            navigateTo("/");
+        }, 1000);
     };
 
     const handleClickOutside = (event) => {
         if (!event.target.closest(".relative")) {
-            showQuickAdd.value = false;
-            showNotifications.value = false;
-            showUserMenu.value = false;
+            closeAllDropdowns();
         }
     };
 
