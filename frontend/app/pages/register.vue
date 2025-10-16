@@ -151,16 +151,6 @@
                             Creating account...
                         </span>
                     </button>
-
-                    <!-- Success Message -->
-                    <div v-if="successMessage" class="p-4 bg-green-50 border border-green-200 rounded-lg">
-                        <p class="text-sm text-green-600">{{ successMessage }}</p>
-                    </div>
-
-                    <!-- Error Message -->
-                    <div v-if="errorMessage" class="p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p class="text-sm text-red-600">{{ errorMessage }}</p>
-                    </div>
                 </form>
             </div>
 
@@ -178,6 +168,8 @@
         layout: "public",
     });
 
+    const { success, error } = useToast();
+
     const form = ref({
         name: "",
         email: "",
@@ -189,41 +181,43 @@
     const showPassword = ref(false);
     const showConfirmPassword = ref(false);
     const isLoading = ref(false);
-    const successMessage = ref("");
-    const errorMessage = ref("");
 
     const handleRegister = async () => {
-        errorMessage.value = "";
-        successMessage.value = "";
-
         // Validate password match
         if (form.value.password !== form.value.password_confirmation) {
-            errorMessage.value = "Passwords do not match";
+            error("Passwords do not match");
             return;
         }
 
         // Validate password length
         if (form.value.password.length < 8) {
-            errorMessage.value = "Password must be at least 8 characters";
+            error("Password must be at least 8 characters");
+            return;
+        }
+
+        // Validate terms acceptance
+        if (!form.value.terms) {
+            error("Please accept the terms and conditions");
             return;
         }
 
         isLoading.value = true;
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        try {
+            // Simulate API call
+            await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        // Placeholder for actual register logic
-        console.log("Register attempt:", form.value);
+            // Placeholder for actual register logic
+            console.log("Register attempt:", form.value);
 
-        // Example success
-        successMessage.value = "Account created successfully! Redirecting to login...";
+            // Show success toast
+            success("Account created successfully! Welcome..");
 
-        isLoading.value = false;
-
-        // After successful registration, redirect to login
-        // setTimeout(() => {
-        //     navigateTo('/login')
-        // }, 2000)
+            navigateTo("/dashboard");
+        } catch (err) {
+            error("Registration failed. Please try again.");
+        } finally {
+            isLoading.value = false;
+        }
     };
 </script>

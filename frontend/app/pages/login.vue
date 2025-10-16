@@ -32,7 +32,6 @@
                                 type="email"
                                 id="email"
                                 v-model="form.email"
-                                required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="you@example.com" />
                         </div>
@@ -52,7 +51,6 @@
                                 :type="showPassword ? 'text' : 'password'"
                                 id="password"
                                 v-model="form.password"
-                                required
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="••••••••" />
                             <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -115,6 +113,8 @@
         layout: "public",
     });
 
+    const { success, error } = useToast();
+
     const form = ref({
         email: "",
         password: "",
@@ -132,15 +132,17 @@
         // Simulate API call
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        // Placeholder for actual login logic
-        console.log("Login attempt:", form.value);
-
-        // Example error (remove when implementing real backend)
-        errorMessage.value = "Invalid email or password. Please try again.";
+        // Demo: Check for valid credentials
+        if (form.value.email && form.value.password.length >= 6) {
+            // Success case
+            success("Login successful! Redirecting to dashboard...");
+            navigateTo("/dashboard");
+        } else {
+            // Error case
+            errorMessage.value = "Invalid email or password. Please try again.";
+            error("Login failed. Please check your credentials.");
+        }
 
         isLoading.value = false;
-
-        // After successful login, redirect to dashboard
-        // navigateTo('/dashboard')
     };
 </script>
