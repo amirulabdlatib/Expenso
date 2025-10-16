@@ -3,14 +3,6 @@
         <div class="max-w-md w-full">
             <!-- Logo and Header -->
             <div class="text-center mb-8">
-                <NuxtLink to="/" class="inline-flex items-center justify-center space-x-2 mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
-                        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
-                        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
-                    </svg>
-                    <span class="text-3xl font-bold text-indigo-600">Expenso</span>
-                </NuxtLink>
                 <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
                 <p class="text-gray-600">Sign in to your account to continue</p>
             </div>
@@ -91,11 +83,6 @@
                             Signing in...
                         </span>
                     </button>
-
-                    <!-- Error Message -->
-                    <div v-if="errorMessage" class="p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p class="text-sm text-red-600">{{ errorMessage }}</p>
-                    </div>
                 </form>
             </div>
 
@@ -111,38 +98,32 @@
 <script setup>
     definePageMeta({
         layout: "public",
+        middleware: ["sanctum:guest"],
     });
 
     const { success, error } = useToast();
+    const { login } = useSanctumAuth();
 
-    const form = ref({
+    const form = reactive({
         email: "",
         password: "",
-        remember: false,
     });
 
     const showPassword = ref(false);
     const isLoading = ref(false);
-    const errorMessage = ref("");
 
     const handleLogin = async () => {
         isLoading.value = true;
-        errorMessage.value = "";
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        // Demo: Check for valid credentials
-        if (form.value.email && form.value.password.length >= 6) {
-            // Success case
-            success("Login successful! Redirecting to dashboard...");
+        try {
+            await login(form);
+            success("Login successful! Welcome to Expenso");
             navigateTo("/dashboard");
-        } else {
-            // Error case
-            errorMessage.value = "Invalid email or password. Please try again.";
+        } catch (err) {
+            console.log(err);
             error("Login failed. Please check your credentials.");
+        } finally {
+            isLoading.value = false;
         }
-
-        isLoading.value = false;
     };
 </script>
