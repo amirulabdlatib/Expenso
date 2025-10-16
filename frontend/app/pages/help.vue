@@ -278,8 +278,6 @@
 </template>
 
 <script setup>
-    import { ref, computed } from "vue";
-
     useHead({
         title: "Help and Support - Expenso",
     });

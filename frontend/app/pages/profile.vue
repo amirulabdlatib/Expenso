@@ -234,8 +234,6 @@
 </template>
 
 <script setup>
-    import { ref } from "vue";
-
     useHead({
         title: "Profile - Expenso",
     });

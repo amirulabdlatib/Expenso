@@ -82,8 +82,6 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onUnmounted } from "vue";
-
     const words = ["Finances", "Expenses", "Transactions", "Money"];
     const displayText = ref("");
     const currentWordIndex = ref(0);

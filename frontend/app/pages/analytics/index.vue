@@ -252,8 +252,6 @@
 </template>
 
 <script setup>
-    import { ref, computed } from "vue";
-
     useHead({
         title: "Analytics - Expenso",
     });

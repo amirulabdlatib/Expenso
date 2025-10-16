@@ -143,8 +143,6 @@
 </template>
 
 <script setup>
-    import { ref } from "vue";
-
     const form = ref({
         name: "",
         email: "",

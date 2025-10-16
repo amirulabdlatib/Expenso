@@ -59,11 +59,7 @@
 </template>
 
 <script setup>
-    import { ref, onMounted } from "vue";
-    import { useRouter } from "vue-router";
-
     const isOpen = ref(false);
-    const router = useRouter();
 
     // Handle hash navigation on page load
     onMounted(() => {

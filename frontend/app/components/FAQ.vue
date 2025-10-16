@@ -118,8 +118,6 @@
 </template>
 
 <script setup>
-    import { ref } from "vue";
-
     const openIndex = ref(null);
 
     const toggleFaq = (index) => {

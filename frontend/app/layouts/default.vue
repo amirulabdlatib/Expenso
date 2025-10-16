@@ -18,8 +18,6 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onUnmounted } from "vue";
-
     const sidebarCollapsed = ref(false);
 
     const handleSidebarCollapse = (event) => {
