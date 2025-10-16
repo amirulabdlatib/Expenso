@@ -50,8 +50,8 @@
                 <NuxtLink to="/#contact" @click="isOpen = false" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> Contact Us </NuxtLink>
 
                 <div class="pt-4 border-t border-gray-200 space-y-2">
-                    <NuxtLink to="/login" class="block w-full text-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium"> Login </NuxtLink>
-                    <NuxtLink to="/register" class="block w-full text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium"> Get Started </NuxtLink>
+                    <NuxtLink to="/login" @click="isOpen = false" class="block w-full text-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium"> Login </NuxtLink>
+                    <NuxtLink to="/register" @click="isOpen = false" class="block w-full text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium"> Get Started </NuxtLink>
                 </div>
             </div>
         </div>
