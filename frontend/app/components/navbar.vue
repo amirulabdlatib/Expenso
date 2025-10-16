@@ -60,24 +60,4 @@
 
 <script setup>
     const isOpen = ref(false);
-
-    // Handle hash navigation on page load
-    onMounted(() => {
-        const hash = window.location.hash;
-        if (hash) {
-            setTimeout(() => {
-                const element = document.querySelector(hash);
-                if (element) {
-                    const navbarHeight = 64;
-                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-                    const offsetPosition = elementPosition - navbarHeight;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth",
-                    });
-                }
-            }, 100);
-        }
-    });
 </script>
