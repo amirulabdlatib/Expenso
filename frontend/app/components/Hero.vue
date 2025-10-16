@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-    const words = ["Finances", "Expenses", "Transactions", "Money"];
+    const words = ["Expenses", "Transactions", "Incomes", "Accounts", "Finances"];
     const displayText = ref("");
     const currentWordIndex = ref(0);
     const currentCharIndex = ref(0);
