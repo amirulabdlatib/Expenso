@@ -107,12 +107,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Still have questions? -->
-            <div class="mt-12 text-center" data-aos="fade-up" data-aos-delay="200">
-                <p class="text-gray-600 mb-4">Still have questions?</p>
-                <NuxtLink to="/#contact" class="inline-block text-indigo-600 hover:text-indigo-700 font-semibold"> Contact us → </NuxtLink>
-            </div>
         </div>
     </section>
 </template>
