@@ -1,6 +1,6 @@
 <template>
     <!-- Overlay for mobile -->
-    <div v-if="isOpen && isMobile" @click="closeSidebar" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"></div>
+    <div v-if="isOpen && isMobile" @click="closeSidebar" class="fixed inset-0 bg-gray-300 bg-opacity-50 z-30 lg:hidden" style="top: 4rem"></div>
 
     <!-- Sidebar - FIXED ON LEFT -->
     <aside
