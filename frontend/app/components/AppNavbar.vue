@@ -131,6 +131,10 @@
                             <p class="text-sm font-semibold text-gray-900">Ahmad Syafiq</p>
                             <p class="text-xs text-gray-500 mt-1">ahmad@email.com</p>
                         </div>
+                        <NuxtLink to="/dashboard" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <Icon name="heroicons:home" class="w-5 h-5" />
+                            <span>Dashboard</span>
+                        </NuxtLink>
                         <NuxtLink to="/profile" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <Icon name="heroicons:user" class="w-5 h-5" />
                             <span>View Profile</span>
