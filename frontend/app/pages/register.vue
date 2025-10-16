@@ -158,6 +158,7 @@
 <script setup>
     definePageMeta({
         layout: "public",
+        middleware: ["sanctum:guest"],
     });
 
     const { success, error } = useToast();

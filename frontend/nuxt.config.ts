@@ -13,6 +13,12 @@ export default defineNuxtConfig({
 
     sanctum: {
         baseUrl: process.env.NUXT_BACKEND_API_URL,
+        redirect: {
+            onLogin: "/dashboard",
+            onLogout: "/login",
+            onAuthOnly: "/login",
+            onGuestOnly: "/dashboard",
+        },
     },
 
     googleFonts: {

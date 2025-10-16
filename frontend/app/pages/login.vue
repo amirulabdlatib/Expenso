@@ -83,11 +83,6 @@
                             Signing in...
                         </span>
                     </button>
-
-                    <!-- Error Message -->
-                    <div v-if="errorMessage" class="p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p class="text-sm text-red-600">{{ errorMessage }}</p>
-                    </div>
                 </form>
             </div>
 
@@ -103,38 +98,32 @@
 <script setup>
     definePageMeta({
         layout: "public",
+        middleware: ["sanctum:guest"],
     });
 
     const { success, error } = useToast();
+    const { login } = useSanctumAuth();
 
-    const form = ref({
+    const form = reactive({
         email: "",
         password: "",
-        remember: false,
     });
 
     const showPassword = ref(false);
     const isLoading = ref(false);
-    const errorMessage = ref("");
 
     const handleLogin = async () => {
         isLoading.value = true;
-        errorMessage.value = "";
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        // Demo: Check for valid credentials
-        if (form.value.email && form.value.password.length >= 6) {
-            // Success case
-            success("Login successful! Redirecting to dashboard...");
+        try {
+            await login(form);
+            success("Login successful! Welcome to Expenso");
             navigateTo("/dashboard");
-        } else {
-            // Error case
-            errorMessage.value = "Invalid email or password. Please try again.";
+        } catch (err) {
+            console.log(err);
             error("Login failed. Please check your credentials.");
+        } finally {
+            isLoading.value = false;
         }
-
-        isLoading.value = false;
     };
 </script>
