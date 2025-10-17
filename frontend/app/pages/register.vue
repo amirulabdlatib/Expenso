@@ -24,9 +24,9 @@
                                 type="text"
                                 id="name"
                                 v-model="form.name"
-                                required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="John Doe" />
+                            <span v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</span>
                         </div>
                     </div>
 
@@ -44,9 +44,9 @@
                                 type="email"
                                 id="email"
                                 v-model="form.email"
-                                required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="you@example.com" />
+                            <span v-if="errors.email" class="text-red-400">{{ errors.email[0] }}</span>
                         </div>
                     </div>
 
@@ -64,8 +64,6 @@
                                 :type="showPassword ? 'text' : 'password'"
                                 id="password"
                                 v-model="form.password"
-                                required
-                                minlength="8"
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="••••••••" />
                             <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -81,7 +79,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
+                        <span v-if="errors.password" class="text-red-400">{{ errors.password[0] }}</span>
                     </div>
 
                     <!-- Confirm Password Field -->
@@ -98,7 +96,6 @@
                                 :type="showConfirmPassword ? 'text' : 'password'"
                                 id="password_confirmation"
                                 v-model="form.password_confirmation"
-                                required
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="••••••••" />
                             <button type="button" @click="showConfirmPassword = !showConfirmPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -161,9 +158,11 @@
         middleware: ["sanctum:guest"],
     });
 
+    const { doRegister, errors } = useAuth();
+    const { refreshIdentity } = useSanctumAuth();
     const { success, error } = useToast();
 
-    const form = ref({
+    const form = reactive({
         name: "",
         email: "",
         password: "",
@@ -176,20 +175,7 @@
     const isLoading = ref(false);
 
     const handleRegister = async () => {
-        // Validate password match
-        if (form.value.password !== form.value.password_confirmation) {
-            error("Passwords do not match");
-            return;
-        }
-
-        // Validate password length
-        if (form.value.password.length < 8) {
-            error("Password must be at least 8 characters");
-            return;
-        }
-
-        // Validate terms acceptance
-        if (!form.value.terms) {
+        if (!form.terms) {
             error("Please accept the terms and conditions");
             return;
         }
@@ -197,17 +183,12 @@
         isLoading.value = true;
 
         try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-
-            // Placeholder for actual register logic
-            console.log("Register attempt:", form.value);
-
-            // Show success toast
-            success("Account created successfully! Welcome..");
-
+            await doRegister(form);
+            success("Account created successfully! Welcome to Expenso");
+            await refreshIdentity();
             navigateTo("/dashboard");
         } catch (err) {
+            console.log(err);
             error("Registration failed. Please try again.");
         } finally {
             isLoading.value = false;

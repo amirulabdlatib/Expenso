@@ -2,7 +2,7 @@ export const useAuth = () => {
     const errors = ref({});
 
     const { login } = useSanctumAuth();
-    const sanctumFetch = useSanctumFetch();
+    const sanctumClient = useSanctumClient();
 
     async function doLogin(form) {
         try {
@@ -17,7 +17,7 @@ export const useAuth = () => {
 
     async function doRegister(form) {
         try {
-            await sanctumFetch("/register", {
+            await sanctumClient("/register", {
                 method: "POST",
                 body: form,
             });
