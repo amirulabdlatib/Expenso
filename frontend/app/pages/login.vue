@@ -27,6 +27,7 @@
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="you@example.com" />
                         </div>
+                        <span v-if="errors?.email" class="text-red-400">{{ errors.email[0] }}</span>
                     </div>
 
                     <!-- Password Field -->
@@ -101,9 +102,8 @@
         middleware: ["sanctum:guest"],
     });
 
+    const { doLogin, errors } = useAuth();
     const { success, error } = useToast();
-    const { login } = useSanctumAuth();
-
     const form = reactive({
         email: "",
         password: "",
@@ -116,11 +116,11 @@
         isLoading.value = true;
 
         try {
-            await login(form);
+            await doLogin(form);
             success("Login successful! Welcome to Expenso");
             navigateTo("/dashboard");
         } catch (err) {
-            console.log(err);
+            console.log(errors);
             error("Login failed. Please check your credentials.");
         } finally {
             isLoading.value = false;
