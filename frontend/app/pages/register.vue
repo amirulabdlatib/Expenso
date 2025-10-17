@@ -184,8 +184,8 @@
 
         try {
             await doRegister(form);
-            success("Account created successfully! Welcome to Expenso");
             await refreshIdentity();
+            success("Account created successfully! Welcome to Expenso");
             navigateTo("/dashboard");
         } catch (err) {
             console.log(err);
