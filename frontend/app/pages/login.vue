@@ -120,7 +120,7 @@
             success("Login successful! Welcome to Expenso");
             navigateTo("/dashboard");
         } catch (err) {
-            console.log(errors);
+            console.log(err);
             error("Login failed. Please check your credentials.");
         } finally {
             isLoading.value = false;
