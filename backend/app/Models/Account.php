@@ -26,6 +26,6 @@ class Account extends Model
     {
         return $this->accounts()
                     ->where('is_active',false)
-                    ->sum('balance')
+                    ->sum('balance');
     }
 }
