@@ -15,7 +15,7 @@ export default defineNuxtConfig({
         baseUrl: process.env.NUXT_BACKEND_API_URL,
         redirect: {
             onLogin: "/dashboard",
-            onLogout: "/login",
+            onLogout: "/",
             onAuthOnly: "/login",
             onGuestOnly: "/dashboard",
         },

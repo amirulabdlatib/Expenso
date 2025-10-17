@@ -121,15 +121,15 @@
                 <div class="relative">
                     <button @click="toggleUserMenu" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
                         <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
-                            <span class="text-white font-semibold text-sm">AS</span>
+                            <span class="text-white font-semibold text-sm">{{ nickName }}</span>
                         </div>
                     </button>
 
                     <!-- User Menu Dropdown -->
                     <div v-if="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                         <div class="px-4 py-3 border-b border-gray-200">
-                            <p class="text-sm font-semibold text-gray-900">Ahmad Syafiq</p>
-                            <p class="text-xs text-gray-500 mt-1">ahmad@email.com</p>
+                            <p class="text-sm font-semibold text-gray-900">{{ user?.name }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ user?.email }}</p>
                         </div>
                         <NuxtLink @click="closeAllDropdowns" to="/dashboard" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                             <Icon name="heroicons:home" class="w-5 h-5" />
@@ -144,7 +144,7 @@
                             <span>Settings</span>
                         </NuxtLink>
                         <hr class="my-2 border-gray-200" />
-                        <button @click="logout" class="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        <button @click="doLogout" class="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                             <Icon name="heroicons:arrow-right-on-rectangle" class="w-5 h-5" />
                             <span>Logout</span>
                         </button>
@@ -156,12 +156,16 @@
 </template>
 
 <script setup>
-    import { ref, onMounted, onUnmounted } from "vue";
-
+    const { user } = useSanctumAuth();
     const showQuickAdd = ref(false);
     const showNotifications = ref(false);
     const showUserMenu = ref(false);
     const isCollapsed = ref(false);
+
+    const nickName = computed(() => {
+        if (!user.value?.name) return "";
+        return user.value.name.trim().charAt(0).toUpperCase();
+    });
 
     const closeAllDropdowns = () => {
         showQuickAdd.value = false;
@@ -197,13 +201,17 @@
         showNotifications.value = false;
     };
 
-    const logout = () => {
-        const { success } = useToast();
-        success("Logged out successfully!");
+    const doLogout = async () => {
+        const { success, error } = useToast();
+        const { logout: logoutAction } = useSanctumAuth();
 
-        setTimeout(() => {
-            navigateTo("/");
-        }, 1000);
+        try {
+            await logoutAction();
+            success("Logged out successfully!");
+        } catch (err) {
+            console.log(err);
+            error("Something wrong happen!");
+        }
     };
 
     const handleClickOutside = (event) => {
