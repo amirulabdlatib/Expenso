@@ -9,7 +9,7 @@
 
             <!-- Register Form -->
             <div class="bg-white rounded-2xl shadow-xl p-8">
-                <form @submit.prevent="handleRegister" class="space-y-6">
+                <form class="space-y-6" @submit.prevent="handleRegister">
                     <!-- Name Field -->
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-900 mb-2"> Full Name </label>
@@ -21,11 +21,11 @@
                                 </svg>
                             </div>
                             <input
-                                type="text"
                                 id="name"
                                 v-model="form.name"
+                                type="text"
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
-                                placeholder="John Doe" />
+                                placeholder="John Doe" >
                             <span v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</span>
                         </div>
                     </div>
@@ -41,11 +41,11 @@
                                 </svg>
                             </div>
                             <input
-                                type="email"
                                 id="email"
                                 v-model="form.email"
+                                type="email"
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
-                                placeholder="you@example.com" />
+                                placeholder="you@example.com" >
                             <span v-if="errors.email" class="text-red-400">{{ errors.email[0] }}</span>
                         </div>
                     </div>
@@ -61,12 +61,12 @@
                                 </svg>
                             </div>
                             <input
-                                :type="showPassword ? 'text' : 'password'"
                                 id="password"
                                 v-model="form.password"
+                                :type="showPassword ? 'text' : 'password'"
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
-                                placeholder="••••••••" />
-                            <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                placeholder="••••••••" >
+                            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" @click="showPassword = !showPassword">
                                 <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                                     <circle cx="12" cy="12" r="3" />
@@ -93,12 +93,12 @@
                                 </svg>
                             </div>
                             <input
-                                :type="showConfirmPassword ? 'text' : 'password'"
                                 id="password_confirmation"
                                 v-model="form.password_confirmation"
+                                :type="showConfirmPassword ? 'text' : 'password'"
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
-                                placeholder="••••••••" />
-                            <button type="button" @click="showConfirmPassword = !showConfirmPassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                placeholder="••••••••" >
+                            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" @click="showConfirmPassword = !showConfirmPassword">
                                 <svg v-if="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                                     <circle cx="12" cy="12" r="3" />
@@ -116,7 +116,7 @@
                     <!-- Terms and Conditions -->
                     <div class="flex items-start">
                         <div class="flex items-center h-5">
-                            <input id="terms" type="checkbox" v-model="form.terms" required class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-600" />
+                            <input id="terms" v-model="form.terms" type="checkbox" required class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-600" >
                         </div>
                         <label for="terms" class="ml-2 text-sm text-gray-600">
                             I agree to the
@@ -134,8 +134,8 @@
                         <span v-if="!isLoading">Create Account</span>
                         <span v-else class="flex items-center">
                             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                             </svg>
                             Creating account...
                         </span>

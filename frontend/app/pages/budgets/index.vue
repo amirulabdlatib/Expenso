@@ -64,28 +64,28 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
-                        <button @click="filterStatus = 'all'" :class="[filterStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                        <button :class="[filterStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']" @click="filterStatus = 'all'">
                             All
                         </button>
                         <button
-                            @click="filterStatus = 'on-track'"
-                            :class="[filterStatus === 'on-track' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                            :class="[filterStatus === 'on-track' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
+                            @click="filterStatus = 'on-track'">
                             On Track
                         </button>
                         <button
-                            @click="filterStatus = 'warning'"
-                            :class="[filterStatus === 'warning' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                            :class="[filterStatus === 'warning' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
+                            @click="filterStatus = 'warning'">
                             Warning
                         </button>
                         <button
-                            @click="filterStatus = 'exceeded'"
-                            :class="[filterStatus === 'exceeded' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                            :class="[filterStatus === 'exceeded' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
+                            @click="filterStatus = 'exceeded'">
                             Exceeded
                         </button>
                     </div>
                     <div class="relative">
                         <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                        <input v-model="searchQuery" type="text" placeholder="Search budgets..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
+                        <input v-model="searchQuery" type="text" placeholder="Search budgets..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" >
                     </div>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                                 <NuxtLink :to="`/budgets/edit/${budget.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors">
                                     <Icon name="heroicons:pencil" class="w-4 h-4" />
                                 </NuxtLink>
-                                <button @click="deleteBudget(budget.id)" class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+                                <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteBudget(budget.id)">
                                     <Icon name="heroicons:trash" class="w-4 h-4" />
                                 </button>
                             </div>
@@ -142,7 +142,7 @@
                         <!-- Progress Bar -->
                         <div class="space-y-2">
                             <div class="w-full bg-gray-200 rounded-full h-3">
-                                <div :class="[getProgressColor(budget.percentage), 'h-3 rounded-full transition-all']" :style="{ width: Math.min(budget.percentage, 100) + '%' }"></div>
+                                <div :class="[getProgressColor(budget.percentage), 'h-3 rounded-full transition-all']" :style="{ width: Math.min(budget.percentage, 100) + '%' }"/>
                             </div>
                             <div class="flex items-center justify-between text-xs">
                                 <span class="text-gray-600">{{ budget.percentage }}% used</span>

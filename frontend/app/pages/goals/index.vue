@@ -57,22 +57,22 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
-                        <button @click="filterStatus = 'all'" :class="[filterStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                        <button :class="[filterStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']" @click="filterStatus = 'all'">
                             All Goals
                         </button>
                         <button
-                            @click="filterStatus = 'active'"
-                            :class="[filterStatus === 'active' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                            :class="[filterStatus === 'active' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
+                            @click="filterStatus = 'active'">
                             Active
                         </button>
                         <button
-                            @click="filterStatus = 'completed'"
-                            :class="[filterStatus === 'completed' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                            :class="[filterStatus === 'completed' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
+                            @click="filterStatus = 'completed'">
                             Completed
                         </button>
                         <button
-                            @click="filterStatus = 'paused'"
-                            :class="[filterStatus === 'paused' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']">
+                            :class="[filterStatus === 'paused' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
+                            @click="filterStatus = 'paused'">
                             Paused
                         </button>
                     </div>
@@ -103,7 +103,7 @@
                                 <NuxtLink :to="`/goals/edit/${goal.id}`" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
                                     <Icon name="heroicons:pencil" class="w-4 h-4" />
                                 </NuxtLink>
-                                <button @click="deleteGoal(goal.id)" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
+                                <button class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors" @click="deleteGoal(goal.id)">
                                     <Icon name="heroicons:trash" class="w-4 h-4" />
                                 </button>
                             </div>
@@ -148,7 +148,7 @@
 
                         <!-- Progress Bar -->
                         <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div :style="{ width: goal.progress + '%', backgroundColor: goal.color }" class="h-2.5 rounded-full transition-all"></div>
+                            <div :style="{ width: goal.progress + '%', backgroundColor: goal.color }" class="h-2.5 rounded-full transition-all"/>
                         </div>
 
                         <!-- Timeline -->
@@ -181,7 +181,7 @@
                             <div class="flex items-center justify-between">
                                 <span :class="[getStatusClass(goal.status), 'px-3 py-1 text-xs font-medium rounded-full']">{{ goal.status === "active" ? "Active" : goal.status === "completed" ? "Completed" : "Paused" }}</span>
                                 <div class="flex items-center space-x-2">
-                                    <button @click="addContribution(goal.id)" class="px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-700 transition-colors">Add Savings</button>
+                                    <button class="px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-700 transition-colors" @click="addContribution(goal.id)">Add Savings</button>
                                     <NuxtLink :to="`/goals/${goal.id}`" class="p-1.5 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors">
                                         <Icon name="heroicons:arrow-right" class="w-4 h-4" />
                                     </NuxtLink>
@@ -193,7 +193,7 @@
                         <div v-if="goal.milestones && goal.milestones.length > 0" class="pt-4 border-t border-gray-100">
                             <p class="text-xs text-gray-500 mb-2">Milestones</p>
                             <div class="flex items-center space-x-2">
-                                <div v-for="(milestone, index) in goal.milestones" :key="index" :class="[goal.progress >= milestone ? 'bg-indigo-600' : 'bg-gray-200', 'flex-1 h-2 rounded-full']"></div>
+                                <div v-for="(milestone, index) in goal.milestones" :key="index" :class="[goal.progress >= milestone ? 'bg-indigo-600' : 'bg-gray-200', 'flex-1 h-2 rounded-full']"/>
                             </div>
                             <div class="flex items-center justify-between mt-1">
                                 <span class="text-xs text-gray-500">{{ goal.milestones.filter((m) => goal.progress >= m).length }}/{{ goal.milestones.length }} completed</span>

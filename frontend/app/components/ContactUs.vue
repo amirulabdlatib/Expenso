@@ -79,38 +79,38 @@
 
                 <!-- Contact Form -->
                 <div data-aos="fade-left" class="bg-white rounded-2xl shadow-lg p-8">
-                    <form @submit.prevent="handleSubmit" class="space-y-6">
+                    <form class="space-y-6" @submit.prevent="handleSubmit">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-900 mb-2"> Name </label>
                             <input
-                                type="text"
                                 id="name"
                                 v-model="form.name"
+                                type="text"
                                 required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
-                                placeholder="Your name" />
+                                placeholder="Your name" >
                         </div>
 
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-900 mb-2"> Email </label>
                             <input
-                                type="email"
                                 id="email"
                                 v-model="form.email"
+                                type="email"
                                 required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
-                                placeholder="your@email.com" />
+                                placeholder="your@email.com" >
                         </div>
 
                         <div>
                             <label for="subject" class="block text-sm font-medium text-gray-900 mb-2"> Subject </label>
                             <input
-                                type="text"
                                 id="subject"
                                 v-model="form.subject"
+                                type="text"
                                 required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
-                                placeholder="How can we help?" />
+                                placeholder="How can we help?" >
                         </div>
 
                         <div>
@@ -121,7 +121,7 @@
                                 required
                                 rows="5"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors resize-none"
-                                placeholder="Tell us more about your inquiry..."></textarea>
+                                placeholder="Tell us more about your inquiry..."/>
                         </div>
 
                         <button

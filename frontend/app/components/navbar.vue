@@ -27,7 +27,7 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button @click="isOpen = !isOpen" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" @click="isOpen = !isOpen">
                     <svg v-if="!isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="4" x2="20" y1="12" y2="12" />
                         <line x1="4" x2="20" y1="6" y2="6" />
@@ -44,14 +44,14 @@
         <!-- Mobile Menu -->
         <div v-if="isOpen" class="md:hidden border-t border-gray-200 bg-white">
             <div class="px-4 py-4 space-y-3">
-                <NuxtLink to="/#features" @click="isOpen = false" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> Features </NuxtLink>
-                <NuxtLink to="/#how-it-works" @click="isOpen = false" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> How It Works </NuxtLink>
-                <NuxtLink to="/#testimonials" @click="isOpen = false" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> Testimonials </NuxtLink>
-                <NuxtLink to="/#contact" @click="isOpen = false" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer"> Contact Us </NuxtLink>
+                <NuxtLink to="/#features" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer" @click="isOpen = false"> Features </NuxtLink>
+                <NuxtLink to="/#how-it-works" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer" @click="isOpen = false"> How It Works </NuxtLink>
+                <NuxtLink to="/#testimonials" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer" @click="isOpen = false"> Testimonials </NuxtLink>
+                <NuxtLink to="/#contact" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors cursor-pointer" @click="isOpen = false"> Contact Us </NuxtLink>
 
                 <div class="pt-4 border-t border-gray-200 space-y-2">
-                    <NuxtLink to="/login" @click="isOpen = false" class="block w-full text-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium"> Login </NuxtLink>
-                    <NuxtLink to="/register" @click="isOpen = false" class="block w-full text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium"> Get Started </NuxtLink>
+                    <NuxtLink to="/login" class="block w-full text-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium" @click="isOpen = false"> Login </NuxtLink>
+                    <NuxtLink to="/register" class="block w-full text-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium" @click="isOpen = false"> Get Started </NuxtLink>
                 </div>
             </div>
         </div>

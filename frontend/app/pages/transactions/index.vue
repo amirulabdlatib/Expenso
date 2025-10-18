@@ -55,7 +55,7 @@
                     <!-- Search -->
                     <div class="md:col-span-2 relative">
                         <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                        <input v-model="searchQuery" type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        <input v-model="searchQuery" type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" >
                     </div>
 
                     <!-- Type Filter -->
@@ -83,10 +83,10 @@
                 <!-- Quick Filters -->
                 <div class="flex items-center space-x-2 mt-4">
                     <span class="text-sm text-gray-600 font-medium">Quick Filter:</span>
-                    <button @click="quickFilter = 'today'" :class="[quickFilter === 'today' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']">Today</button>
-                    <button @click="quickFilter = 'week'" :class="[quickFilter === 'week' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']">This Week</button>
-                    <button @click="quickFilter = 'month'" :class="[quickFilter === 'month' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']">This Month</button>
-                    <button @click="quickFilter = 'all'" :class="[quickFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']">All Time</button>
+                    <button :class="[quickFilter === 'today' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'today'">Today</button>
+                    <button :class="[quickFilter === 'week' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'week'">This Week</button>
+                    <button :class="[quickFilter === 'month' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'month'">This Month</button>
+                    <button :class="[quickFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'all'">All Time</button>
                 </div>
             </div>
 
@@ -160,7 +160,7 @@
                                         <NuxtLink :to="`/transactions/edit/${transaction.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors">
                                             <Icon name="heroicons:pencil" class="w-4 h-4" />
                                         </NuxtLink>
-                                        <button @click="deleteTransaction(transaction.id)" class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+                                        <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteTransaction(transaction.id)">
                                             <Icon name="heroicons:trash" class="w-4 h-4" />
                                         </button>
                                     </div>

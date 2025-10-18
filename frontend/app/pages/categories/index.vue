@@ -18,14 +18,14 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
                 <div class="flex border-b border-gray-200">
                     <button
-                        @click="activeTab = 'expense'"
-                        :class="[activeTab === 'expense' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']">
+                        :class="[activeTab === 'expense' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
+                        @click="activeTab = 'expense'">
                         Expense Categories
                         <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'expense' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">{{ expenseCategories.length }}</span>
                     </button>
                     <button
-                        @click="activeTab = 'income'"
-                        :class="[activeTab === 'income' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']">
+                        :class="[activeTab === 'income' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
+                        @click="activeTab = 'income'">
                         Income Categories
                         <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'income' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">{{ incomeCategories.length }}</span>
                     </button>
@@ -41,7 +41,7 @@
                             v-model="searchQuery"
                             type="text"
                             placeholder="Search categories..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" >
                     </div>
                     <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="name">Sort by Name</option>
@@ -68,7 +68,7 @@
                             <NuxtLink :to="`/categories/edit/${category.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors">
                                 <Icon name="heroicons:pencil" class="w-4 h-4" />
                             </NuxtLink>
-                            <button @click="deleteCategory(category.id)" class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+                            <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteCategory(category.id)">
                                 <Icon name="heroicons:trash" class="w-4 h-4" />
                             </button>
                         </div>
@@ -81,7 +81,7 @@
                             <span class="font-semibold text-gray-900">{{ formatCurrency(category.totalAmount) }}</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div :style="{ width: category.usagePercentage + '%', backgroundColor: category.color }" class="h-2 rounded-full transition-all"></div>
+                            <div :style="{ width: category.usagePercentage + '%', backgroundColor: category.color }" class="h-2 rounded-full transition-all"/>
                         </div>
                         <div class="flex items-center justify-between text-xs text-gray-500">
                             <span>{{ category.usagePercentage }}% of total</span>
