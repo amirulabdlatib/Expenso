@@ -21,11 +21,4 @@ class Account extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function totalBalance()
-    {
-        return $this->accounts()
-                    ->where('is_active',false)
-                    ->sum('balance');
-    }
 }
