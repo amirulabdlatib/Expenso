@@ -47,9 +47,11 @@ class AccountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Account $account)
     {
-        //
+        return response()->json([
+            'account' => $account,
+        ], Response::HTTP_OK);
     }
 
     /**

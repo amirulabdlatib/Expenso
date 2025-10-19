@@ -89,7 +89,7 @@
                                             <p class="text-sm text-white/80">{{ account.type }}</p>
                                         </div>
                                     </div>
-                                    <NuxtLink :to="`/accounts/edit/${account.id}`" class="p-2 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200">
+                                    <NuxtLink :to="`/accounts/${account.id}`" class="p-2 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200">
                                         <Icon name="heroicons:pencil" class="w-4 h-4" />
                                     </NuxtLink>
                                 </div>
@@ -118,7 +118,7 @@
                                     <span :class="[account.is_active ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20' : 'bg-gray-50 text-gray-600 ring-1 ring-gray-600/20', 'px-3 py-1 text-xs font-semibold rounded-full']">
                                         {{ account.is_active ? "Active" : "Inactive" }}
                                     </span>
-                                    <NuxtLink :to="`/accounts/edit/${account.id}`" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center space-x-1 group/link">
+                                    <NuxtLink :to="`/accounts/${account.id}`" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center space-x-1 group/link">
                                         <span>Manage</span>
                                         <Icon name="heroicons:arrow-right" class="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" />
                                     </NuxtLink>
