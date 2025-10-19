@@ -36,8 +36,8 @@
                             <Icon name="heroicons:wallet" class="w-8 h-8 opacity-80" />
                             <span class="text-sm opacity-80">Total Balance</span>
                         </div>
-                        <p class="text-3xl font-bold">{{ formatCurrency(accountsData?.cashBalance || 0) }}</p>
-                        <p class="text-sm opacity-80 mt-2">Across {{ accountsData?.accounts || 0 }} accounts</p>
+                        <p class="text-3xl font-bold">{{ formatCurrency(accountsData?.totalBalance || 0) }}</p>
+                        <p class="text-sm opacity-80 mt-2">Across {{ totalAccounts }} accounts</p>
                     </div>
 
                     <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
@@ -172,6 +172,11 @@
     const client = useSanctumClient();
 
     const { data: accountsData, status, error, refresh } = await useAsyncData("accounts", () => client("/api/accounts"));
+
+    const totalAccounts = computed(() => {
+        const data = accountsData.value || {};
+        return (data.active_accounts || 0) + (data.inactiveAccounts || 0);
+    });
 
     // State
     const searchQuery = ref("");

@@ -23,11 +23,12 @@ class AccountController extends Controller
         $inactiveAccounts = $accounts->where('is_active', false);
 
         return response()->json([
-            'accounts' => $accounts->count(),
+            'accounts' => $accounts,
+            'totalBalance' => $accounts->sum('balance'),
             'active_accounts' => $activeAccounts->count(),
             'activeAccountsBalance' => $activeAccounts->sum('balance'),
             'inactiveAccounts' => $inactiveAccounts->count(),
-            'cashBalance' => $activeAccounts->sum('balance'),
+            'activeBalance' => $activeAccounts->sum('balance'),
         ], Response::HTTP_OK);
     }
 
