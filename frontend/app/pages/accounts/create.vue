@@ -26,8 +26,9 @@
                             type="text"
                             placeholder="e.g., Maybank Savings, CIMB Credit Card"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            required
+                            :disabled="isLoading"
                         />
+                        <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                     </div>
 
                     <!-- Account Type -->
@@ -38,9 +39,11 @@
                                 v-for="type in accountTypes"
                                 :key="type.value"
                                 type="button"
+                                :disabled="isLoading"
                                 :class="[
                                     'flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all',
                                     form.type === type.value ? 'border-indigo-500 bg-indigo-50 shadow-sm' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
+                                    isLoading ? 'opacity-50 cursor-not-allowed' : '',
                                 ]"
                                 @click="form.type = type.value"
                             >
@@ -50,6 +53,7 @@
                                 </span>
                             </button>
                         </div>
+                        <p v-if="errors.type" class="text-red-400 mt-2">{{ errors.type[0] }}</p>
                     </div>
 
                     <!-- Icon Selection -->
@@ -60,15 +64,18 @@
                                 v-for="iconOption in accountIcons"
                                 :key="iconOption"
                                 type="button"
+                                :disabled="isLoading"
                                 :class="[
                                     'flex items-center justify-center p-3 md:p-4 rounded-lg border-2 transition-all',
                                     form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
+                                    isLoading ? 'opacity-50 cursor-not-allowed' : '',
                                 ]"
                                 @click="form.icon = iconOption"
                             >
                                 <Icon :name="iconOption" class="w-6 h-6" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
                             </button>
                         </div>
+                        <p v-if="errors.icon" class="text-red-400">{{ errors.icon[0] }}</p>
                     </div>
 
                     <!-- Initial Balance -->
@@ -85,7 +92,7 @@
                                 step="0.01"
                                 placeholder="0.00"
                                 class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                required
+                                :disabled="isLoading"
                             />
                         </div>
                     </div>
@@ -93,7 +100,7 @@
                     <!-- Currency -->
                     <div>
                         <label for="currency" class="block text-sm font-medium text-gray-700 mb-2"> Currency <span class="text-red-500">*</span> </label>
-                        <select id="currency" v-model="form.currency" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <select id="currency" v-model="form.currency" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" :disabled="isLoading">
                             <option v-for="curr in currencies" :key="curr.code" :value="curr.code">{{ curr.code }} - {{ curr.name }}</option>
                         </select>
                     </div>
@@ -102,8 +109,8 @@
                     <div>
                         <label class="flex items-center space-x-3 cursor-pointer">
                             <div class="relative">
-                                <input v-model="form.is_active" type="checkbox" class="sr-only peer" />
-                                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors" />
+                                <input v-model="form.is_active" type="checkbox" class="sr-only peer" :disabled="isLoading" />
+                                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors" :class="isLoading ? 'opacity-50' : ''" />
                                 <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
                             </div>
                             <div>
@@ -115,10 +122,28 @@
 
                     <!-- Form Actions -->
                     <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end gap-3 pt-6 border-t border-gray-200">
-                        <NuxtLink to="/accounts" class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"> Cancel </NuxtLink>
-                        <button type="submit" class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2">
-                            <Icon name="heroicons:check" class="w-5 h-5" />
-                            <span>Create Account</span>
+                        <NuxtLink
+                            to="/accounts"
+                            class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                            :class="isLoading ? 'pointer-events-none opacity-50' : ''"
+                        >
+                            Cancel
+                        </NuxtLink>
+                        <button
+                            type="submit"
+                            :disabled="isLoading"
+                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <span v-if="!isLoading" class="flex items-center space-x-2">
+                                <span>Create Account</span>
+                            </span>
+                            <span v-else class="flex items-center space-x-2">
+                                <span>Creating...</span>
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                </svg>
+                            </span>
                         </button>
                     </div>
                 </form>
@@ -137,18 +162,32 @@
     });
 
     const { accountTypes, accountIcons, currencies } = useAccountConstants();
+    const { createAccount, errors } = useAccount();
+    const { success, error } = useToast();
 
-    const form = ref({
+    const isLoading = ref(false);
+
+    const form = reactive({
         name: "",
-        type: "Bank Account",
-        icon: "heroicons:building-library",
+        type: "",
+        icon: "",
         balance: 0,
         currency: "MYR",
         is_active: true,
     });
 
-    const handleSubmit = () => {
-        console.log("Form submitted:", form.value);
-        // API call will be implemented in backend integration
+    const handleSubmit = async () => {
+        isLoading.value = true;
+
+        try {
+            await createAccount(form);
+            success("Account created successfully.");
+            navigateTo("/accounts");
+        } catch (err) {
+            error("Account creation failed");
+            console.log("Account creation failed:", err);
+        } finally {
+            isLoading.value = false;
+        }
     };
 </script>
