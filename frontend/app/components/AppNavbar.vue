@@ -25,7 +25,7 @@
             <!-- Center: Search Bar (Hidden on mobile) -->
             <div class="hidden md:flex flex-1 max-w-md mx-8">
                 <div class="relative w-full">
-                    <input type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" >
+                    <input type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
                     <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
                 </div>
             </div>
@@ -34,14 +34,18 @@
             <div class="flex items-center space-x-2">
                 <!-- Quick Add Button -->
                 <div class="relative">
-                    <button class="hidden sm:flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors" @click="toggleQuickAdd">
-                        <Icon name="heroicons:plus" class="w-5 h-5" />
+                    <button class="hidden sm:flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm" @click="toggleQuickAdd">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
                         <span class="font-medium">Add</span>
                     </button>
 
                     <!-- Mobile Add Button -->
                     <button class="sm:hidden p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors" @click="toggleQuickAdd">
-                        <Icon name="heroicons:plus" class="w-5 h-5" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
                     </button>
 
                     <!-- Quick Add Dropdown -->
@@ -58,7 +62,7 @@
                             <Icon name="heroicons:arrow-path" class="w-5 h-5 text-blue-500" />
                             <span class="text-gray-700">Transfer Money</span>
                         </button>
-                        <hr class="my-2 border-gray-200" >
+                        <hr class="my-2 border-gray-200" />
                         <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3" @click="closeAllDropdowns">
                             <Icon name="heroicons:building-library" class="w-5 h-5 text-indigo-500" />
                             <span class="text-gray-700">Add Account</span>
@@ -77,7 +81,7 @@
                             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
                             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                         </svg>
-                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"/>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
                     </button>
 
                     <!-- Notifications Dropdown -->
@@ -143,7 +147,7 @@
                             <Icon name="heroicons:cog-6-tooth" class="w-5 h-5" />
                             <span>Settings</span>
                         </NuxtLink>
-                        <hr class="my-2 border-gray-200" >
+                        <hr class="my-2 border-gray-200" />
                         <button class="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors" @click="doLogout">
                             <Icon name="heroicons:arrow-right-on-rectangle" class="w-5 h-5" />
                             <span>Logout</span>
