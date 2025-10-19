@@ -94,12 +94,7 @@
                     <div>
                         <label for="currency" class="block text-sm font-medium text-gray-700 mb-2"> Currency <span class="text-red-500">*</span> </label>
                         <select id="currency" v-model="form.currency" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            <option value="MYR">MYR - Malaysian Ringgit</option>
-                            <!-- <option value="USD">USD - US Dollar</option>
-                            <option value="SGD">SGD - Singapore Dollar</option>
-                            <option value="EUR">EUR - Euro</option>
-                            <option value="GBP">GBP - British Pound</option>
-                            <option value="JPY">JPY - Japanese Yen</option> -->
+                            <option v-for="curr in currencies" :key="curr.code" :value="curr.code">{{ curr.code }} - {{ curr.name }}</option>
                         </select>
                     </div>
 
@@ -128,28 +123,6 @@
                     </div>
                 </form>
             </div>
-
-            <!-- Preview Card -->
-            <div v-if="form.name || form.type" class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
-                <h3 class="text-sm font-medium text-gray-700 mb-4">Preview</h3>
-                <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
-                    <div class="flex items-start justify-between mb-8">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                                <Icon :name="form.icon || 'heroicons:building-library'" class="w-6 h-6" />
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-lg">{{ form.name || "Account Name" }}</h3>
-                                <p class="text-sm opacity-80">{{ form.type || "Account Type" }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-sm opacity-80 mb-1">Current Balance</p>
-                        <p class="text-3xl font-bold">{{ form.currency }} {{ formatCurrency(form.balance) }}</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
@@ -163,53 +136,19 @@
         middleware: ["sanctum:auth"],
     });
 
+    const { accountTypes, accountIcons, currencies } = useAccountConstants();
+
     const form = ref({
         name: "",
         type: "Bank Account",
-        icon: "",
+        icon: "heroicons:building-library",
         balance: 0,
         currency: "MYR",
         is_active: true,
     });
 
-    const accountTypes = [
-        { label: "Bank Account", value: "Bank Account", icon: "heroicons:building-library" },
-        { label: "Credit Card", value: "Credit Card", icon: "heroicons:credit-card" },
-        { label: "Cash", value: "Cash", icon: "heroicons:banknotes" },
-        { label: "E-Wallet", value: "E-Wallet", icon: "heroicons:device-phone-mobile" },
-        { label: "Savings", value: "Savings", icon: "heroicons:shield-check" },
-        { label: "Investment", value: "Investment", icon: "heroicons:chart-bar-square" },
-        { label: "Emergency Fund", value: "Emergency Fund", icon: "heroicons:lifebuoy" },
-    ];
-
-    const accountIcons = [
-        "heroicons:building-library",
-        "heroicons:credit-card",
-        "heroicons:banknotes",
-        "heroicons:device-phone-mobile",
-        "heroicons:shield-check",
-        "heroicons:chart-bar-square",
-        "heroicons:lifebuoy",
-        "heroicons:wallet",
-        "heroicons:currency-dollar",
-        "heroicons:building-office",
-        "heroicons:receipt-percent",
-        "heroicons:document-currency-dollar",
-        "heroicons:presentation-chart-line",
-        "heroicons:chart-pie",
-        "heroicons:calculator",
-        "heroicons:academic-cap",
-    ];
-
     const handleSubmit = () => {
         console.log("Form submitted:", form.value);
         // API call will be implemented in backend integration
-    };
-
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat("en-MY", {
-            style: "currency",
-            currency: "MYR",
-        }).format(amount);
     };
 </script>
