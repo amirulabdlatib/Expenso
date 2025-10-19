@@ -63,34 +63,20 @@
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div class="flex items-center space-x-4">
-                            <button :class="[filterType === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']" @click="filterType = 'all'">
-                                All
-                            </button>
-                            <button :class="[filterType === 'bank' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']" @click="filterType = 'bank'">
-                                Bank
-                            </button>
-                            <button
-                                :class="[filterType === 'credit' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                                @click="filterType = 'credit'"
-                            >
-                                Credit Card
-                            </button>
-                            <button :class="[filterType === 'cash' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']" @click="filterType = 'cash'">
-                                Cash
-                            </button>
+                            <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">All</button>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="relative">
                                 <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                                <input v-model="searchQuery" type="text" placeholder="Search accounts..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
+                                <input type="text" placeholder="Search accounts..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Accounts Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div v-for="account in filteredAccounts" :key="account.id" class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden">
+                <div v-if="accountsData.accounts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div v-for="account in accountsData.accounts" :key="account.id" class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden">
                         <!-- Account Header -->
                         <div class="p-6 text-white relative bg-gradient-to-br from-indigo-500 to-indigo-600">
                             <div class="flex items-start justify-between mb-8">
@@ -113,8 +99,6 @@
                                 <p class="text-sm opacity-80 mb-1">Current Balance</p>
                                 <p class="text-3xl font-bold">{{ formatCurrency(account.balance) }}</p>
                             </div>
-                            <div v-if="account.accountNumber" class="mt-4 text-sm opacity-80">•••• {{ account.accountNumber.slice(-4) }}</div>
-                            <div v-if="account.accountNumber" class="mt-4 text-sm opacity-80">•••• {{ account.accountNumber.slice(-4) }}</div>
                         </div>
 
                         <!-- Account Details -->
@@ -144,10 +128,10 @@
                 </div>
 
                 <!-- Empty State -->
-                <div v-if="filteredAccounts.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                <div v-else class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                     <Icon name="heroicons:building-library" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">No accounts found</h3>
-                    <p class="text-gray-600 mb-6">{{ searchQuery || filterType !== "all" ? "Try adjusting your filters" : "Add your first account to start tracking your finances" }}</p>
+                    <p class="text-gray-600 mb-6">Add your first account to start tracking your finances</p>
                     <NuxtLink to="/accounts/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                         <Icon name="heroicons:plus" class="w-5 h-5" />
                         <span>Add Account</span>
@@ -176,14 +160,5 @@
     const totalAccounts = computed(() => {
         const data = accountsData.value || {};
         return (data.active_accounts || 0) + (data.inactiveAccounts || 0);
-    });
-
-    // State
-    const searchQuery = ref("");
-    const filterType = ref("all");
-
-    // Computed - will be empty until backend returns account list
-    const filteredAccounts = computed(() => {
-        return [];
     });
 </script>
