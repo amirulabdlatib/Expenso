@@ -82,7 +82,7 @@
                         <div class="flex items-center space-x-3">
                             <div class="relative">
                                 <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                                <input v-model="searchQuery" type="text" placeholder="Search accounts..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" >
+                                <input v-model="searchQuery" type="text" placeholder="Search accounts..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
                             </div>
                         </div>
                     </div>
@@ -167,6 +167,8 @@
         middleware: ["sanctum:auth"],
     });
 
+    const { formatCurrency } = useCurrency();
+
     const client = useSanctumClient();
 
     const { data: accountsData, status, error, refresh } = await useAsyncData("accounts", () => client("/api/accounts"));
@@ -179,12 +181,4 @@
     const filteredAccounts = computed(() => {
         return [];
     });
-
-    // Methods
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat("en-MY", {
-            style: "currency",
-            currency: "MYR",
-        }).format(amount);
-    };
 </script>
