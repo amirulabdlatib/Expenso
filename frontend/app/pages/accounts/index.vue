@@ -74,68 +74,66 @@
                     </div>
                 </div>
 
-                <!-- Accounts Grid -->
-                <div v-if="accountsData.accounts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div v-for="account in accountsData.accounts" :key="account.id" class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden">
-                        <!-- Account Header -->
-                        <div class="p-6 text-white relative bg-gradient-to-br from-indigo-500 to-indigo-600">
-                            <div class="flex items-start justify-between mb-8">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-12 h-12 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                                        <Icon :name="account.icon" class="w-6 h-6" />
+                <!-- Accounts Container -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div v-if="accountsData.accounts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div v-for="account in accountsData.accounts" :key="account.id" class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden">
+                            <!-- Account Header -->
+                            <div class="p-6 text-white relative bg-gradient-to-br from-indigo-500 to-indigo-600">
+                                <div class="flex items-start justify-between mb-8">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-12 h-12 bg-white bg-opacity-20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                                            <Icon :name="account.icon" class="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-lg">{{ account.name }}</h3>
+                                            <p class="text-sm opacity-80">{{ account.type }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <NuxtLink :to="`/accounts/edit/${account.id}`" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
+                                            <Icon name="heroicons:pencil" class="w-4 h-4" />
+                                        </NuxtLink>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80 mb-1">Current Balance</p>
+                                    <p class="text-3xl font-bold">{{ formatCurrency(account.balance) }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Account Details -->
+                            <div class="p-6 space-y-4">
+                                <!-- Quick Stats -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">Currency</p>
+                                        <p class="text-lg font-semibold text-gray-900">{{ account.currency || "MYR" }}</p>
                                     </div>
                                     <div>
-                                        <h3 class="font-semibold text-lg">{{ account.name }}</h3>
-                                        <p class="text-sm opacity-80">{{ account.type }}</p>
+                                        <p class="text-xs text-gray-500 mb-1">Type</p>
+                                        <p class="text-lg font-semibold text-gray-900">{{ account.type }}</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center space-x-1">
-                                    <NuxtLink :to="`/accounts/edit/${account.id}`" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
-                                        <Icon name="heroicons:pencil" class="w-4 h-4" />
-                                    </NuxtLink>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="text-sm opacity-80 mb-1">Current Balance</p>
-                                <p class="text-3xl font-bold">{{ formatCurrency(account.balance) }}</p>
-                            </div>
-                        </div>
 
-                        <!-- Account Details -->
-                        <div class="p-6 space-y-4">
-                            <!-- Quick Stats -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-xs text-gray-500 mb-1">Currency</p>
-                                    <p class="text-lg font-semibold text-gray-900">{{ account.currency || "MYR" }}</p>
+                                <!-- Status Badge -->
+                                <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                    <span :class="[account.is_active ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600', 'px-3 py-1 text-xs font-medium rounded-full']">{{ account.is_active ? "Active" : "Inactive" }}</span>
                                 </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 mb-1">Type</p>
-                                    <p class="text-lg font-semibold text-gray-900">{{ account.type }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Status Badge -->
-                            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                                <span :class="[account.is_active ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600', 'px-3 py-1 text-xs font-medium rounded-full']">{{ account.is_active ? "Active" : "Inactive" }}</span>
-                                <NuxtLink :to="`/accounts/edit/${account.id}`" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center space-x-1">
-                                    <span>View Details</span>
-                                    <Icon name="heroicons:arrow-right" class="w-4 h-4" />
-                                </NuxtLink>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Empty State -->
-                <div v-else class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-                    <Icon name="heroicons:building-library" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No accounts found</h3>
-                    <p class="text-gray-600 mb-6">Add your first account to start tracking your finances</p>
-                    <NuxtLink to="/accounts/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                        <Icon name="heroicons:plus" class="w-5 h-5" />
-                        <span>Add Account</span>
-                    </NuxtLink>
+                    <!-- Empty State -->
+                    <div v-else class="p-6 text-center">
+                        <Icon name="heroicons:building-library" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">No accounts found</h3>
+                        <p class="text-gray-600 mb-6">Add your first account to start tracking your finances</p>
+                        <NuxtLink to="/accounts/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                            <Icon name="heroicons:plus" class="w-5 h-5" />
+                            <span>Add Account</span>
+                        </NuxtLink>
+                    </div>
                 </div>
             </template>
         </div>
