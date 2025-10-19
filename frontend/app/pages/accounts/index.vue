@@ -31,31 +31,31 @@
             <template v-else>
                 <!-- Summary Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-b-4 border-indigo-600">
                         <div class="flex items-center justify-between mb-4">
-                            <Icon name="heroicons:wallet" class="w-8 h-8 opacity-80" />
-                            <span class="text-sm opacity-80">Total Balance</span>
+                            <Icon name="heroicons:wallet" class="w-8 h-8 text-indigo-600" />
+                            <span class="text-sm text-gray-500">Total Balance</span>
                         </div>
-                        <p class="text-3xl font-bold">{{ formatCurrency(accountsData?.totalBalance || 0) }}</p>
-                        <p class="text-sm opacity-80 mt-2">Across {{ totalAccounts }} accounts</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ formatCurrency(accountsData?.totalBalance || 0) }}</p>
+                        <p class="text-sm text-gray-500 mt-2">Across {{ totalAccounts }} accounts</p>
                     </div>
 
-                    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-b-4 border-green-600">
                         <div class="flex items-center justify-between mb-4">
-                            <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 opacity-80" />
-                            <span class="text-sm opacity-80">Active Accounts</span>
+                            <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 text-green-600" />
+                            <span class="text-sm text-gray-500">Active Accounts</span>
                         </div>
-                        <p class="text-3xl font-bold">{{ accountsData?.active_accounts || 0 }}</p>
-                        <p class="text-sm opacity-80 mt-2">{{ accountsData?.inactiveAccounts || 0 }} inactive</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ accountsData?.active_accounts || 0 }}</p>
+                        <p class="text-sm text-gray-500 mt-2">{{ accountsData?.inactiveAccounts || 0 }} inactive</p>
                     </div>
 
-                    <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-b-4 border-purple-600">
                         <div class="flex items-center justify-between mb-4">
-                            <Icon name="heroicons:credit-card" class="w-8 h-8 opacity-80" />
-                            <span class="text-sm opacity-80">Active Balance</span>
+                            <Icon name="heroicons:credit-card" class="w-8 h-8 text-purple-600" />
+                            <span class="text-sm text-gray-500">Active Balance</span>
                         </div>
-                        <p class="text-3xl font-bold">{{ formatCurrency(accountsData?.activeAccountsBalance || 0) }}</p>
-                        <p class="text-sm opacity-80 mt-2">From active accounts</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ formatCurrency(accountsData?.activeAccountsBalance || 0) }}</p>
+                        <p class="text-sm text-gray-500 mt-2">From active accounts</p>
                     </div>
                 </div>
 
