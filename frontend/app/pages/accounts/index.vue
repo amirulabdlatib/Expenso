@@ -78,8 +78,7 @@
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div v-if="accountsData.accounts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div v-for="account in accountsData.accounts" :key="account.id" class="bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200 overflow-hidden group">
-                            <!-- Account Header -->
-                            <div class="p-6 bg-gradient-to-br from-indigo-500 to-indigo-600">
+                            <div class="p-6 bg-gradient-to-br" :class="getAccountColors(account.type).gradient">
                                 <div class="flex items-start justify-between mb-6">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
@@ -154,6 +153,7 @@
     });
 
     const { formatCurrency } = useCurrency();
+    const { getAccountColors } = useAccountConstants();
 
     const client = useSanctumClient();
 

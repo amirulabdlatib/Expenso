@@ -28,18 +28,71 @@ export const useAccountConstants = () => {
         "heroicons:academic-cap",
     ];
 
-    const currencies = [
-        { code: "MYR", name: "Malaysian Ringgit" },
-        // { code: "USD", name: "US Dollar" },
-        // { code: "SGD", name: "Singapore Dollar" },
-        // { code: "EUR", name: "Euro" },
-        // { code: "GBP", name: "British Pound" },
-        // { code: "JPY", name: "Japanese Yen" },
-    ];
+    const currencies = [{ code: "MYR", name: "Malaysian Ringgit" }];
+
+    // Color mapping for each account type
+    const accountColors = {
+        "Bank Account": {
+            gradient: "from-indigo-500 to-indigo-600",
+            icon: "bg-indigo-100",
+            iconColor: "text-indigo-600",
+            border: "border-indigo-600",
+        },
+        "Credit Card": {
+            gradient: "from-purple-500 to-purple-600",
+            icon: "bg-purple-100",
+            iconColor: "text-purple-600",
+            border: "border-purple-600",
+        },
+        Cash: {
+            gradient: "from-green-500 to-green-600",
+            icon: "bg-green-100",
+            iconColor: "text-green-600",
+            border: "border-green-600",
+        },
+        "E-Wallet": {
+            gradient: "from-blue-500 to-blue-600",
+            icon: "bg-blue-100",
+            iconColor: "text-blue-600",
+            border: "border-blue-600",
+        },
+        Savings: {
+            gradient: "from-emerald-500 to-emerald-600",
+            icon: "bg-emerald-100",
+            iconColor: "text-emerald-600",
+            border: "border-emerald-600",
+        },
+        Investment: {
+            gradient: "from-orange-500 to-orange-600",
+            icon: "bg-orange-100",
+            iconColor: "text-orange-600",
+            border: "border-orange-600",
+        },
+        "Emergency Fund": {
+            gradient: "from-red-500 to-red-600",
+            icon: "bg-red-100",
+            iconColor: "text-red-600",
+            border: "border-red-600",
+        },
+    };
+
+    // Helper function to get colors for a specific account type
+    const getAccountColors = (accountType) => {
+        return (
+            accountColors[accountType] || {
+                gradient: "from-gray-500 to-gray-600",
+                icon: "bg-gray-100",
+                iconColor: "text-gray-600",
+                border: "border-gray-600",
+            }
+        );
+    };
 
     return {
         accountTypes,
         accountIcons,
         currencies,
+        accountColors,
+        getAccountColors,
     };
 };
