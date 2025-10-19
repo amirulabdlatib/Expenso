@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAccountRequest;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,23 +34,12 @@ class AccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAccountRequest $request)
     {
-        $validated_data = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|string',
-            'icon' => 'required|string',
-            'balance' => 'required|numeric',
-            'currency' => 'required|string|max:7',
-            'is_active' => 'required|boolean',
-        ]);
-
-        $validated_data['user_id'] = Auth::id();
-
-        Account::create($validated_data);
+        Account::create($request->validated());
 
         return response()->json([
-            'message' => 'Account created successfully.'
+            'message' => 'Account created successfully.',
         ], Response::HTTP_CREATED);
     }
 

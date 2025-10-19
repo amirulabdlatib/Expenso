@@ -95,6 +95,7 @@
                                 :disabled="isLoading"
                             />
                         </div>
+                        <p v-if="errors.balance" class="text-red-400">{{ errors.balance[0] }}</p>
                     </div>
 
                     <!-- Currency -->
