@@ -202,7 +202,7 @@
                                     <span class="text-sm font-semibold text-indigo-600">{{ goal.progress }}%</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div :style="{ width: goal.progress + '%' }" class="bg-indigo-600 h-2 rounded-full transition-all"></div>
+                                    <div :style="{ width: goal.progress + '%' }" class="bg-indigo-600 h-2 rounded-full transition-all"/>
                                 </div>
                             </div>
                         </div>

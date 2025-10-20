@@ -27,7 +27,7 @@
                 </p>
 
                 <!-- Close Button -->
-                <button @click="removeToast(toast.id)" class="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close">
+                <button class="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close" @click="removeToast(toast.id)">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6 6 18M6 6l12 12" />
                     </svg>

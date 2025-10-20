@@ -70,7 +70,7 @@
                         <p class="text-sm">Savings Goal</p>
                         <div class="flex items-center space-x-2 mt-2">
                             <div class="w-24 h-2 bg-indigo-400 rounded-full overflow-hidden">
-                                <div class="h-full bg-white rounded-full" style="width: 65%"></div>
+                                <div class="h-full bg-white rounded-full" style="width: 65%"/>
                             </div>
                             <span class="text-sm font-semibold">65%</span>
                         </div>

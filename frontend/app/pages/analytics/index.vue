@@ -76,19 +76,19 @@
                     <div class="h-64 flex items-end justify-between space-x-2">
                         <div v-for="(month, index) in incomeExpenseData" :key="index" class="flex-1 flex flex-col items-center space-y-2">
                             <div class="w-full flex space-x-1">
-                                <div class="flex-1 bg-green-500 rounded-t" :style="{ height: (month.income / 6000) * 200 + 'px' }"></div>
-                                <div class="flex-1 bg-red-500 rounded-t" :style="{ height: (month.expense / 6000) * 200 + 'px' }"></div>
+                                <div class="flex-1 bg-green-500 rounded-t" :style="{ height: (month.income / 6000) * 200 + 'px' }" />
+                                <div class="flex-1 bg-red-500 rounded-t" :style="{ height: (month.expense / 6000) * 200 + 'px' }" />
                             </div>
                             <span class="text-xs text-gray-600">{{ month.month }}</span>
                         </div>
                     </div>
                     <div class="flex items-center justify-center space-x-6 mt-6">
                         <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 bg-green-500 rounded"></div>
+                            <div class="w-3 h-3 bg-green-500 rounded" />
                             <span class="text-sm text-gray-600">Income</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 bg-red-500 rounded"></div>
+                            <div class="w-3 h-3 bg-red-500 rounded" />
                             <span class="text-sm text-gray-600">Expenses</span>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div :style="{ width: category.percentage + '%', backgroundColor: category.color }" class="h-2 rounded-full"></div>
+                                <div :style="{ width: category.percentage + '%', backgroundColor: category.color }" class="h-2 rounded-full" />
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                                 <span class="text-sm text-gray-600">{{ formatCurrency(budget.spent) }} / {{ formatCurrency(budget.limit) }}</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div :class="[budget.percentage > 90 ? 'bg-red-500' : budget.percentage > 70 ? 'bg-yellow-500' : 'bg-green-500', 'h-2.5 rounded-full']" :style="{ width: budget.percentage + '%' }"></div>
+                                <div :class="[budget.percentage > 90 ? 'bg-red-500' : budget.percentage > 70 ? 'bg-yellow-500' : 'bg-green-500', 'h-2.5 rounded-full']" :style="{ width: budget.percentage + '%' }" />
                             </div>
                             <div class="flex items-center justify-between mt-1">
                                 <span class="text-xs text-gray-500">{{ budget.percentage }}% used</span>
@@ -181,7 +181,7 @@
                                 <span class="text-sm font-semibold text-gray-900">{{ formatCurrency(account.balance) }}</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                <div :style="{ width: account.percentage + '%', backgroundColor: account.color }" class="h-1.5 rounded-full"></div>
+                                <div :style="{ width: account.percentage + '%', backgroundColor: account.color }" class="h-1.5 rounded-full" />
                             </div>
                         </div>
                         <div class="pt-4 border-t border-gray-200">
@@ -237,7 +237,7 @@
                                 <span class="text-sm font-semibold text-indigo-600">{{ goal.progress }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-indigo-600 h-2.5 rounded-full" :style="{ width: goal.progress + '%' }"></div>
+                                <div class="bg-indigo-600 h-2.5 rounded-full" :style="{ width: goal.progress + '%' }" />
                             </div>
                             <div class="flex items-center justify-between mt-2">
                                 <span class="text-xs text-gray-500">{{ formatCurrency(goal.current) }} saved</span>

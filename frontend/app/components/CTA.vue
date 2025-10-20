@@ -2,18 +2,18 @@
     <section class="relative py-24 overflow-hidden bg-gray-50">
         <!-- Subtle Pattern Overlay -->
         <div class="absolute inset-0 opacity-[0.03]">
-            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, #1e40af 1px, transparent 0); background-size: 32px 32px"></div>
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, #1e40af 1px, transparent 0); background-size: 32px 32px"/>
         </div>
 
         <!-- Floating Shapes for Visual Interest -->
-        <div class="absolute top-10 left-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div class="absolute bottom-10 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style="animation-delay: 1s"></div>
+        <div class="absolute top-10 left-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"/>
+        <div class="absolute bottom-10 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style="animation-delay: 1s"/>
 
         <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" data-aos="fade-up">
             <div class="text-center">
                 <!-- Badge -->
                 <div class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-full border border-indigo-100 mb-6">
-                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"/>
                     <span class="text-sm font-medium text-indigo-700">Join 10,000+ Smart Savers</span>
                 </div>
 

@@ -13,7 +13,7 @@
                         v-model="searchQuery"
                         type="text"
                         placeholder="Search for help articles..."
-                        class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg shadow-sm" />
+                        class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg shadow-sm" >
                 </div>
             </div>
 
@@ -57,8 +57,8 @@
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Browse by Category</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <button
-                        @click="selectedCategory = 'general'"
-                        :class="[selectedCategory === 'general' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']">
+                        :class="[selectedCategory === 'general' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']"
+                        @click="selectedCategory = 'general'">
                         <div class="flex items-center space-x-3">
                             <Icon name="heroicons:information-circle" class="w-6 h-6 text-indigo-600" />
                             <div>
@@ -69,8 +69,8 @@
                     </button>
 
                     <button
-                        @click="selectedCategory = 'transactions'"
-                        :class="[selectedCategory === 'transactions' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']">
+                        :class="[selectedCategory === 'transactions' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']"
+                        @click="selectedCategory = 'transactions'">
                         <div class="flex items-center space-x-3">
                             <Icon name="heroicons:arrow-path" class="w-6 h-6 text-indigo-600" />
                             <div>
@@ -81,8 +81,8 @@
                     </button>
 
                     <button
-                        @click="selectedCategory = 'budgets'"
-                        :class="[selectedCategory === 'budgets' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']">
+                        :class="[selectedCategory === 'budgets' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']"
+                        @click="selectedCategory = 'budgets'">
                         <div class="flex items-center space-x-3">
                             <Icon name="heroicons:chart-bar" class="w-6 h-6 text-indigo-600" />
                             <div>
@@ -93,8 +93,8 @@
                     </button>
 
                     <button
-                        @click="selectedCategory = 'accounts'"
-                        :class="[selectedCategory === 'accounts' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']">
+                        :class="[selectedCategory === 'accounts' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']"
+                        @click="selectedCategory = 'accounts'">
                         <div class="flex items-center space-x-3">
                             <Icon name="heroicons:building-library" class="w-6 h-6 text-indigo-600" />
                             <div>
@@ -105,8 +105,8 @@
                     </button>
 
                     <button
-                        @click="selectedCategory = 'security'"
-                        :class="[selectedCategory === 'security' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']">
+                        :class="[selectedCategory === 'security' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']"
+                        @click="selectedCategory = 'security'">
                         <div class="flex items-center space-x-3">
                             <Icon name="heroicons:shield-check" class="w-6 h-6 text-indigo-600" />
                             <div>
@@ -117,8 +117,8 @@
                     </button>
 
                     <button
-                        @click="selectedCategory = 'troubleshooting'"
-                        :class="[selectedCategory === 'troubleshooting' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']">
+                        :class="[selectedCategory === 'troubleshooting' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 bg-white', 'p-4 rounded-lg border-2 hover:border-indigo-600 transition-all text-left']"
+                        @click="selectedCategory = 'troubleshooting'">
                         <div class="flex items-center space-x-3">
                             <Icon name="heroicons:wrench-screwdriver" class="w-6 h-6 text-indigo-600" />
                             <div>
@@ -135,7 +135,7 @@
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 divide-y divide-gray-200">
                     <div v-for="faq in filteredFAQs" :key="faq.id" class="p-6">
-                        <button @click="toggleFAQ(faq.id)" class="w-full flex items-center justify-between text-left">
+                        <button class="w-full flex items-center justify-between text-left" @click="toggleFAQ(faq.id)">
                             <h3 class="text-lg font-semibold text-gray-900">{{ faq.question }}</h3>
                             <Icon :name="openFAQ === faq.id ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" class="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
                         </button>

@@ -9,7 +9,7 @@
             <div class="space-y-4" data-aos="fade-up" data-aos-delay="100">
                 <!-- FAQ Item 1 -->
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button @click="toggleFaq(0)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors" @click="toggleFaq(0)">
                         <span class="text-lg font-semibold text-gray-900">Is Expenso really free?</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,7 @@
 
                 <!-- FAQ Item 2 -->
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button @click="toggleFaq(1)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors" @click="toggleFaq(1)">
                         <span class="text-lg font-semibold text-gray-900">Is my financial data secure?</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@
 
                 <!-- FAQ Item 3 -->
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button @click="toggleFaq(2)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors" @click="toggleFaq(2)">
                         <span class="text-lg font-semibold text-gray-900">Can I use Expenso on mobile?</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +84,7 @@
 
                 <!-- FAQ Item 6 -->
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button @click="toggleFaq(5)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors" @click="toggleFaq(5)">
                         <span class="text-lg font-semibold text-gray-900">Do I need to link my bank accounts?</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
