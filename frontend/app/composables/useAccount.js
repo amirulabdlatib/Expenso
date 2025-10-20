@@ -19,8 +19,22 @@ export const useAccount = () => {
         }
     }
 
+    async function deleteAccount(id) {
+        try {
+            const response = await sanctumClient(`/api/accounts/${id}`, {
+                method: "DELETE",
+            });
+
+            return response;
+        } catch (err) {
+            errors.value = err.data.errors;
+            throw err;
+        }
+    }
+
     return {
         errors,
         createAccount,
+        deleteAccount,
     };
 };

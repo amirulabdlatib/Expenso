@@ -93,7 +93,7 @@
                                         <NuxtLink :to="`/accounts/${account.id}`" class="p-2 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200">
                                             <Icon name="heroicons:pencil" class="w-4 h-4" />
                                         </NuxtLink>
-                                        <button class="p-2 text-white/70 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-all duration-200" @click="openDeleteModal">
+                                        <button class="p-2 text-white/70 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-all duration-200" @click="openDeleteModal(account.id)">
                                             <Icon name="heroicons:trash" class="w-4 h-4" />
                                         </button>
                                     </div>
@@ -161,6 +161,8 @@
 
     const { formatCurrency } = useCurrency();
     const { getAccountColors } = useAccountConstants();
+    const { deleteAccount, errors } = useAccount();
+    const { success, error: errorToast } = useToast();
 
     const client = useSanctumClient();
 
@@ -173,17 +175,29 @@
 
     // Delete modal state
     const showDeleteModal = ref(false);
+    const accountToDelete = ref(null);
 
-    const openDeleteModal = () => {
+    const openDeleteModal = (id) => {
+        accountToDelete.value = id;
         showDeleteModal.value = true;
     };
 
     const closeDeleteModal = () => {
         showDeleteModal.value = false;
+        accountToDelete.value = null;
     };
 
-    const handleDelete = () => {
-        console.log("Delete confirmed");
-        closeDeleteModal();
+    const handleDelete = async () => {
+        try {
+            await deleteAccount(accountToDelete.value);
+            success("Account deleted successfully.");
+            await refresh();
+        } catch (err) {
+            errorToast("There is some error occurred. Try again later");
+            console.log(errors.value);
+            console.log(err);
+        } finally {
+            closeDeleteModal();
+        }
     };
 </script>
