@@ -26,6 +26,7 @@
                                 type="text"
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="John Doe"
+                                autocomplete="name"
                             />
                             <span v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</span>
                         </div>
@@ -47,6 +48,8 @@
                                 type="email"
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="you@example.com"
+                                inputmode="email"
+                                autocomplete="email"
                             />
                             <span v-if="errors.email" class="text-red-400">{{ errors.email[0] }}</span>
                         </div>
@@ -68,6 +71,7 @@
                                 :type="showPassword ? 'text' : 'password'"
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="••••••••"
+                                autocomplete="new-password"
                             />
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" @click="showPassword = !showPassword">
                                 <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -101,6 +105,7 @@
                                 :type="showConfirmPassword ? 'text' : 'password'"
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="••••••••"
+                                autocomplete="new-password"
                             />
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" @click="showConfirmPassword = !showConfirmPassword">
                                 <svg v-if="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
