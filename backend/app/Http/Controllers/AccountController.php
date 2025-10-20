@@ -6,7 +6,6 @@ use App\Http\Requests\StoreAccountRequest;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
@@ -65,8 +64,12 @@ class AccountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Account $account)
     {
-        //
+        $account->delete();
+
+        return response()->json([
+            'message' => 'Account deleted successfully',
+        ], Response::HTTP_NO_CONTENT);
     }
 }
