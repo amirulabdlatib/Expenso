@@ -146,7 +146,7 @@
             </template>
         </div>
 
-        <DeleteModal :show="showDeleteModal" @close="closeDeleteModal" @confirm="handleDelete" />
+        <DeleteModal :loading="isDeleting" :show="showDeleteModal" @close="closeDeleteModal" @confirm="handleDelete" />
     </div>
 </template>
 
@@ -176,6 +176,7 @@
     // Delete modal state
     const showDeleteModal = ref(false);
     const accountToDelete = ref(null);
+    const isDeleting = ref(false);
 
     const openDeleteModal = (id) => {
         accountToDelete.value = id;
@@ -188,6 +189,7 @@
     };
 
     const handleDelete = async () => {
+        isDeleting.value = true;
         try {
             await deleteAccount(accountToDelete.value);
             success("Account deleted successfully.");
@@ -197,6 +199,7 @@
             console.log(errors.value);
             console.log(err);
         } finally {
+            isDeleting.value = false;
             closeDeleteModal();
         }
     };

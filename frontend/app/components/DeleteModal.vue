@@ -19,13 +19,19 @@
                             <!-- Modal Actions -->
                             <div class="flex flex-col sm:flex-row gap-3">
                                 <button
-                                    class="flex-1 px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    class="flex-1 px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    :disabled="loading"
                                     @click="handleClose"
                                 >
                                     Cancel
                                 </button>
-                                <button class="flex-1 px-4 py-3 text-white bg-red-600 rounded-lg hover:bg-red-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" @click="handleConfirm">
-                                    Delete
+                                <button
+                                    class="flex-1 px-4 py-3 text-white bg-red-600 rounded-lg hover:bg-red-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    :disabled="loading"
+                                    @click="handleConfirm"
+                                >
+                                    <span v-if="loading" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                                    <span>{{ loading ? "Deleting..." : "Delete" }}</span>
                                 </button>
                             </div>
                         </div>
@@ -39,6 +45,10 @@
 <script setup>
     defineProps({
         show: Boolean,
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     });
 
     const emit = defineEmits(["close", "confirm"]);
