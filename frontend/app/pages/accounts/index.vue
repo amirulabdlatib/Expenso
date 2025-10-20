@@ -93,7 +93,7 @@
                                         <NuxtLink :to="`/accounts/${account.id}`" class="p-2 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200">
                                             <Icon name="heroicons:pencil" class="w-4 h-4" />
                                         </NuxtLink>
-                                        <button class="p-2 text-white/70 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-all duration-200">
+                                        <button class="p-2 text-white/70 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-all duration-200" @click="openDeleteModal">
                                             <Icon name="heroicons:trash" class="w-4 h-4" />
                                         </button>
                                     </div>
@@ -145,6 +145,8 @@
                 </div>
             </template>
         </div>
+
+        <DeleteModal :show="showDeleteModal" @close="closeDeleteModal" @confirm="handleDelete" />
     </div>
 </template>
 
@@ -168,4 +170,20 @@
         const data = accountsData.value || {};
         return (data.active_accounts || 0) + (data.inactiveAccounts || 0);
     });
+
+    // Delete modal state
+    const showDeleteModal = ref(false);
+
+    const openDeleteModal = () => {
+        showDeleteModal.value = true;
+    };
+
+    const closeDeleteModal = () => {
+        showDeleteModal.value = false;
+    };
+
+    const handleDelete = () => {
+        // Add delete logic here later
+        console.log("Delete confirmed");
+    };
 </script>
