@@ -76,7 +76,7 @@
 
                 <!-- Accounts Container -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div v-if="accountsData.accounts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div v-if="accountsData?.accounts?.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div v-for="account in accountsData.accounts" :key="account.id" class="bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200 overflow-hidden group">
                             <div class="p-6 bg-gradient-to-br" :class="getAccountColors(account.type).gradient">
                                 <div class="flex items-start justify-between mb-6">
