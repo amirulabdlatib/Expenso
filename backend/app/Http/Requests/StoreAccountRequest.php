@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AccountType;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAccountRequest extends FormRequest
@@ -27,7 +29,7 @@ class StoreAccountRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
-            'type' => 'required|string',
+            'type' => ['required', new Enum(AccountType::class)],
             'icon' => 'required|string',
             'balance' => 'required|numeric',
             'currency' => 'required|string|max:7',
