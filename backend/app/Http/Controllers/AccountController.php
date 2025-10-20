@@ -27,7 +27,6 @@ class AccountController extends Controller
             'active_accounts' => $activeAccounts->count(),
             'activeAccountsBalance' => $activeAccounts->sum('balance'),
             'inactiveAccounts' => $inactiveAccounts->count(),
-            'activeBalance' => $activeAccounts->sum('balance'),
         ], Response::HTTP_OK);
     }
 
