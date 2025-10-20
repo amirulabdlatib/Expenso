@@ -89,9 +89,14 @@
                                             <p class="text-sm text-white/80">{{ account.type }}</p>
                                         </div>
                                     </div>
-                                    <NuxtLink :to="`/accounts/${account.id}`" class="p-2 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200">
-                                        <Icon name="heroicons:pencil" class="w-4 h-4" />
-                                    </NuxtLink>
+                                    <div>
+                                        <NuxtLink :to="`/accounts/${account.id}`" class="p-2 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition-all duration-200">
+                                            <Icon name="heroicons:pencil" class="w-4 h-4" />
+                                        </NuxtLink>
+                                        <button class="p-2 text-white/70 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-all duration-200">
+                                            <Icon name="heroicons:trash" class="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 </div>
                                 <div>
                                     <p class="text-xs text-white/80 mb-2 font-medium uppercase tracking-wide">Current Balance</p>
