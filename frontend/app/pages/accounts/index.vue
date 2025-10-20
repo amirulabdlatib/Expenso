@@ -183,7 +183,7 @@
     };
 
     const handleDelete = () => {
-        // Add delete logic here later
         console.log("Delete confirmed");
+        closeDeleteModal();
     };
 </script>

@@ -49,7 +49,6 @@
 
     const handleConfirm = () => {
         emit("confirm");
-        emit("close");
     };
 </script>
 
