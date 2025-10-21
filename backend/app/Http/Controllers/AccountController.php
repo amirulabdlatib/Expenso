@@ -62,8 +62,6 @@ class AccountController extends Controller
     public function update(UpdateAccountRequest $request, Account $account)
     {
         $data = $request->validated();
-        $data['user_id'] = Auth::id();
-
         $account->update($data);
 
         return response()->json([
@@ -80,9 +78,9 @@ class AccountController extends Controller
         return response()->noContent();
     }
 
-    public function getActiveAccountCount(Account $account)
+    public function getActiveAccountCount()
     {
-        return $account->where('user_id',Auth::id())
+        return Account::where('user_id',Auth::id())
                         ->where('is_active',true)
                         ->count();
     }

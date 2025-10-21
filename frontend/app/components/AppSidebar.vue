@@ -224,7 +224,7 @@
         window.dispatchEvent(event);
     });
 
-    onMounted(async() => {
+    onMounted(() => {
         checkMobile();
         window.addEventListener("resize", checkMobile);
         window.addEventListener("toggle-sidebar", handleToggleSidebar);
