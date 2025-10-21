@@ -35,7 +35,10 @@ class AccountController extends Controller
      */
     public function store(StoreAccountRequest $request)
     {
-        Account::create($request->validated());
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+
+        Account::create($data);
 
         return response()->json([
             'message' => 'Account created successfully.',

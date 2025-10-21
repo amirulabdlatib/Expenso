@@ -27,7 +27,6 @@ class StoreAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'type' => ['required', new Enum(AccountType::class)],
             'icon' => 'required|string',
@@ -37,10 +36,4 @@ class StoreAccountRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'user_id' => Auth::id(),
-        ]);
-    }
 }
