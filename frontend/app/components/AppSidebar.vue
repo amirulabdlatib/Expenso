@@ -54,7 +54,7 @@
                         <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
                     </svg>
                     <span v-if="!isCollapsed || isMobile" class="font-medium">Accounts</span>
-                    <span v-if="!isCollapsed || isMobile" class="ml-auto text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">{{ getAccountActiveCounts }}</span>
+                    <span v-if="(!isCollapsed || isMobile) && accountActiveCounts > 0" class="ml-auto text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">{{ getAccountActiveCounts }}</span>
                 </NuxtLink>
 
                 <!-- Analytics -->
