@@ -289,10 +289,5 @@
         title: "Dashboard - Expenso",
     });
 
-    const { user } = useSanctumAuth();
-    const capitalizedName = computed(() => {
-        const name = user.value?.name;
-        if (!name) return "";
-        return name.trim().replace(/\b\w/g, (c) => c.toUpperCase());
-    });
+    const { capitalizedName } = useNameDisplay();
 </script>
