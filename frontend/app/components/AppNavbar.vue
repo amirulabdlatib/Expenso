@@ -160,6 +160,7 @@
 </template>
 
 <script setup>
+    const { user } = useSanctumAuth();
     const { capitalizedName, nickName } = useNameDisplay();
     const showQuickAdd = ref(false);
     const showNotifications = ref(false);
