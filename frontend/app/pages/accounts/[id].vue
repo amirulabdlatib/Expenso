@@ -13,14 +13,38 @@
                 </div>
             </div>
 
+            <!-- Loading State -->
             <div v-if="isFetchData" class="text-center py-12">
                 <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
                 <p class="mt-4 text-gray-600">Loading accounts...</p>
             </div>
 
-            <div v-else-if="Object.keys(errors).length > 0" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <!-- Error States -->
+            <div v-else-if="fetchError" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                 <Icon name="heroicons:exclamation-triangle" class="w-12 h-12 text-red-500 mx-auto mb-4" />
-                <h3 class="text-lg font-semibold text-red-900 mb-2">Error loading accounts details</h3>
+
+                <!-- 404 Error -->
+                <div v-if="fetchError.statusCode === 404">
+                    <h3 class="text-lg font-semibold text-red-900 mb-2">Account Not Found</h3>
+                    <p class="text-gray-600 mb-4">The account you're looking for doesn't exist or has been deleted.</p>
+                </div>
+
+                <!-- 403 Error -->
+                <div v-else-if="fetchError.statusCode === 403">
+                    <h3 class="text-lg font-semibold text-red-900 mb-2">Access Denied</h3>
+                    <p class="text-gray-600 mb-4">You are not authorized to view this account.</p>
+                </div>
+
+                <!-- Other Errors -->
+                <div v-else>
+                    <h3 class="text-lg font-semibold text-red-900 mb-2">Error Loading Account</h3>
+                    <p class="text-gray-600 mb-4">{{ fetchError.message || "An unexpected error occurred. Please try again." }}</p>
+                </div>
+
+                <NuxtLink to="/accounts" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                    <Icon name="heroicons:arrow-left" class="w-4 h-4 mr-2" />
+                    Back to Accounts
+                </NuxtLink>
             </div>
 
             <!-- Form Card -->
@@ -35,8 +59,7 @@
                             type="text"
                             placeholder="e.g., Maybank Savings, CIMB Credit Card"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            :disabled="isLoading"
-                        />
+                            :disabled="isLoading" />
                         <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                     </div>
 
@@ -54,8 +77,7 @@
                                     form.type === type.value ? 'border-indigo-500 bg-indigo-50 shadow-sm' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
                                     isLoading ? 'opacity-50 cursor-not-allowed' : '',
                                 ]"
-                                @click="form.type = type.value"
-                            >
+                                @click="form.type = type.value">
                                 <Icon :name="type.icon" class="w-8 h-8 mb-2" :class="form.type === type.value ? 'text-indigo-600' : 'text-gray-600'" />
                                 <span class="text-xs md:text-sm font-medium text-center" :class="form.type === type.value ? 'text-indigo-900' : 'text-gray-700'">
                                     {{ type.label }}
@@ -79,8 +101,7 @@
                                     form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
                                     isLoading ? 'opacity-50 cursor-not-allowed' : '',
                                 ]"
-                                @click="form.icon = iconOption"
-                            >
+                                @click="form.icon = iconOption">
                                 <Icon :name="iconOption" class="w-6 h-6" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
                             </button>
                         </div>
@@ -101,8 +122,7 @@
                                 step="0.01"
                                 placeholder="0.00"
                                 class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :disabled="isLoading"
-                            />
+                                :disabled="isLoading" />
                         </div>
                         <p v-if="errors.balance" class="text-red-400">{{ errors.balance[0] }}</p>
                     </div>
@@ -135,15 +155,13 @@
                         <NuxtLink
                             to="/accounts"
                             class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                            :class="isLoading ? 'pointer-events-none opacity-50' : ''"
-                        >
+                            :class="isLoading ? 'pointer-events-none opacity-50' : ''">
                             Cancel
                         </NuxtLink>
                         <button
                             type="submit"
                             :disabled="isLoading"
-                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
+                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
                             <span v-if="!isLoading" class="flex items-center space-x-2">
                                 <span>Update</span>
                             </span>
@@ -173,9 +191,10 @@
 
     const { accountTypes, accountIcons, currencies } = useAccountConstants();
     const isFetchData = ref(true);
+    const fetchError = ref(null);
     const { getAccount, updateAccount, errors } = useAccount();
     const route = useRoute();
-    const { success , error } = useToast()
+    const { success, error } = useToast();
     const accountId = route.params.id;
 
     const isLoading = ref(false);
@@ -192,18 +211,27 @@
     onMounted(async () => {
         try {
             const data = await getAccount(accountId);
-            form.name = data.account.name;
-            form.type = data.account.type;
-            form.icon = data.account.icon;
-            form.balance = data.account.balance;
-            form.currency = data.account.currency;
-            form.is_active = Boolean(data.account.is_active);
+            populateForm(data.account)
+            fetchError.value = null;
         } catch (err) {
             console.log(err);
+            fetchError.value = {
+                statusCode: err.statusCode || err.status || 500,
+                message: err.message || err.data?.message || "An error occurred",
+            };
         } finally {
             isFetchData.value = false;
         }
     });
+
+    const populateForm = (accountData) => {
+        form.name = accountData.name;
+        form.type = accountData.type;
+        form.icon = accountData.icon;
+        form.balance = accountData.balance;
+        form.currency = accountData.currency;
+        form.is_active = Boolean(accountData.is_active);
+    };
 
     const handleUpdate = async () => {
         isLoading.value = true;

@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p class="text-gray-600 mt-2">Welcome back, Ahmad! Here's your financial overview.</p>
+            <p class="text-gray-600 mt-2">Welcome back, {{ capitalizedName }}! Here's your financial overview.</p>
         </div>
 
         <!-- Stats Cards -->
@@ -75,7 +75,7 @@
                 <p class="text-2xl font-bold text-gray-900">RM 15,000</p>
                 <div class="flex items-center space-x-2 mt-2">
                     <div class="flex-1 h-2 bg-purple-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-purple-600 rounded-full" style="width: 65%"/>
+                        <div class="h-full bg-purple-600 rounded-full" style="width: 65%" />
                     </div>
                     <span class="text-sm text-purple-600 font-semibold">65%</span>
                 </div>
@@ -168,7 +168,7 @@
                             <span class="text-sm font-semibold text-gray-900">RM 450 / RM 500</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-yellow-500 rounded-full" style="width: 90%"/>
+                            <div class="h-full bg-yellow-500 rounded-full" style="width: 90%" />
                         </div>
                         <p class="text-xs text-yellow-600 mt-1">⚠️ 90% used</p>
                     </div>
@@ -182,7 +182,7 @@
                             <span class="text-sm font-semibold text-gray-900">RM 180 / RM 300</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-green-500 rounded-full" style="width: 60%"/>
+                            <div class="h-full bg-green-500 rounded-full" style="width: 60%" />
                         </div>
                         <p class="text-xs text-green-600 mt-1">✓ On track</p>
                     </div>
@@ -196,7 +196,7 @@
                             <span class="text-sm font-semibold text-gray-900">RM 245 / RM 400</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500 rounded-full" style="width: 61%"/>
+                            <div class="h-full bg-blue-500 rounded-full" style="width: 61%" />
                         </div>
                         <p class="text-xs text-blue-600 mt-1">✓ Good progress</p>
                     </div>
@@ -210,7 +210,7 @@
                             <span class="text-sm font-semibold text-gray-900">RM 95 / RM 200</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-indigo-500 rounded-full" style="width: 47%"/>
+                            <div class="h-full bg-indigo-500 rounded-full" style="width: 47%" />
                         </div>
                         <p class="text-xs text-indigo-600 mt-1">✓ Under budget</p>
                     </div>
@@ -237,7 +237,7 @@
                             <span class="font-semibold text-indigo-600">65%</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-indigo-600 rounded-full" style="width: 65%"/>
+                            <div class="h-full bg-indigo-600 rounded-full" style="width: 65%" />
                         </div>
                         <p class="text-sm font-semibold text-gray-900">RM 6,500 saved</p>
                     </div>
@@ -253,7 +253,7 @@
                             <span class="font-semibold text-purple-600">42%</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-purple-600 rounded-full" style="width: 42%"/>
+                            <div class="h-full bg-purple-600 rounded-full" style="width: 42%" />
                         </div>
                         <p class="text-sm font-semibold text-gray-900">RM 2,100 saved</p>
                     </div>
@@ -269,7 +269,7 @@
                             <span class="font-semibold text-green-600">28%</span>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-green-600 rounded-full" style="width: 28%"/>
+                            <div class="h-full bg-green-600 rounded-full" style="width: 28%" />
                         </div>
                         <p class="text-sm font-semibold text-gray-900">RM 4,200 saved</p>
                     </div>
@@ -288,4 +288,6 @@
     useHead({
         title: "Dashboard - Expenso",
     });
+
+    const { capitalizedName } = useNameDisplay();
 </script>

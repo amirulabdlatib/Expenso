@@ -132,7 +132,7 @@
                     <!-- User Menu Dropdown -->
                     <div v-if="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                         <div class="px-4 py-3 border-b border-gray-200">
-                            <p class="text-sm font-semibold text-gray-900">{{ user?.name }}</p>
+                            <p class="text-sm font-semibold text-gray-900">{{ capitalizedName }}</p>
                             <p class="text-xs text-gray-500 mt-1">{{ user?.email }}</p>
                         </div>
                         <NuxtLink to="/dashboard" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors" @click="closeAllDropdowns">
@@ -161,15 +161,11 @@
 
 <script setup>
     const { user } = useSanctumAuth();
+    const { capitalizedName, nickName } = useNameDisplay();
     const showQuickAdd = ref(false);
     const showNotifications = ref(false);
     const showUserMenu = ref(false);
     const isCollapsed = ref(false);
-
-    const nickName = computed(() => {
-        if (!user.value?.name) return "";
-        return user.value.name.trim().charAt(0).toUpperCase();
-    });
 
     const closeAllDropdowns = () => {
         showQuickAdd.value = false;
