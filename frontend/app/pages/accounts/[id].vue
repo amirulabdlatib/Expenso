@@ -210,6 +210,7 @@
 
         try {
             await updateAccount(form,accountId);
+            await refreshNuxtData('active-accounts-count');
             success("Account updated successfully.");
             navigateTo("/accounts");
         } catch (err) {

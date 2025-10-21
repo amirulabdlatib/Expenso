@@ -182,6 +182,7 @@
 
         try {
             await createAccount(form);
+            await refreshNuxtData('active-accounts-count');
             success("Account created successfully.");
             navigateTo("/accounts");
         } catch (err) {

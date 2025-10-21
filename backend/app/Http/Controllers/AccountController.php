@@ -82,6 +82,8 @@ class AccountController extends Controller
 
     public function getActiveAccountCount(Account $account)
     {
-        return $account->where('user_id',Auth::id())->count();
+        return $account->where('user_id',Auth::id())
+                        ->where('is_active',true)
+                        ->count();
     }
 }

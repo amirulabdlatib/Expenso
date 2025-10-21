@@ -54,7 +54,9 @@
                         <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
                     </svg>
                     <span v-if="!isCollapsed || isMobile" class="font-medium">Accounts</span>
-                    <span v-if="(!isCollapsed || isMobile) && accountActiveCounts > 0" class="ml-auto text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">{{ getAccountActiveCounts }}</span>
+                    <span v-if="(!isCollapsed || isMobile) && getAccountActiveCounts > 0" class="ml-auto text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">
+                        {{ getAccountActiveCounts }}
+                    </span>
                 </NuxtLink>
 
                 <!-- Analytics -->
@@ -159,13 +161,21 @@
     const isOpen = ref(true);
     const isCollapsed = ref(false);
     const isMobile = ref(false);
-    const accountActiveCounts = ref(0)
 
     const { getActiveAccountsCount } = useAccount()
 
-    const getAccountActiveCounts = computed(()=>{
-        return accountActiveCounts.value > 0 ? accountActiveCounts.value :""
-    })
+    const { data: activeAccountsCount } = await useAsyncData(
+        'active-accounts-count',
+        () => getActiveAccountsCount(),
+        {
+            default: () => 0,
+        }
+    );
+
+    const getAccountActiveCounts = computed(() => {
+        const count = activeAccountsCount.value?.count || activeAccountsCount.value || 0;
+        return count > 0 ? count : "";
+    });
 
     const handleLinkClick = () => {
         // Close sidebar on mobile when clicking any link
@@ -219,13 +229,6 @@
         window.addEventListener("resize", checkMobile);
         window.addEventListener("toggle-sidebar", handleToggleSidebar);
         window.addEventListener("collapse-sidebar", handleCollapseSidebar);
-
-        try{
-            const data = await getActiveAccountsCount()
-            accountActiveCounts.value = data
-        }catch(err){
-            console.log(err)
-        }
     });
 
     onUnmounted(() => {

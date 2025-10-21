@@ -191,6 +191,8 @@
             await deleteAccount(accountToDelete.value);
             success("Account deleted successfully.");
             await refresh();
+            await refreshNuxtData('active-accounts-count');
+
         } catch (err) {
             errorToast("There is some error occurred. Try again later");
             console.log(errors.value);
