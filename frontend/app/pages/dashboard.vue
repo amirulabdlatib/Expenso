@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p class="text-gray-600 mt-2">Welcome back, {{ capitalizedName }}! Here's your financial overview.</p>
+            <p class="text-gray-600 mt-2">Welcome back, {{ user.name }}! Here's your financial overview.</p>
         </div>
 
         <!-- Stats Cards -->
@@ -290,5 +290,4 @@
     });
 
     const { user } = useSanctumAuth();
-    const capitalizedName = computed(() => user?.name.replace(/\b\w/g, (c) => c.toUpperCase()) || "");
 </script>
