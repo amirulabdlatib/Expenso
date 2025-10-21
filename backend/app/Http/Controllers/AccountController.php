@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAccountRequest;
+use App\Http\Requests\UpdateAccountRequest;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -35,7 +36,10 @@ class AccountController extends Controller
      */
     public function store(StoreAccountRequest $request)
     {
-        Account::create($request->validated());
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+
+        Account::create($data);
 
         return response()->json([
             'message' => 'Account created successfully.',
@@ -55,9 +59,14 @@ class AccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateAccountRequest $request, Account $account)
     {
-        //
+        $data = $request->validated();
+        $account->update($data);
+
+        return response()->json([
+            "account"=> $account,
+        ],  Response::HTTP_OK);
     }
 
     /**
@@ -67,5 +76,12 @@ class AccountController extends Controller
     {
         $account->delete();
         return response()->noContent();
+    }
+
+    public function getActiveAccountCount()
+    {
+        return Account::where('user_id',Auth::id())
+                        ->where('is_active',true)
+                        ->count();
     }
 }

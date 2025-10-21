@@ -11,4 +11,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::resource('accounts', AccountController::class);
+    Route::get('/getActiveAccountCount',[AccountController::class,'getActiveAccountCount']);
 });
