@@ -211,12 +211,7 @@
     onMounted(async () => {
         try {
             const data = await getAccount(accountId);
-            form.name = data.account.name;
-            form.type = data.account.type;
-            form.icon = data.account.icon;
-            form.balance = data.account.balance;
-            form.currency = data.account.currency;
-            form.is_active = Boolean(data.account.is_active);
+            populateForm(data.account)
             fetchError.value = null;
         } catch (err) {
             console.log(err);
@@ -228,6 +223,15 @@
             isFetchData.value = false;
         }
     });
+
+    const populateForm = (accountData) => {
+        form.name = accountData.name;
+        form.type = accountData.type;
+        form.icon = accountData.icon;
+        form.balance = accountData.balance;
+        form.currency = accountData.currency;
+        form.is_active = Boolean(accountData.is_active);
+    };
 
     const handleUpdate = async () => {
         isLoading.value = true;
