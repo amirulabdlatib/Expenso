@@ -79,4 +79,9 @@ class AccountController extends Controller
         $account->delete();
         return response()->noContent();
     }
+
+    public function getActiveAccountCount(Account $account)
+    {
+        return $account->where('user_id',Auth::id())->count();
+    }
 }

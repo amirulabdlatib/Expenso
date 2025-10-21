@@ -57,11 +57,22 @@ export const useAccount = () => {
         }
     }
 
+    async function getActiveAccountsCount() {
+        try{
+            const response = await sanctumClient('/api/getActiveAccountCount');
+            return response
+        }catch(err){
+            errors.value = err.data.errors;
+            throw(err)
+        }
+    }
+
     return {
         errors,
         createAccount,
         getAccount,
         updateAccount,
         deleteAccount,
+        getActiveAccountsCount,
     };
 };
