@@ -11,7 +11,6 @@ export const useAccount = () => {
 
             return response;
         } catch (err) {
-            console.log(err);
             if (err.statusCode == 422) {
                 errors.value = err.data.errors;
             }
@@ -25,6 +24,22 @@ export const useAccount = () => {
             return response;
         } catch (err) {
             errors.value = err.data.errors;
+            throw err;
+        }
+    }
+
+    async function updateAccount(form,id) {
+        try{
+            const response = await sanctumClient(`/api/accounts/${id}`,{
+                method:"PUT",
+                body:form
+            })
+
+            return response
+        }catch(err){
+            if (err.statusCode == 422) {
+                errors.value = err.data.errors;
+            }
             throw err;
         }
     }
@@ -46,6 +61,7 @@ export const useAccount = () => {
         errors,
         createAccount,
         getAccount,
+        updateAccount,
         deleteAccount,
     };
 };

@@ -8,8 +8,7 @@
                         <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                     </NuxtLink>
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Create New Account</h1>
-                        <p class="text-gray-600 text-sm md:text-base mt-1">Add a new financial account to track your money</p>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Edit Account</h1>
                     </div>
                 </div>
             </div>
@@ -26,7 +25,7 @@
 
             <!-- Form Card -->
             <div v-else class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
-                <form class="space-y-6" @submit.prevent="handleSubmit">
+                <form class="space-y-6" @submit.prevent="handleUpdate">
                     <!-- Account Name -->
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Account Name <span class="text-red-500">*</span> </label>
@@ -146,10 +145,10 @@
                             class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <span v-if="!isLoading" class="flex items-center space-x-2">
-                                <span>Create Account</span>
+                                <span>Update</span>
                             </span>
                             <span v-else class="flex items-center space-x-2">
-                                <span>Creating...</span>
+                                <span>Updating...</span>
                                 <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -165,7 +164,7 @@
 
 <script setup>
     useHead({
-        title: "Create Account - Expenso",
+        title: "Edit Account - Expenso",
     });
 
     definePageMeta({
@@ -174,8 +173,10 @@
 
     const { accountTypes, accountIcons, currencies } = useAccountConstants();
     const isFetchData = ref(true);
-    const { getAccount, errors } = useAccount();
+    const { getAccount, updateAccount, errors } = useAccount();
     const route = useRoute();
+    const { success , error } = useToast()
+    const accountId = route.params.id;
 
     const isLoading = ref(false);
 
@@ -190,14 +191,13 @@
 
     onMounted(async () => {
         try {
-            const accountId = route.params.id;
             const data = await getAccount(accountId);
             form.name = data.account.name;
             form.type = data.account.type;
             form.icon = data.account.icon;
             form.balance = data.account.balance;
             form.currency = data.account.currency;
-            form.is_active = data.account.is_active;
+            form.is_active = Boolean(data.account.is_active);
         } catch (err) {
             console.log(err);
         } finally {
@@ -205,18 +205,18 @@
         }
     });
 
-    // const handleUpdate = async () => {
-    //     isLoading.value = true;
+    const handleUpdate = async () => {
+        isLoading.value = true;
 
-    //     try {
-    //         await createAccount(form);
-    //         success("Account created successfully.");
-    //         navigateTo("/accounts");
-    //     } catch (err) {
-    //         error("Account creation failed");
-    //         console.log("Account creation failed:", err);
-    //     } finally {
-    //         isLoading.value = false;
-    //     }
-    // };
+        try {
+            await updateAccount(form,accountId);
+            success("Account updated successfully.");
+            navigateTo("/accounts");
+        } catch (err) {
+            error("Account update failed");
+            console.log("Account update failed:", err);
+        } finally {
+            isLoading.value = false;
+        }
+    };
 </script>
