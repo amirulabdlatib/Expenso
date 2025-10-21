@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAccountRequest;
-use App\Http\Requests\UpdateAccountRequest;
 use App\Models\Account;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreAccountRequest;
+use App\Http\Requests\UpdateAccountRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AccountController extends Controller
 {
+
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -51,6 +54,8 @@ class AccountController extends Controller
      */
     public function show(Account $account)
     {
+        $this->authorize('view', $account);
+
         return response()->json([
             'account' => $account,
         ], Response::HTTP_OK);
@@ -61,6 +66,8 @@ class AccountController extends Controller
      */
     public function update(UpdateAccountRequest $request, Account $account)
     {
+        $this->authorize('update', $account);
+
         $data = $request->validated();
         $account->update($data);
 
@@ -74,6 +81,8 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
+        $this->authorize('delete', $account);
+
         $account->delete();
         return response()->noContent();
     }
