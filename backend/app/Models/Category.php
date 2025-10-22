@@ -13,6 +13,7 @@ class Category extends Model
         'name',
         'type',
         'icon',
+        'color',
         'parent_id',
     ];
 
