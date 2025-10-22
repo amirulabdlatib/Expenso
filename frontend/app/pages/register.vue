@@ -168,6 +168,10 @@
         middleware: ["sanctum:guest"],
     });
 
+    useHead({
+        title: 'Register - Expenso'
+    })
+
     const { doRegister, errors } = useAuth();
     const { refreshIdentity } = useSanctumAuth();
     const { success, error } = useToast();
