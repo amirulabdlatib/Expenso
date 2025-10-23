@@ -150,17 +150,16 @@
         middleware: ["sanctum:auth"],
     });
 
-    // Placeholder for future composables
-    // const { createCategory, errors } = useCategory();
-    // const { success, error } = useToast();
+    const { createCategory, errors } = useCategory();
+    const { success, error } = useToast();
 
     const isLoading = ref(false);
-    const errors = ref({});
 
     const form = reactive({
         name: "",
         type: "",
         icon: "",
+        color: "",
     });
 
     const categoryTypes = [
@@ -230,24 +229,14 @@
 
     const handleSubmit = async () => {
         isLoading.value = true;
-        errors.value = {};
 
         try {
-            // TODO: Implement API call
-            // await createCategory(form);
-            // success("Category created successfully.");
-            // navigateTo("/categories");
-
-            console.log("Form submitted:", form);
-
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-
-            alert("Category created successfully! (API not implemented yet)");
-            // navigateTo("/categories");
+            await createCategory(form);
+            success("Category created successfully.");
+            navigateTo("/categories");
         } catch (err) {
-            // error("Category creation failed");
             console.error("Category creation failed:", err);
+            error("Category creation failed!");
         } finally {
             isLoading.value = false;
         }

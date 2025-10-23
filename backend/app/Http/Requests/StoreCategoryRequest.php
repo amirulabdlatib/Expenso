@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\AccountType;
+use App\Enums\CategoryType;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreCategoryRequest extends FormRequest
 {
@@ -23,7 +27,11 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
+            'name' => 'required|max:255',
+            'type' => ['required', new Enum(CategoryType::class)],
+            'icon' => 'required| ',
+            'color' => 'required',
+            'parent_id' => 'nullable',
         ];
     }
 }
