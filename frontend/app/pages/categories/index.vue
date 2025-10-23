@@ -129,6 +129,7 @@
 
     const activeTab = ref("all");
     const { success, error: toastError } = useToast();
+    const { deleteCategory } = useCategory();
     const client = useSanctumClient();
 
     const { data: categoriesData, status, error, refresh } = await useAsyncData("categories", () => client("api/categories"));
@@ -163,9 +164,7 @@
         }
 
         try {
-            await client(`api/categories/${id}`, {
-                method: "DELETE",
-            });
+            await deleteCategory(id);
             success("Category deleted successfully.");
             refresh();
         } catch (err) {

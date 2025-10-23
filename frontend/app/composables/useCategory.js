@@ -17,8 +17,20 @@ export const useCategory = () => {
         }
     }
 
+    async function deleteCategory(id) {
+        try {
+            await sanctumClient(`api/categories/${id}`, {
+                method: "DELETE",
+            });
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     return {
         errors,
         createCategory,
+        deleteCategory,
     };
 };
