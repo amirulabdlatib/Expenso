@@ -211,7 +211,7 @@
     });
 
     onMounted(async () => {
-        await accountsStore.getActiveAccountsCount();
+        void accountsStore.getActiveAccountsCount().catch((e) => console.debug("Sidebar count fetch failed:", e));
 
         checkMobile();
         window.addEventListener("resize", checkMobile);
