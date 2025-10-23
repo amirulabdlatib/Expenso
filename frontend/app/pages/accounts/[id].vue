@@ -197,6 +197,7 @@
     const route = useRoute();
     const { success, error } = useToast();
     const accountId = route.params.id;
+    const accountsStore = useAccountsStore();
 
     const isLoading = ref(false);
 
@@ -239,7 +240,7 @@
 
         try {
             await updateAccount(form, accountId);
-            await refreshNuxtData("active-accounts-count");
+            await accountsStore.getActiveAccountsCount();
             success("Account updated successfully.");
             navigateTo("/accounts");
         } catch (err) {

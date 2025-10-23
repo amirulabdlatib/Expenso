@@ -160,6 +160,7 @@
     const { getAccountColors } = useAccountConstants();
     const { deleteAccount, errors } = useAccount();
     const { success, error: errorToast } = useToast();
+    const accountsStore = useAccountsStore();
 
     const client = useSanctumClient();
 
@@ -189,10 +190,9 @@
         isDeleting.value = true;
         try {
             await deleteAccount(accountToDelete.value);
+            await accountsStore.getActiveAccountsCount();
             success("Account deleted successfully.");
             await refresh();
-            await refreshNuxtData('active-accounts-count');
-
         } catch (err) {
             errorToast("There is some error occurred. Try again later");
             console.log(errors.value);
