@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <NuxtLink :to="`/categories/${category.id}/edit`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">
+                            <NuxtLink :to="`/categories/${category.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">
                                 <Icon name="heroicons:pencil" class="w-4 h-4" />
                             </NuxtLink>
                             <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="handleDelete(category.id)">
