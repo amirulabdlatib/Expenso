@@ -18,16 +18,10 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
                 <div class="flex border-b border-gray-200">
                     <button
-                        :class="[activeTab === 'expense' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
-                        @click="activeTab = 'expense'">
-                        Expense Categories
-                        <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'expense' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">{{ expenseCategories.length }}</span>
-                    </button>
-                    <button
-                        :class="[activeTab === 'income' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
-                        @click="activeTab = 'income'">
-                        Income Categories
-                        <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'income' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">{{ incomeCategories.length }}</span>
+                        :class="[activeTab === 'all' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
+                        @click="activeTab = 'all'">
+                        All
+                        <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'all' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">{{ expenseCategories.length }}</span>
                     </button>
                 </div>
             </div>
@@ -41,7 +35,7 @@
                             v-model="searchQuery"
                             type="text"
                             placeholder="Search categories..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" >
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
                     </div>
                     <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="name">Sort by Name</option>
@@ -64,14 +58,9 @@
                                 <p class="text-sm text-gray-500">{{ category.transactionCount }} transactions</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <NuxtLink :to="`/categories/edit/${category.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors">
-                                <Icon name="heroicons:pencil" class="w-4 h-4" />
-                            </NuxtLink>
-                            <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteCategory(category.id)">
-                                <Icon name="heroicons:trash" class="w-4 h-4" />
-                            </button>
-                        </div>
+                        <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteCategory(category.id)">
+                            <Icon name="heroicons:trash" class="w-4 h-4" />
+                        </button>
                     </div>
 
                     <!-- Usage Stats -->
@@ -81,11 +70,10 @@
                             <span class="font-semibold text-gray-900">{{ formatCurrency(category.totalAmount) }}</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div :style="{ width: category.usagePercentage + '%', backgroundColor: category.color }" class="h-2 rounded-full transition-all"/>
+                            <div :style="{ width: category.usagePercentage + '%', backgroundColor: category.color }" class="h-2 rounded-full transition-all" />
                         </div>
                         <div class="flex items-center justify-between text-xs text-gray-500">
                             <span>{{ category.usagePercentage }}% of total</span>
-                            <span v-if="category.isDefault" class="px-2 py-1 bg-blue-100 text-blue-600 rounded-full">Default</span>
                         </div>
                     </div>
 
@@ -117,6 +105,8 @@
         title: "Categories - Expenso",
     });
 
+    const { formatCurrency } = useCurrency();
+
     // Dummy Data
     const expenseCategories = ref([
         {
@@ -128,7 +118,6 @@
             transactionCount: 45,
             totalAmount: 2500.0,
             usagePercentage: 25,
-            isDefault: true,
             subcategories: [
                 { id: 11, name: "Supermarket" },
                 { id: 12, name: "Restaurants" },
@@ -143,7 +132,6 @@
             transactionCount: 32,
             totalAmount: 1800.0,
             usagePercentage: 18,
-            isDefault: true,
             subcategories: [
                 { id: 21, name: "Fuel" },
                 { id: 22, name: "Public Transport" },
@@ -158,7 +146,6 @@
             transactionCount: 28,
             totalAmount: 1200.0,
             usagePercentage: 12,
-            isDefault: true,
             subcategories: [],
         },
         {
@@ -170,7 +157,6 @@
             transactionCount: 24,
             totalAmount: 1500.0,
             usagePercentage: 15,
-            isDefault: false,
             subcategories: [],
         },
         {
@@ -182,7 +168,6 @@
             transactionCount: 15,
             totalAmount: 900.0,
             usagePercentage: 9,
-            isDefault: true,
             subcategories: [],
         },
         {
@@ -194,7 +179,6 @@
             transactionCount: 12,
             totalAmount: 800.0,
             usagePercentage: 8,
-            isDefault: true,
             subcategories: [],
         },
     ]);
@@ -209,7 +193,6 @@
             transactionCount: 12,
             totalAmount: 48000.0,
             usagePercentage: 80,
-            isDefault: true,
             subcategories: [],
         },
         {
@@ -221,7 +204,6 @@
             transactionCount: 8,
             totalAmount: 8000.0,
             usagePercentage: 13,
-            isDefault: false,
             subcategories: [],
         },
         {
@@ -233,13 +215,12 @@
             transactionCount: 5,
             totalAmount: 4000.0,
             usagePercentage: 7,
-            isDefault: true,
             subcategories: [],
         },
     ]);
 
     // State
-    const activeTab = ref("expense");
+    const activeTab = ref("all");
     const searchQuery = ref("");
     const sortBy = ref("name");
 
@@ -261,14 +242,6 @@
 
         return categories;
     });
-
-    // Methods
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat("en-MY", {
-            style: "currency",
-            currency: "MYR",
-        }).format(amount);
-    };
 
     const deleteCategory = (id) => {
         if (confirm("Are you sure you want to delete this category?")) {
