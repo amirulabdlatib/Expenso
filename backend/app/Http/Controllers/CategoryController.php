@@ -12,6 +12,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::where('user_id',Auth::id())
+                                ->whereNull('parent_id')
                                 ->select(['id', 'name', 'type', 'icon', 'color', 'parent_id'])
                                 ->with('children:id,name,parent_id')
                                 ->get();
