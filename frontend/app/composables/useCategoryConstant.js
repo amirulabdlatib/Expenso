@@ -54,7 +54,6 @@ export const useCategoryConstant = () => {
         { value: "sky", class: "bg-sky-500" },
         { value: "blue", class: "bg-blue-500" },
         { value: "indigo", class: "bg-indigo-500" },
-        { value: "violet", class: "bg-violet-500" },
         { value: "purple", class: "bg-purple-500" },
         { value: "fuchsia", class: "bg-fuchsia-500" },
         { value: "pink", class: "bg-pink-500" },
