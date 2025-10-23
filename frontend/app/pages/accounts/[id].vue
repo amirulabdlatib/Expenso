@@ -9,6 +9,7 @@
                     </NuxtLink>
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Edit Account</h1>
+                        <p class="text-gray-600 text-sm md:text-base mt-1">Make changes to your account details</p>
                     </div>
                 </div>
             </div>
@@ -196,6 +197,7 @@
     const route = useRoute();
     const { success, error } = useToast();
     const accountId = route.params.id;
+    const accountsStore = useAccountsStore();
 
     const isLoading = ref(false);
 
@@ -211,7 +213,7 @@
     onMounted(async () => {
         try {
             const data = await getAccount(accountId);
-            populateForm(data.account)
+            populateForm(data.account);
             fetchError.value = null;
         } catch (err) {
             console.log(err);
@@ -237,8 +239,8 @@
         isLoading.value = true;
 
         try {
-            await updateAccount(form,accountId);
-            await refreshNuxtData('active-accounts-count');
+            await updateAccount(form, accountId);
+            await accountsStore.getActiveAccountsCount();
             success("Account updated successfully.");
             navigateTo("/accounts");
         } catch (err) {

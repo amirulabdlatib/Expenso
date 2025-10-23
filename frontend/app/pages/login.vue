@@ -105,6 +105,10 @@
         middleware: ["sanctum:guest"],
     });
 
+    useHead({
+        title: 'Login - Expenso'
+    })
+
     const { doLogin, errors } = useAuth();
     const { success, error } = useToast();
     const form = reactive({
