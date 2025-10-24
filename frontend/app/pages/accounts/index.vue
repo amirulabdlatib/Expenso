@@ -158,7 +158,7 @@
 
     const { formatCurrency } = useCurrency();
     const { getAccountColors } = useAccountConstants();
-    const { deleteAccount, errors } = useAccount();
+    const { deleteAccount } = useAccount();
     const { success, error: errorToast } = useToast();
     const accountsStore = useAccountsStore();
 
