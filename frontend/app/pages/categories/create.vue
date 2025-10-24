@@ -68,7 +68,7 @@
                                     :disabled="isLoading"
                                     class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
                                     :class="[form.parent_id === category.id ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
-                                    @click="form.parent_id = category.id">
+                                    @click="selectParentCategory(category)">
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="getColorClasses(category.color).bgClass">
                                             <Icon :name="category.icon" class="w-5 h-5" :class="getColorClasses(category.color).textClass" />
@@ -99,15 +99,27 @@
                         <!-- Category Type -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3"> Category Type <span class="text-red-500">*</span> </label>
+
+                            <!-- Info message when parent is selected -->
+                            <div v-if="isSubcategory && form.parent_id" class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start space-x-2">
+                                <Icon name="heroicons:information-circle" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <p class="text-sm text-blue-700">
+                                    Type automatically set to match parent category: <span class="font-semibold">{{ capitalizeWord(form.type) }}</span>
+                                </p>
+                            </div>
+
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <button
                                     v-for="type in categoryTypes"
                                     :key="type.value"
                                     type="button"
-                                    :disabled="isLoading"
+                                    :disabled="isLoading || (isSubcategory && form.parent_id !== null)"
                                     class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
-                                    :class="[form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
-                                    @click="form.type = type.value">
+                                    :class="[
+                                        form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
+                                        isLoading || (isSubcategory && form.parent_id !== null) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+                                    ]"
+                                    @click="!isSubcategory && (form.type = type.value)">
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
                                             <Icon :name="type.icon" class="w-5 h-5" :class="type.iconColor" />
@@ -233,8 +245,14 @@
     watch(isSubcategory, (newValue) => {
         if (!newValue) {
             form.parent_id = null;
+            form.type = "";
         }
     });
+
+    const selectParentCategory = (category) => {
+        form.parent_id = category.id;
+        form.type = category.type;
+    };
 
     const handleSubmit = async () => {
         isLoading.value = true;
