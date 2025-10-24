@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\CategoryType;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -36,5 +38,23 @@ class Transaction extends Model
     public function relatedAccount() : BelongsTo
     {
         return $this->belongsTo(Account::class, 'related_account_id');
+    }
+
+    public static function totalIncome()
+    {
+        return static::where('user_id',Auth::id())
+            ->whereHas('category', function($q){
+            $q->where('type',CategoryType::Income);
+        })
+            ->sum('credit');
+    }
+
+    public static function totalExpenses()
+    {
+        return static::where('user_id',Auth::id())
+            ->whereHas('category', function($q){
+            $q->where('type',CategoryType::Expense);
+        })
+        ->sum('debit');
     }
 }
