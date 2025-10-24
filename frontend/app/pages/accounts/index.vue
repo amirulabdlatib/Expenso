@@ -24,7 +24,7 @@
             <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                 <Icon name="heroicons:exclamation-triangle" class="w-12 h-12 text-red-500 mx-auto mb-4" />
                 <h3 class="text-lg font-semibold text-red-900 mb-2">Error Loading Accounts</h3>
-                <p class="text-red-700 mb-4">{{ error.message }}</p>
+                <p class="text-red-700 mb-4">{{ error?.data?.message }}</p>
                 <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors" @click="refresh">Try Again</button>
             </div>
 
