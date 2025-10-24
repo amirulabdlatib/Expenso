@@ -59,6 +59,6 @@ class User extends Authenticatable
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(Category::class);
+        return $this->hasMany(Transaction::class);
     }
 }
