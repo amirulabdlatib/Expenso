@@ -27,6 +27,16 @@ class CategoryController extends Controller
         $data = $request->validated();
         $data['user_id'] = Auth::id();
 
+        if (!empty($data['parent_id'])) {
+
+        $parent = Category::find($data['parent_id']);
+        if ($parent && $parent->parent_id !== null) {
+                return response()->json([
+                    'message' => 'Cannot assign a child to another child category.'
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+        }
+
         Category::create($data);
 
         return response()->json([

@@ -7,6 +7,7 @@ use App\Enums\CategoryType;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class StoreCategoryRequest extends FormRequest
@@ -31,7 +32,11 @@ class StoreCategoryRequest extends FormRequest
             'type' => ['required', new Enum(CategoryType::class)],
             'icon' => 'required| ',
             'color' => 'required',
-            'parent_id' => 'nullable',
+            'parent_id' => ['nullable',
+                            Rule::exists('categories','id')
+                                ->whereNull('parent_id')
+                                ->where('user_id',Auth::id()),
+                        ],
         ];
     }
 }
