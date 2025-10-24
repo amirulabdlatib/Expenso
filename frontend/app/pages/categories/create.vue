@@ -220,6 +220,7 @@
 
     const { createCategory, errors } = useCategory();
     const { categoryTypes, categoryIcons, categoryColors, getColorClasses } = useCategoryConstant();
+    const { capitalizeWord } = useUtils();
     const { success, error } = useToast();
     const client = useSanctumClient();
 
@@ -247,11 +248,6 @@
             form.parent_id = null;
         }
     });
-
-    function capitalizeWord(text) {
-        if (!text) return "";
-        return text.charAt(0).toUpperCase() + text.slice(1);
-    }
 
     const handleSubmit = async () => {
         isLoading.value = true;
