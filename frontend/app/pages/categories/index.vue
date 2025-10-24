@@ -130,6 +130,7 @@
     const activeTab = ref("all");
     const { success, error: toastError } = useToast();
     const { deleteCategory } = useCategory();
+    const { capitalizeWord } = useUtils();
     const { getColorClasses } = useCategoryConstant();
     const client = useSanctumClient();
 
@@ -153,11 +154,6 @@
             return incomeCategories.value;
         }
     });
-
-    function capitalizeWord(text) {
-        if (!text) return "";
-        return text.charAt(0).toUpperCase() + text.slice(1);
-    }
 
     const handleDelete = async (id) => {
         if (!confirm("Are you sure you want to delete this category?")) {
