@@ -195,7 +195,6 @@
             await refresh();
         } catch (err) {
             errorToast("There is some error occurred. Try again later");
-            console.log(errors.value);
             console.log(err);
         } finally {
             isDeleting.value = false;
