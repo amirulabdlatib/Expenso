@@ -72,8 +72,8 @@
                 <div v-for="category in displayedCategories" :key="category.id" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div class="flex items-start justify-between mb-4">
                         <div class="flex items-center space-x-3">
-                            <div :class="`bg-${category.color}-100`" class="w-12 h-12 rounded-lg flex items-center justify-center">
-                                <Icon :name="category.icon" class="w-6 h-6" :class="`text-${category.color}-600`" />
+                            <div :class="getColorClasses(category.color).bgClass" class="w-12 h-12 rounded-lg flex items-center justify-center">
+                                <Icon :name="category.icon" class="w-6 h-6" :class="getColorClasses(category.color).textClass" />
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900">{{ category.name }}</h3>
@@ -130,6 +130,7 @@
     const activeTab = ref("all");
     const { success, error: toastError } = useToast();
     const { deleteCategory } = useCategory();
+    const { getColorClasses } = useCategoryConstant();
     const client = useSanctumClient();
 
     const { data: categoriesData, status, error, refresh } = await useAsyncData("categories", () => client("api/categories"));
