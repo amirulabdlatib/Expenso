@@ -11,9 +11,11 @@ class Transaction extends Model
         'user_id',
         'account_id',
         'category_id',
+        'related_account_id',
         'name',
-        'type',
-        'amount'
+        'description',
+        'debit',
+        'credit',
     ];
 
     public function user() :BelongsTo
@@ -29,5 +31,10 @@ class Transaction extends Model
     public function category() :BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function relatedAccount() : BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'related_account_id');
     }
 }

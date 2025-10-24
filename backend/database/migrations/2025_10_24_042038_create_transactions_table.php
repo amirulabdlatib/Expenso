@@ -16,9 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('account_id')->constrained('accounts')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')->restrictOnDelete();
+            $table->foreignId('related_account_id')->nullable()->constrained('accounts')->cascadeOnDelete();
             $table->string('name');
-            $table->string('type');
-            $table->decimal('amount',10,2);
+            $table->text('description')->nullable();
+            $table->decimal('debit',10,2);
+            $table->decimal('credit',10,2);
             $table->timestamps();
         });
     }
