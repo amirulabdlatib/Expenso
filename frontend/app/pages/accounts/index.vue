@@ -59,12 +59,14 @@
                     </div>
                 </div>
 
+                <!-- TODO::Tab filter -->
                 <!-- Filter and Sort -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div class="flex items-center space-x-4">
                             <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">All</button>
                         </div>
+                        <!-- TODO::Searching -->
                         <div class="flex items-center space-x-3">
                             <div class="relative">
                                 <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
