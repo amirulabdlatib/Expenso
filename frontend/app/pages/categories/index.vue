@@ -44,6 +44,7 @@
                 </div>
             </div>
 
+            <!-- TODO::Searching -->
             <!-- Search and Filter (UI only, no functionality) -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                 <div class="flex items-center space-x-4">
@@ -83,6 +84,7 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
+                            <!-- TODO::Edit -->
                             <NuxtLink :to="`/categories/${category.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">
                                 <Icon name="heroicons:pencil" class="w-4 h-4" />
                             </NuxtLink>
