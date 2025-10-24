@@ -30,7 +30,7 @@
                         </div>
 
                         <!-- Subcategory Toggle -->
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div v-if="!categoriesLoading && parentCategories.length !== 0" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                             <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
                                     <Icon name="heroicons:folder-minus" class="w-5 h-5 text-indigo-600" />
