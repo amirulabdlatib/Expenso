@@ -225,7 +225,7 @@
     const { data: categoriesData, status: categoriesStatus } = await useAsyncData("parent-categories", () => client("api/categories"));
 
     const parentCategories = computed(() => {
-        return categoriesData.value?.categories?.filter((cat) => !cat.parent_id) || [];
+        return categoriesData.value?.categories?.filter((cat) => cat?.parent_id == null) || [];
     });
 
     const categoriesLoading = computed(() => categoriesStatus.value === "pending");
