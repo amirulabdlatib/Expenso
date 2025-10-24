@@ -1,17 +1,7 @@
 <template>
     <div class="min-h-screen bg-gray-50">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Header -->
-            <div class="mb-8">
-                <div class="flex items-center space-x-3 mb-3">
-                    <NuxtLink to="/categories" class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all">
-                        <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
-                    </NuxtLink>
-                    <h1 class="text-3xl font-bold text-gray-900">Create Category</h1>
-                </div>
-                <p class="text-gray-600 ml-14">Add a new category to organize your expenses and income</p>
-            </div>
-
+            <CreateCategoryHeader />
             <!-- Form Card -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <form class="p-6 md:p-8" @submit.prevent="handleSubmit">
