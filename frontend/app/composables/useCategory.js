@@ -19,7 +19,7 @@ export const useCategory = () => {
 
     async function deleteCategory(id) {
         try {
-            await sanctumClient(`api/categories/${id}`, {
+            await sanctumClient(`/api/categories/${id}`, {
                 method: "DELETE",
             });
         } catch (err) {
