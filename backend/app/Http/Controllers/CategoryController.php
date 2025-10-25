@@ -11,15 +11,15 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::where('user_id',Auth::id())
-                                ->whereNull('parent_id')
-                                ->select(['id', 'name', 'type', 'icon', 'color', 'parent_id'])
-                                ->with('children:id,name,parent_id')
-                                ->get();
+        $categories = Category::where('user_id', Auth::id())
+            ->whereNull('parent_id')
+            ->select(['id', 'name', 'type', 'icon', 'color', 'parent_id'])
+            ->with('children:id,name,parent_id')
+            ->get();
 
         return response()->json([
             'categories' => $categories,
-        ],Response::HTTP_OK);
+        ], Response::HTTP_OK);
     }
 
     public function store(StoreCategoryRequest $request)
@@ -29,8 +29,8 @@ class CategoryController extends Controller
 
         if (!empty($data['parent_id'])) {
 
-        $parent = Category::find($data['parent_id']);
-        if ($parent && $parent->parent_id !== null) {
+            $parent = Category::find($data['parent_id']);
+            if ($parent && $parent->parent_id !== null) {
                 return response()->json([
                     'message' => 'Cannot assign a child to another child category.'
                 ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -41,7 +41,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Category created successfully.'
-        ],Response::HTTP_CREATED);
+        ], Response::HTTP_CREATED);
     }
 
     public function destroy(Category $category)

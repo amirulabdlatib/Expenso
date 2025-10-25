@@ -30,11 +30,12 @@ class StoreCategoryRequest extends FormRequest
             'type' => ['required', new Enum(CategoryType::class)],
             'icon' => 'required',
             'color' => 'required',
-            'parent_id' => ['nullable',
-                            Rule::exists('categories','id')
-                                ->whereNull('parent_id')
-                                ->where('user_id',Auth::id()),
-                        ],
+            'parent_id' => [
+                'nullable',
+                Rule::exists('categories', 'id')
+                    ->whereNull('parent_id')
+                    ->where('user_id', Auth::id()),
+            ],
         ];
     }
 }

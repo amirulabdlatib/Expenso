@@ -72,7 +72,7 @@ class AccountController extends Controller
         $account->update($data);
 
         return response()->json([
-            "account"=> $account,
+            "account" => $account,
         ],  Response::HTTP_OK);
     }
 
@@ -89,8 +89,8 @@ class AccountController extends Controller
 
     public function getActiveAccountCount()
     {
-        return Account::where('user_id',Auth::id())
-                        ->where('is_active',true)
-                        ->count();
+        return Account::where('user_id', Auth::id())
+            ->where('is_active', true)
+            ->count();
     }
 }

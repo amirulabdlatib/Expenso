@@ -35,5 +35,4 @@ class StoreAccountRequest extends FormRequest
             'is_active' => 'required|boolean',
         ];
     }
-
 }

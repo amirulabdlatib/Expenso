@@ -60,7 +60,8 @@
                             type="text"
                             placeholder="e.g., Maybank Savings, CIMB Credit Card"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            :disabled="isLoading" />
+                            :disabled="isLoading"
+                        />
                         <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                     </div>
 
@@ -78,7 +79,8 @@
                                     form.type === type.value ? 'border-indigo-500 bg-indigo-50 shadow-sm' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
                                     isLoading ? 'opacity-50 cursor-not-allowed' : '',
                                 ]"
-                                @click="form.type = type.value">
+                                @click="form.type = type.value"
+                            >
                                 <Icon :name="type.icon" class="w-8 h-8 mb-2" :class="form.type === type.value ? 'text-indigo-600' : 'text-gray-600'" />
                                 <span class="text-xs md:text-sm font-medium text-center" :class="form.type === type.value ? 'text-indigo-900' : 'text-gray-700'">
                                     {{ type.label }}
@@ -102,7 +104,8 @@
                                     form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
                                     isLoading ? 'opacity-50 cursor-not-allowed' : '',
                                 ]"
-                                @click="form.icon = iconOption">
+                                @click="form.icon = iconOption"
+                            >
                                 <Icon :name="iconOption" class="w-6 h-6" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
                             </button>
                         </div>
@@ -123,7 +126,8 @@
                                 step="0.01"
                                 placeholder="0.00"
                                 class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :disabled="isLoading" />
+                                :disabled="isLoading"
+                            />
                         </div>
                         <p v-if="errors.balance" class="text-red-400">{{ errors.balance[0] }}</p>
                     </div>
@@ -156,13 +160,15 @@
                         <NuxtLink
                             to="/accounts"
                             class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                            :class="isLoading ? 'pointer-events-none opacity-50' : ''">
+                            :class="isLoading ? 'pointer-events-none opacity-50' : ''"
+                        >
                             Cancel
                         </NuxtLink>
                         <button
                             type="submit"
                             :disabled="isLoading"
-                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
                             <span v-if="!isLoading" class="flex items-center space-x-2">
                                 <span>Update</span>
                             </span>
