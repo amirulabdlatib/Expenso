@@ -20,41 +20,41 @@ class Transaction extends Model
         'credit',
     ];
 
-    public function user() :BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function account() :BelongsTo
+    public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
-    } 
+    }
 
-    public function category() :BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function relatedAccount() : BelongsTo
+    public function relatedAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'related_account_id');
     }
 
     public static function totalIncome()
     {
-        return static::where('user_id',Auth::id())
-            ->whereHas('category', function($q){
-            $q->where('type',CategoryType::Income);
-        })
+        return static::where('user_id', Auth::id())
+            ->whereHas('category', function ($q) {
+                $q->where('type', CategoryType::Income);
+            })
             ->sum('credit');
     }
 
     public static function totalExpenses()
     {
-        return static::where('user_id',Auth::id())
-            ->whereHas('category', function($q){
-            $q->where('type',CategoryType::Expense);
-        })
-        ->sum('debit');
+        return static::where('user_id', Auth::id())
+            ->whereHas('category', function ($q) {
+                $q->where('type', CategoryType::Expense);
+            })
+            ->sum('debit');
     }
 }

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('related_account_id')->nullable()->constrained('accounts')->cascadeOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('debit',10,2);
-            $table->decimal('credit',10,2);
+            $table->decimal('debit', 10, 2)->nullable();
+            $table->decimal('credit', 10, 2)->nullable();
             $table->timestamps();
         });
     }
