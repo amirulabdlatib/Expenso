@@ -28,15 +28,15 @@ export const useAccount = () => {
         }
     }
 
-    async function updateAccount(form,id) {
-        try{
-            const response = await sanctumClient(`/api/accounts/${id}`,{
-                method:"PUT",
-                body:form
-            })
+    async function updateAccount(form, id) {
+        try {
+            const response = await sanctumClient(`/api/accounts/${id}`, {
+                method: "PUT",
+                body: form,
+            });
 
-            return response
-        }catch(err){
+            return response;
+        } catch (err) {
             if (err.statusCode == 422) {
                 errors.value = err.data.errors;
             }

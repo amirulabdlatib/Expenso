@@ -169,8 +169,8 @@
     });
 
     useHead({
-        title: 'Register - Expenso'
-    })
+        title: "Register - Expenso",
+    });
 
     const { doRegister, errors } = useAuth();
     const { refreshIdentity } = useSanctumAuth();

@@ -106,8 +106,8 @@
     });
 
     useHead({
-        title: 'Login - Expenso'
-    })
+        title: "Login - Expenso",
+    });
 
     const { doLogin, errors } = useAuth();
     const { success, error } = useToast();

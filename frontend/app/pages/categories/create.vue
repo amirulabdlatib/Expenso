@@ -15,7 +15,8 @@
                                 type="text"
                                 placeholder="e.g., Food & Dining, Transportation, Entertainment"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :disabled="isLoading" />
+                                :disabled="isLoading"
+                            />
                             <p v-if="errors.name" class="mt-1 text-sm text-red-500">{{ errors.name[0] }}</p>
                         </div>
 
@@ -35,7 +36,8 @@
                                 :disabled="isLoading"
                                 class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 :class="isSubcategory ? 'bg-indigo-600' : 'bg-gray-200'"
-                                @click="isSubcategory = !isSubcategory">
+                                @click="isSubcategory = !isSubcategory"
+                            >
                                 <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out" :class="isSubcategory ? 'translate-x-5' : 'translate-x-0'" />
                             </button>
                         </div>
@@ -58,7 +60,8 @@
                                     :disabled="isLoading"
                                     class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
                                     :class="[form.parent_id === category.id ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
-                                    @click="selectParentCategory(category)">
+                                    @click="selectParentCategory(category)"
+                                >
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="getColorClasses(category.color).bgClass">
                                             <Icon :name="category.icon" class="w-5 h-5" :class="getColorClasses(category.color).textClass" />
@@ -109,7 +112,8 @@
                                         form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
                                         isLoading || (isSubcategory && form.parent_id !== null) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
                                     ]"
-                                    @click="!isSubcategory && (form.type = type.value)">
+                                    @click="!isSubcategory && (form.type = type.value)"
+                                >
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
                                             <Icon :name="type.icon" class="w-5 h-5" :class="type.iconColor" />
@@ -138,7 +142,8 @@
                                     :disabled="isLoading"
                                     class="aspect-square p-3 border-2 rounded-lg transition-all duration-200 hover:scale-105"
                                     :class="[form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : '']"
-                                    @click="form.icon = iconOption">
+                                    @click="form.icon = iconOption"
+                                >
                                     <Icon :name="iconOption" class="w-full h-full" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
                                 </button>
                             </div>
@@ -156,7 +161,8 @@
                                     :disabled="isLoading"
                                     class="aspect-square rounded-lg transition-all duration-200 hover:scale-110 relative"
                                     :class="[colorOption.class, isLoading ? 'opacity-50 cursor-not-allowed' : '']"
-                                    @click="form.color = colorOption.value">
+                                    @click="form.color = colorOption.value"
+                                >
                                     <div v-if="form.color === colorOption.value" class="absolute inset-0 flex items-center justify-center">
                                         <Icon name="heroicons:check" class="w-5 h-5 text-white drop-shadow-lg" />
                                     </div>
@@ -170,13 +176,15 @@
                         <NuxtLink
                             to="/categories"
                             class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                            :class="isLoading ? 'pointer-events-none opacity-50' : ''">
+                            :class="isLoading ? 'pointer-events-none opacity-50' : ''"
+                        >
                             Cancel
                         </NuxtLink>
                         <button
                             type="submit"
                             :disabled="isLoading"
-                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
                             <span v-if="!isLoading" class="flex items-center space-x-2">
                                 <span>Create</span>
                             </span>
