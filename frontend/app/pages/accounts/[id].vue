@@ -121,12 +121,13 @@
                             </span>
                             <input
                                 id="balance"
-                                v-model="form.balance"
+                                v-model.number="form.balance"
                                 type="number"
                                 step="0.01"
                                 placeholder="0.00"
                                 class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                 :disabled="isLoading"
+                                @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                             />
                         </div>
                         <p v-if="errors.balance" class="text-red-400">{{ errors.balance[0] }}</p>
