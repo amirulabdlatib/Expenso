@@ -9,23 +9,6 @@
                 <p class="mt-4 text-gray-600">Loading...</p>
             </div>
 
-            <!-- Error State -->
-            <div v-else-if="errors" class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
-                <div class="flex items-start space-x-4">
-                    <Icon name="heroicons:exclamation-circle" class="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-red-900 mb-2">Error Loading Data</h3>
-                        <p class="text-red-800 mb-4">
-                            {{ errors.statusMessage || "Failed to load accounts. Please try again." }}
-                        </p>
-                        <button class="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium" @click="retryFetch">
-                            <Icon name="heroicons:arrow-path" class="w-5 h-5" />
-                            <span>Retry</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             <!-- Main Content -->
             <div v-else>
                 <NoAccountsAlert v-if="accounts.length === 0" />
@@ -39,6 +22,7 @@
                             <VSelect v-model="form.account_id" :options="accounts" :reduce="(account) => account.id" label="name" placeholder="Select an account" class="vue-select-custom" :clearable="true">
                                 <template #no-options>No accounts found</template>
                             </VSelect>
+                            <p v-if="errors.account_id" class="text-red-400">{{ errors.account_id[0] }}</p>
                         </div>
 
                         <!-- Transaction Name -->
@@ -50,8 +34,8 @@
                                 type="text"
                                 placeholder="e.g., Grocery Shopping"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                required
                             />
+                            <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                         </div>
 
                         <!-- Description -->
@@ -64,6 +48,7 @@
                                 placeholder="Add any notes about this transaction..."
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
                             />
+                            <p v-if="errors.description" class="text-red-400">{{ errors.description[0] }}</p>
                         </div>
 
                         <!-- Transaction Type -->
@@ -104,7 +89,7 @@
                         </div>
 
                         <!-- Categories dropdown -->
-                        <div v-if="form.type !== 'transfer' && form.type !== ''">
+                        <div v-if="form.type == 'expense' || form.type == 'income'">
                             <label for="category" class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
 
                             <!-- Loading Categories -->
@@ -114,6 +99,7 @@
                             <VSelect v-else v-model="form.category_id" :options="filteredCategories" :reduce="(category) => category.id" label="name" placeholder="Select a category" class="vue-select-custom" :clearable="true">
                                 <template #no-options>No categories found</template>
                             </VSelect>
+                            <p v-if="errors.category_id" class="text-red-400">{{ errors.category_id[0] }}</p>
                         </div>
 
                         <!-- Related Account (for transfers) -->
@@ -128,6 +114,7 @@
                                 <option value="null" disabled>Select destination account</option>
                                 <option v-for="account in transferredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                             </select>
+                            <p v-if="errors.related_account_id" class="text-red-400">{{ errors.related_account_id[0] }}</p>
                         </div>
 
                         <!-- Amount -->
@@ -143,9 +130,9 @@
                                     min="0"
                                     placeholder="0.00"
                                     class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
-                                    required
                                     @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                                 />
+                                <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                             </div>
                         </div>
 
@@ -153,20 +140,31 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label for="date" class="block text-sm font-medium text-gray-700 mb-2"> Date <span class="text-red-500">*</span> </label>
-                                <input id="date" v-model="form.date" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required />
+                                <input id="date" v-model="form.date" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
                             </div>
 
                             <div>
                                 <label for="time" class="block text-sm font-medium text-gray-700 mb-2"> Time <span class="text-red-500">*</span> </label>
-                                <input id="time" v-model="form.time" type="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required />
+                                <input id="time" v-model="form.time" type="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
                             </div>
                         </div>
 
                         <!-- Form Actions -->
                         <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end gap-3 pt-6 border-t border-gray-200">
                             <NuxtLink to="/transactions" class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"> Cancel </NuxtLink>
-                            <button type="submit" class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2">
-                                <span>Create Transaction</span>
+                            <button
+                                type="submit"
+                                :disabled="isLoading"
+                                class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <span v-if="!isLoading">Create </span>
+                                <span v-else class="flex items-center space-x-2">
+                                    <span>Creating...</span>
+                                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                    </svg>
+                                </span>
                             </button>
                         </div>
                     </form>
@@ -190,6 +188,12 @@
     const now = new Date();
     const isFetchingAccounts = ref(false);
     const isFetchingCategories = ref(false);
+    const isLoading = ref(false);
+    const accounts = ref([]);
+    const categories = ref([]);
+    const { success, error } = useToast();
+    const { getTransactionAccounts, getTransactionCategories, createTransaction, errors } = useTransactions();
+
     const form = reactive({
         type: null,
         name: "",
@@ -201,10 +205,6 @@
         related_account_id: null,
         description: null,
     });
-
-    const accounts = ref([]);
-    const categories = ref([]);
-    const { getTransactionAccounts, getTransactionCategories, errors } = useTransactions();
 
     const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
 
@@ -232,13 +232,6 @@
         }
     };
 
-    const retryFetch = () => {
-        fetchAccounts();
-        if (categories.value.length === 0 && form.type !== "transfer" && form.type !== "") {
-            fetchCategories();
-        }
-    };
-
     watch(
         () => form.type,
         (newType) => {
@@ -261,12 +254,22 @@
         fetchAccounts();
     });
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        isLoading.value = true;
         const datetime = `${form.date} ${form.time}:00`;
         const { date, time, ...formData } = form;
         const data = { ...formData, datetime };
 
-        console.log("Form submitted:", data);
+        try {
+            await createTransaction(data);
+            success("Transaction created successfully.");
+            navigateTo("/transactions");
+        } catch (err) {
+            console.log(err);
+            error("Transaction fail to create.");
+        } finally {
+            isLoading.value = false;
+        }
     };
 </script>
 
