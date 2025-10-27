@@ -247,6 +247,8 @@
             }
             if (newType === "transfer") {
                 form.category_id = "";
+            } else {
+                form.related_account_id = "";
             }
         }
     );
