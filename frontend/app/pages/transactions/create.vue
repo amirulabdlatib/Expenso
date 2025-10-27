@@ -19,7 +19,7 @@
                         <!-- Account -->
                         <div>
                             <label for="account" class="block text-sm font-medium text-gray-700 mb-2"> Account <span class="text-red-500">*</span> </label>
-                            <VSelect v-model="form.account_id" :options="accounts" :reduce="(account) => account.id" label="name" placeholder="Select an account" class="vue-select-custom" :clearable="true">
+                            <VSelect v-model="form.account_id" :options="accounts" :reduce="(account) => account.id" label="name" placeholder="Select an account" class="vue-select-custom" :clearable="true" :disabled="isLoading">
                                 <template #no-options>No accounts found</template>
                             </VSelect>
                             <p v-if="errors.account_id" class="text-red-400">{{ errors.account_id[0] }}</p>
@@ -34,6 +34,8 @@
                                 type="text"
                                 placeholder="e.g., Grocery Shopping"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
+                                :disabled="isLoading"
                             />
                             <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                         </div>
@@ -47,6 +49,8 @@
                                 rows="4"
                                 placeholder="Add any notes about this transaction..."
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                                :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
+                                :disabled="isLoading"
                             />
                             <p v-if="errors.description" class="text-red-400">{{ errors.description[0] }}</p>
                         </div>
@@ -86,6 +90,7 @@
                                     <span class="text-sm font-medium block" :class="form.type === 'transfer' ? 'text-blue-700' : 'text-gray-700'">Transfer</span>
                                 </button>
                             </div>
+                            <p v-if="errors.type" class="text-red-400">{{ errors.type[0] }}</p>
                         </div>
 
                         <!-- Categories dropdown -->
@@ -96,7 +101,17 @@
                             <div v-if="isFetchingCategories" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">Loading categories...</div>
 
                             <!-- Category Select -->
-                            <VSelect v-else v-model="form.category_id" :options="filteredCategories" :reduce="(category) => category.id" label="name" placeholder="Select a category" class="vue-select-custom" :clearable="true">
+                            <VSelect
+                                v-else
+                                v-model="form.category_id"
+                                :options="filteredCategories"
+                                :reduce="(category) => category.id"
+                                label="name"
+                                placeholder="Select a category"
+                                class="vue-select-custom"
+                                :clearable="true"
+                                :disabled="isLoading"
+                            >
                                 <template #no-options>No categories found</template>
                             </VSelect>
                             <p v-if="errors.category_id" class="text-red-400">{{ errors.category_id[0] }}</p>
@@ -109,7 +124,9 @@
                                 id="related_account"
                                 v-model.number="form.related_account_id"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
                                 :required="form.type === 'transfer'"
+                                :disabled="isLoading"
                             >
                                 <option value="null" disabled>Select destination account</option>
                                 <option v-for="account in transferredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
@@ -130,22 +147,38 @@
                                     min="0"
                                     placeholder="0.00"
                                     class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
+                                    :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
+                                    :disabled="isLoading"
                                     @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                                 />
-                                <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                             </div>
+                            <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
 
                         <!-- Date and Time -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label for="date" class="block text-sm font-medium text-gray-700 mb-2"> Date <span class="text-red-500">*</span> </label>
-                                <input id="date" v-model="form.date" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+                                <input
+                                    id="date"
+                                    v-model="form.date"
+                                    type="date"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
+                                    :disabled="isLoading"
+                                />
                             </div>
 
                             <div>
                                 <label for="time" class="block text-sm font-medium text-gray-700 mb-2"> Time <span class="text-red-500">*</span> </label>
-                                <input id="time" v-model="form.time" type="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+                                <input
+                                    id="time"
+                                    v-model="form.time"
+                                    type="time"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
+                                    :disabled="isLoading"
+                                />
                             </div>
                         </div>
 
@@ -155,7 +188,8 @@
                             <button
                                 type="submit"
                                 :disabled="isLoading"
-                                class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2"
+                                :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
                             >
                                 <span v-if="!isLoading">Create </span>
                                 <span v-else class="flex items-center space-x-2">
