@@ -114,7 +114,7 @@
                             <!-- Category Select -->
                             <select v-else id="category" v-model.number="form.category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
                                 <option value="" disabled>Select a category</option>
-                                <option v-for="category in categories" :key="category.id" :value="category.id">
+                                <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
                                     {{ category.name }}
                                 </option>
                             </select>
@@ -252,6 +252,10 @@
             }
         }
     );
+
+    const filteredCategories = computed(() => {
+        return categories.value.filter((category) => category.type === form.type);
+    });
 
     onMounted(() => {
         fetchAccounts();
