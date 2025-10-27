@@ -2,12 +2,31 @@
     <div class="min-h-screen bg-gray-50 pt-6">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <CreateTransactionHeader />
+
             <!-- Loading State -->
             <div v-if="isFetchingAccounts" class="text-center py-12">
                 <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
                 <p class="mt-4 text-gray-600">Loading...</p>
             </div>
 
+            <!-- Error State -->
+            <div v-else-if="errors" class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+                <div class="flex items-start space-x-4">
+                    <Icon name="heroicons:exclamation-circle" class="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-red-900 mb-2">Error Loading Data</h3>
+                        <p class="text-red-800 mb-4">
+                            {{ errors.statusMessage || "Failed to load accounts. Please try again." }}
+                        </p>
+                        <button class="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium" @click="retryFetch">
+                            <Icon name="heroicons:arrow-path" class="w-5 h-5" />
+                            <span>Retry</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
             <div v-else>
                 <NoAccountsAlert v-if="accounts.length === 0" />
 
@@ -22,6 +41,7 @@
                                 <option v-for="account in accounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                             </select>
                         </div>
+
                         <!-- Transaction Name -->
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Transaction Name <span class="text-red-500">*</span> </label>
@@ -100,7 +120,7 @@
 
                         <!-- Category -->
                         <div>
-                            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Category </label>
+                            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Category <span class="text-red-500">*</span></label>
                             <select id="category" v-model.number="form.category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
                                 <option value="" disabled>Select a category</option>
                                 <option value="1">🍔 Food & Dining</option>
@@ -147,7 +167,7 @@
                         <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end gap-3 pt-6 border-t border-gray-200">
                             <NuxtLink to="/transactions" class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"> Cancel </NuxtLink>
                             <button type="submit" class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2">
-                                <span>Create </span>
+                                <span>Create Transaction</span>
                             </button>
                         </div>
                     </form>
@@ -172,8 +192,8 @@
         type: "",
         name: "",
         amount: 0,
-        date: now.toISOString().split("T")[0], // YYYY-MM-DD
-        time: now.toTimeString().split(" ")[0].substring(0, 5), // HH:MM
+        date: now.toISOString().split("T")[0],
+        time: now.toTimeString().split(" ")[0].substring(0, 5),
         account_id: "",
         category_id: "",
         related_account_id: "",
@@ -185,17 +205,24 @@
 
     const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
 
-    onMounted(async () => {
+    const fetchAccounts = async () => {
         isFetchingAccounts.value = true;
         try {
             const response = await getTransactionAccounts();
             accounts.value = response.accounts || [];
         } catch (err) {
-            console.log(err);
-            console.log(errors.value);
+            console.error("Error fetching accounts:", err);
         } finally {
             isFetchingAccounts.value = false;
         }
+    };
+
+    const retryFetch = () => {
+        fetchAccounts();
+    };
+
+    onMounted(() => {
+        fetchAccounts();
     });
 
     const handleSubmit = () => {
@@ -204,8 +231,5 @@
         const data = { ...formData, datetime };
 
         console.log("Form submitted:", data);
-
-        // TODO: API request will go here
-        // For now, just log the form data
     };
 </script>

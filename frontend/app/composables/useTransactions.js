@@ -4,10 +4,10 @@ export const useTransactions = () => {
 
     async function getTransactionAccounts() {
         try {
-            let response = await sanctumClient("api/lookup/accounts");
+            let response = await sanctumClient("api/lookup/accountss");
             return response;
         } catch (error) {
-            errors.value = error.statusCode;
+            errors.value = error;
             throw new Error(`Account fetch failed: ${error.message}`);
         }
     }
