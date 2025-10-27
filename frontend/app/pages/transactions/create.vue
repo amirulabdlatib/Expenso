@@ -254,7 +254,7 @@
     );
 
     const filteredCategories = computed(() => {
-        return categories.value.filter((category) => category.type === form.type);
+        return categories.value.filter((category) => category.type === form.type).sort((a, b) => a.name.localeCompare(b.name));
     });
 
     onMounted(() => {
