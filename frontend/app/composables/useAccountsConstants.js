@@ -9,25 +9,6 @@ export const useAccountConstants = () => {
         { label: "Emergency Fund", value: "Emergency Fund", icon: "heroicons:lifebuoy" },
     ];
 
-    const accountIcons = [
-        "heroicons:building-library",
-        "heroicons:credit-card",
-        "heroicons:banknotes",
-        "heroicons:device-phone-mobile",
-        "heroicons:shield-check",
-        "heroicons:chart-bar-square",
-        "heroicons:lifebuoy",
-        "heroicons:wallet",
-        "heroicons:currency-dollar",
-        "heroicons:building-office",
-        "heroicons:receipt-percent",
-        "heroicons:document-currency-dollar",
-        "heroicons:presentation-chart-line",
-        "heroicons:chart-pie",
-        "heroicons:calculator",
-        "heroicons:academic-cap",
-    ];
-
     const currencies = [{ code: "MYR", name: "Malaysian Ringgit" }];
 
     // Color mapping for each account type
@@ -90,7 +71,6 @@ export const useAccountConstants = () => {
 
     return {
         accountTypes,
-        accountIcons,
         currencies,
         accountColors,
         getAccountColors,
