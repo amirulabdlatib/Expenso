@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AccountLookupController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoryLookupController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,7 +15,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::resource('accounts', AccountController::class);
-    Route::get('/getActiveAccountCount',[AccountController::class,'getActiveAccountCount']);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('transactions', TransactionController::class);
 
-    Route::resource('categories',CategoryController::class);
+    Route::get('/getActiveAccountCount', [AccountController::class, 'getActiveAccountCount']);
+    Route::get('/lookup/accounts', AccountLookupController::class);
+    Route::get('/lookup/categories', CategoryLookupController::class);
 });
