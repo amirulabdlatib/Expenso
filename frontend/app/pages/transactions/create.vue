@@ -112,12 +112,9 @@
                             <div v-if="isFetchingCategories" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">Loading categories...</div>
 
                             <!-- Category Select -->
-                            <select v-else id="category" v-model.number="form.category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
-                                <option value="" disabled>Select a category</option>
-                                <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
-                                    {{ category.name }}
-                                </option>
-                            </select>
+                            <VSelect v-else v-model="form.category_id" :options="filteredCategories" :reduce="(category) => category.id" label="name" placeholder="Select a category" class="vue-select-custom" :clearable="true">
+                                <template #no-options>No categories found</template>
+                            </VSelect>
                         </div>
 
                         <!-- Related Account (for transfers) -->
@@ -181,6 +178,8 @@
 </template>
 
 <script setup>
+    import VSelect from "vue-select";
+
     useHead({
         title: "Create Transaction - Expenso",
     });
@@ -269,3 +268,40 @@
         console.log("Form submitted:", data);
     };
 </script>
+
+<style scoped>
+    :deep(.vue-select-custom .vs__dropdown-toggle) {
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+    }
+
+    :deep(.vue-select-custom .vs__search) {
+        outline: none;
+    }
+
+    :deep(.vue-select-custom .vs__search:focus) {
+        outline: none;
+    }
+
+    :deep(.vue-select-custom.vs--open .vs__dropdown-toggle) {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+    }
+
+    :deep(.vue-select-custom .vs__dropdown-menu) {
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        margin-top: 0.25rem;
+    }
+
+    :deep(.vue-select-custom .vs__dropdown-option--highlight) {
+        background-color: #6366f1;
+        color: white;
+    }
+
+    :deep(.vue-select-custom .vs__selected) {
+        margin: 0;
+    }
+</style>
