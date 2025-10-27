@@ -15,7 +15,7 @@ class AccountLookupController extends Controller
     {
         $accounts = Account::where('user_id', Auth::id())
             ->where('is_active', true)
-            ->select(['id', 'name'])
+            ->select(['id', 'name', 'balance'])
             ->get();
 
         return response()->json([
