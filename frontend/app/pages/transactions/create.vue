@@ -104,6 +104,22 @@
                             </div>
                         </div>
 
+                        <!-- Categories dropdown -->
+                        <div v-if="form.type !== 'transfer' && form.type !== ''">
+                            <label for="category" class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
+
+                            <!-- Loading Categories -->
+                            <div v-if="isFetchingCategories" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">Loading categories...</div>
+
+                            <!-- Category Select -->
+                            <select v-else id="category" v-model.number="form.category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                                <option value="" disabled>Select a category</option>
+                                <option v-for="category in categories" :key="category.id" :value="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                        </div>
+
                         <!-- Related Account (for transfers) -->
                         <div v-if="form.type === 'transfer'">
                             <label for="related_account" class="block text-sm font-medium text-gray-700 mb-2"> To Account <span class="text-red-500">*</span> </label>
@@ -114,20 +130,7 @@
                                 :required="form.type === 'transfer'"
                             >
                                 <option value="" disabled>Select destination account</option>
-                                <option v-for="transferAccount in transferredAccounts" :key="transferAccount.id" :value="transferAccount.id">{{ transferAccount.name }}</option>
-                            </select>
-                        </div>
-
-                        <!-- Category -->
-                        <div>
-                            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Category <span class="text-red-500">*</span></label>
-                            <select id="category" v-model.number="form.category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
-                                <option value="" disabled>Select a category</option>
-                                <option value="1">🍔 Food & Dining</option>
-                                <option value="2">🚗 Transportation</option>
-                                <option value="3">🏠 Housing</option>
-                                <option value="4">🎮 Entertainment</option>
-                                <option value="5">💼 Salary</option>
+                                <option v-for="account in transferredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                             </select>
                         </div>
 
@@ -188,6 +191,7 @@
 
     const now = new Date();
     const isFetchingAccounts = ref(false);
+    const isFetchingCategories = ref(false);
     const form = reactive({
         type: "",
         name: "",
@@ -201,7 +205,8 @@
     });
 
     const accounts = ref([]);
-    const { getTransactionAccounts, errors } = useTransactions();
+    const categories = ref([]);
+    const { getTransactionAccounts, getTransactionCategories, errors } = useTransactions();
 
     const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
 
@@ -217,9 +222,36 @@
         }
     };
 
+    const fetchCategories = async () => {
+        isFetchingCategories.value = true;
+        try {
+            const response = await getTransactionCategories();
+            categories.value = response.categories || [];
+        } catch (err) {
+            console.error("Error fetching categories:", err);
+        } finally {
+            isFetchingCategories.value = false;
+        }
+    };
+
     const retryFetch = () => {
         fetchAccounts();
+        if (categories.value.length === 0 && form.type !== "transfer" && form.type !== "") {
+            fetchCategories();
+        }
     };
+
+    watch(
+        () => form.type,
+        (newType) => {
+            if (newType !== "transfer" && newType !== "" && categories.value.length === 0) {
+                fetchCategories();
+            }
+            if (newType === "transfer") {
+                form.category_id = "";
+            }
+        }
+    );
 
     onMounted(() => {
         fetchAccounts();
