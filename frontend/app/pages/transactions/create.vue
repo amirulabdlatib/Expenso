@@ -1,28 +1,18 @@
 <template>
     <div class="min-h-screen bg-gray-50 pt-6">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Page Header -->
-            <div class="mb-8">
-                <div class="flex items-center space-x-3 mb-2">
-                    <NuxtLink to="/transactions" class="p-2 rounded-lg hover:bg-white transition-colors">
-                        <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
-                    </NuxtLink>
-                    <h1 class="text-3xl font-bold text-gray-900">Create Transaction</h1>
-                </div>
-                <p class="text-gray-600 ml-14">Add a new transaction to your account</p>
-            </div>
+            <CreateTransactionHeader />
+            <NoAccountsAlert v-if="accounts.length === 0" />
 
             <!-- Form Card -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+            <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
                 <form class="space-y-6" @submit.prevent="handleSubmit">
                     <!-- Account -->
                     <div>
                         <label for="account" class="block text-sm font-medium text-gray-700 mb-2"> Account <span class="text-red-500">*</span> </label>
                         <select id="account" v-model.number="form.account_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
                             <option value="" disabled>Select an account</option>
-                            <option value="1">Cash</option>
-                            <option value="2">Bank Account</option>
-                            <option value="3">Credit Card</option>
+                            <option v-for="account in accounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                         </select>
                     </div>
                     <!-- Transaction Name -->
@@ -70,6 +60,7 @@
                             </button>
 
                             <button
+                                v-if="accounts.length > 1"
                                 type="button"
                                 class="relative p-4 border-2 rounded-lg transition-all hover:border-blue-500"
                                 :class="form.type === 'transfer' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'"
@@ -166,7 +157,7 @@
 
     const now = new Date();
     const form = reactive({
-        type: "expense",
+        type: "",
         name: "",
         amount: 0,
         date: now.toISOString().split("T")[0], // YYYY-MM-DD
@@ -175,6 +166,19 @@
         category_id: "",
         related_account_id: "",
         description: "",
+    });
+
+    const accounts = ref([]);
+    const { getTransactionAccounts, errors } = useTransactions();
+
+    onMounted(async () => {
+        try {
+            const response = await getTransactionAccounts();
+            accounts.value = response.accounts || [];
+        } catch (err) {
+            console.log(err);
+            console.log(errors.value);
+        }
     });
 
     const handleSubmit = () => {
