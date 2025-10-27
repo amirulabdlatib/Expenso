@@ -74,9 +74,9 @@
                                 <button
                                     type="button"
                                     class="relative p-4 border-2 rounded-lg transition-all"
-                                    :class="[form.type === 'transfer' ? 'border-blue-500 bg-blue-50' : 'border-gray-200', accounts.length > 1 ? 'hover:border-blue-500 cursor-pointer' : 'opacity-50 cursor-not-allowed']"
-                                    :disabled="accounts.length <= 1"
-                                    @click="accounts.length > 1 && (form.type = 'transfer')"
+                                    :class="[form.type === 'transfer' ? 'border-blue-500 bg-blue-50' : 'border-gray-200', accounts.length > 1 && form.account_id ? 'hover:border-blue-500 cursor-pointer' : 'opacity-50 cursor-not-allowed']"
+                                    :disabled="accounts.length <= 1 || !form.account_id"
+                                    @click="accounts.length > 1 && form.account_id && (form.type = 'transfer')"
                                 >
                                     <Icon name="heroicons:arrow-path" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'transfer' ? 'text-blue-500' : 'text-gray-400'" />
                                     <span class="text-sm font-medium block" :class="form.type === 'transfer' ? 'text-blue-700' : 'text-gray-700'">Transfer</span>
