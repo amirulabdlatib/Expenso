@@ -36,10 +36,9 @@
                         <!-- Account -->
                         <div>
                             <label for="account" class="block text-sm font-medium text-gray-700 mb-2"> Account <span class="text-red-500">*</span> </label>
-                            <select id="account" v-model.number="form.account_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
-                                <option value="" disabled>Select an account</option>
-                                <option v-for="account in accounts" :key="account.id" :value="account.id">{{ account.name }}</option>
-                            </select>
+                            <VSelect v-model="form.account_id" :options="accounts" :reduce="(account) => account.id" label="name" placeholder="Select an account" class="vue-select-custom" :clearable="true">
+                                <template #no-options>No accounts found</template>
+                            </VSelect>
                         </div>
 
                         <!-- Transaction Name -->
