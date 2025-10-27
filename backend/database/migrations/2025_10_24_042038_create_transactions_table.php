@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('account_id')->constrained('accounts')->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained('categories')->restrictOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained('categories')->restrictOnDelete();
             $table->foreignId('related_account_id')->nullable()->constrained('accounts')->cascadeOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
