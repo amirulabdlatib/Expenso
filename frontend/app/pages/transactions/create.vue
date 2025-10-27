@@ -125,7 +125,7 @@
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                 :required="form.type === 'transfer'"
                             >
-                                <option value="" disabled>Select destination account</option>
+                                <option value="null" disabled>Select destination account</option>
                                 <option v-for="account in transferredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                             </select>
                         </div>
@@ -191,15 +191,15 @@
     const isFetchingAccounts = ref(false);
     const isFetchingCategories = ref(false);
     const form = reactive({
-        type: "",
+        type: null,
         name: "",
         amount: 0,
         date: now.toISOString().split("T")[0],
         time: now.toTimeString().split(" ")[0].substring(0, 5),
-        account_id: "",
-        category_id: "",
-        related_account_id: "",
-        description: "",
+        account_id: null,
+        category_id: null,
+        related_account_id: null,
+        description: null,
     });
 
     const accounts = ref([]);
@@ -246,9 +246,9 @@
                 fetchCategories();
             }
             if (newType === "transfer") {
-                form.category_id = "";
+                form.category_id = null;
             } else {
-                form.related_account_id = "";
+                form.related_account_id = null;
             }
         }
     );
