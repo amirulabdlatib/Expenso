@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('debit', 10, 2)->nullable();
             $table->decimal('credit', 10, 2)->nullable();
+            $table->datetime('transaction_date');
             $table->timestamps();
         });
     }

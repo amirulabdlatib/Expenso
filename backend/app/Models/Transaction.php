@@ -19,6 +19,7 @@ class Transaction extends Model
         'description',
         'debit',
         'credit',
+        'transaction_date',
     ];
 
     protected $casts = [
