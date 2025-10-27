@@ -35,7 +35,7 @@ class StoreTransactionRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'amount' => ['required', 'numeric', 'min:0.01', 'max:9999999.99'],
-            'datetime' => ['required', 'date_format:Y-m-d H:i:s'],
+            'transaction_date' => ['required', 'date_format:Y-m-d H:i:s'],
             'account_id' => [
                 'required',
                 'integer',

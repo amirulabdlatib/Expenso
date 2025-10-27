@@ -256,9 +256,9 @@
 
     const handleSubmit = async () => {
         isLoading.value = true;
-        const datetime = `${form.date} ${form.time}:00`;
+        const transaction_date = `${form.date} ${form.time}:00`;
         const { date, time, ...formData } = form;
-        const data = { ...formData, datetime };
+        const data = { ...formData, transaction_date };
 
         try {
             await createTransaction(data);

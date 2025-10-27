@@ -45,13 +45,11 @@ class TransactionController extends Controller
     public function store(StoreTransactionRequest $request)
     {
         $data = $request->validated();
+        Log::info($data);
 
         if ($data['type'] == TransactionType::Income) {
-            Log::info($data('type'));
         } elseif ($data['type'] == TransactionType::Expense) {
-            Log::info($data('type'));
         } else {
-            Log::info($data('type'));
         }
 
         // Transaction::create($request->validated());
