@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CategoryType;
+use App\Enums\TransactionType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,10 @@ class Transaction extends Model
         'description',
         'debit',
         'credit',
+    ];
+
+    protected $casts = [
+        'type' => TransactionType::class,
     ];
 
     public function user(): BelongsTo

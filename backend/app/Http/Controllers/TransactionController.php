@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use App\Enums\TransactionType;
 use Carbon\Carbon;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreTransactionRequest;
 
 class TransactionController extends Controller
 {
@@ -32,15 +36,29 @@ class TransactionController extends Controller
             'total_income' => $total_income,
             'total_expenses' => $total_expenses,
             'total_transaction_this_month' => $total_transaction_this_month,
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTransactionRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        if ($data['type'] == TransactionType::Income) {
+            Log::info($data('type'));
+        } elseif ($data['type'] == TransactionType::Expense) {
+            Log::info($data('type'));
+        } else {
+            Log::info($data('type'));
+        }
+
+        // Transaction::create($request->validated());
+
+        return response()->json([
+            'message' => ' Transaction created.'
+        ], Response::HTTP_CREATED);
     }
 
     /**
