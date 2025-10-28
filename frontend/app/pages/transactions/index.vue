@@ -21,7 +21,7 @@
                         <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 text-green-500" />
                     </div>
                     <p class="text-sm text-gray-600 mb-1">Total Income</p>
-                    <p class="text-2xl font-bold text-green-600">{{ formatCurrency(0) }}</p>
+                    <p class="text-2xl font-bold text-green-600">{{ formatCurrency(transactionsData.total_income) }}</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -29,7 +29,7 @@
                         <Icon name="heroicons:arrow-trending-down" class="w-8 h-8 text-red-500" />
                     </div>
                     <p class="text-sm text-gray-600 mb-1">Total Expenses</p>
-                    <p class="text-2xl font-bold text-red-600">{{ formatCurrency(0) }}</p>
+                    <p class="text-2xl font-bold text-red-600">{{ formatCurrency(transactionsData.total_expenses) }}</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -37,15 +37,15 @@
                         <Icon name="heroicons:banknotes" class="w-8 h-8 text-indigo-500" />
                     </div>
                     <p class="text-sm text-gray-600 mb-1">Net Balance</p>
-                    <p class="text-2xl font-bold text-green-600">{{ formatCurrency(0) }}</p>
+                    <p class="text-2xl font-bold text-green-600">{{ formatCurrency(transactionsData.total_income - transactionsData.total_expenses) }}</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center justify-between mb-2">
                         <Icon name="heroicons:calendar" class="w-8 h-8 text-purple-500" />
                     </div>
-                    <p class="text-sm text-gray-600 mb-1">This Month</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ transactions.length }}</p>
+                    <p class="text-sm text-gray-600 mb-1">Total Transactions</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ transactionsData.transactions.length }}</p>
                 </div>
             </div>
 
@@ -106,48 +106,47 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            <tr v-for="transaction in transactions" :key="transaction.id" class="hover:bg-gray-50 transition-colors">
+                            <tr v-for="transaction in transactionsData.transactions" :key="transaction.id" class="hover:bg-gray-50 transition-colors">
                                 <!-- Date & Time -->
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">{{ formatDate(transaction.date) }}</div>
-                                    <div class="text-xs text-gray-500">{{ formatTime(transaction.date) }}</div>
+                                    <div class="text-sm font-medium text-gray-900">{{ transaction.transaction_date }}</div>
+                                    <div class="text-xs text-gray-500">{{ transaction.transaction_date }}</div>
                                 </td>
 
                                 <!-- Description -->
                                 <td class="px-6 py-4">
                                     <div class="text-sm font-medium text-gray-900">{{ transaction.description }}</div>
-                                    <div v-if="transaction.note" class="text-xs text-gray-500 mt-1">{{ transaction.note }}</div>
                                 </td>
 
                                 <!-- Category -->
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
-                                        <div :style="{ backgroundColor: transaction.categoryColor + '20' }" class="w-8 h-8 rounded-lg flex items-center justify-center">
-                                            <Icon :name="transaction.categoryIcon" class="w-4 h-4" :style="{ color: transaction.categoryColor }" />
+                                        <div :style="{ backgroundColor: transaction.category.color + '20' }" class="w-8 h-8 rounded-lg flex items-center justify-center">
+                                            <Icon :name="transaction.category.icon" class="w-4 h-4" :style="{ color: transaction.category.color }" />
                                         </div>
-                                        <span class="text-sm text-gray-900">{{ transaction.category }}</span>
+                                        <span class="text-sm text-gray-900">{{ transaction.category.name }}</span>
                                     </div>
                                 </td>
 
                                 <!-- Account -->
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
-                                        <Icon :name="transaction.accountIcon" class="w-4 h-4 text-gray-400" />
-                                        <span class="text-sm text-gray-900">{{ transaction.account }}</span>
+                                        <Icon :name="transaction.account.icon" class="w-4 h-4 text-gray-400" />
+                                        <span class="text-sm text-gray-900">{{ transaction.account.name }}</span>
                                     </div>
                                 </td>
 
                                 <!-- Type -->
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span :class="[transaction.type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600', 'px-3 py-1 text-xs font-medium rounded-full']">{{
-                                        transaction.type === "income" ? "Income" : "Expense"
+                                    <span :class="[transaction.category.type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600', 'px-3 py-1 text-xs font-medium rounded-full']">{{
+                                        transaction.category.type === "income" ? "Income" : "Expense"
                                     }}</span>
                                 </td>
 
                                 <!-- Amount -->
                                 <td class="px-6 py-4 whitespace-nowrap text-right">
-                                    <span :class="[transaction.type === 'income' ? 'text-green-600' : 'text-red-600', 'text-sm font-semibold']">
-                                        {{ transaction.type === "income" ? "+" : "-" }}{{ formatCurrency(Math.abs(transaction.amount)) }}
+                                    <span :class="[transaction.category.type === 'income' ? 'text-green-600' : 'text-red-600', 'text-sm font-semibold']">
+                                        {{ transaction.category.type === "income" ? "+" : "-" }}{{ formatCurrency(transaction.category.type === "income" ? transaction.credit : transaction.debit) }}
                                     </span>
                                 </td>
 
@@ -172,7 +171,7 @@
 
                 <!-- Pagination -->
                 <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                    <div class="text-sm text-gray-600">Showing {{ transactions.length }} of {{ transactions.length }} transactions</div>
+                    <div class="text-sm text-gray-600">Showing {{ transactionsData.transactions.length }} of {{ transactionsData.transactions.length }} transactions</div>
                     <div class="flex items-center space-x-2">
                         <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
                         <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium">1</button>
@@ -196,148 +195,15 @@
     });
 
     const { formatCurrency } = useCurrency();
-    const { formatDate, formatTime } = useUtils();
+    const client = useSanctumClient();
 
-    // Dummy Data
-    const transactions = ref([
-        {
-            id: 1,
-            description: "Salary Payment",
-            amount: 5000.0,
-            type: "income",
-            category: "Salary",
-            categoryIcon: "heroicons:banknotes",
-            categoryColor: "#10B981",
-            account: "Maybank Savings",
-            accountIcon: "heroicons:building-library",
-            date: "2025-01-15T09:00:00",
-            note: "Monthly salary",
-        },
-        {
-            id: 2,
-            description: "Grocery Shopping",
-            amount: -156.5,
-            type: "expense",
-            category: "Food & Groceries",
-            categoryIcon: "heroicons:shopping-bag",
-            categoryColor: "#10B981",
-            account: "CIMB Credit Card",
-            accountIcon: "heroicons:credit-card",
-            date: "2025-01-14T16:30:00",
-            note: "Weekly groceries at Tesco",
-        },
-        {
-            id: 3,
-            description: "Fuel Top-up",
-            amount: -80.0,
-            type: "expense",
-            category: "Transportation",
-            categoryIcon: "heroicons:truck",
-            categoryColor: "#3B82F6",
-            account: "Cash Wallet",
-            accountIcon: "heroicons:banknotes",
-            date: "2025-01-14T12:15:00",
-            note: "Petrol station",
-        },
-        {
-            id: 4,
-            description: "Freelance Project",
-            amount: 1500.0,
-            type: "income",
-            category: "Freelance",
-            categoryIcon: "heroicons:briefcase",
-            categoryColor: "#3B82F6",
-            account: "Maybank Savings",
-            accountIcon: "heroicons:building-library",
-            date: "2025-01-13T14:00:00",
-            note: "Web development project",
-        },
-        {
-            id: 5,
-            description: "Netflix Subscription",
-            amount: -55.0,
-            type: "expense",
-            category: "Entertainment",
-            categoryIcon: "heroicons:film",
-            categoryColor: "#F59E0B",
-            account: "CIMB Credit Card",
-            accountIcon: "heroicons:credit-card",
-            date: "2025-01-12T10:00:00",
-            note: "Monthly subscription",
-        },
-        {
-            id: 6,
-            description: "Lunch with Friends",
-            amount: -45.0,
-            type: "expense",
-            category: "Food & Groceries",
-            categoryIcon: "heroicons:shopping-bag",
-            categoryColor: "#10B981",
-            account: "Touch 'n Go eWallet",
-            accountIcon: "heroicons:device-phone-mobile",
-            date: "2025-01-11T13:30:00",
-            note: "Italian restaurant",
-        },
-        {
-            id: 7,
-            description: "Electricity Bill",
-            amount: -120.0,
-            type: "expense",
-            category: "Utilities",
-            categoryIcon: "heroicons:bolt",
-            categoryColor: "#8B5CF6",
-            account: "Maybank Savings",
-            accountIcon: "heroicons:building-library",
-            date: "2025-01-10T09:00:00",
-            note: "Monthly bill",
-        },
-        {
-            id: 8,
-            description: "Investment Returns",
-            amount: 250.0,
-            type: "income",
-            category: "Investments",
-            categoryIcon: "heroicons:chart-bar",
-            categoryColor: "#F59E0B",
-            account: "Public Bank Savings",
-            accountIcon: "heroicons:building-library",
-            date: "2025-01-09T11:00:00",
-            note: "Dividend payment",
-        },
-        {
-            id: 9,
-            description: "New Shirt",
-            amount: -89.9,
-            type: "expense",
-            category: "Shopping",
-            categoryIcon: "heroicons:shopping-cart",
-            categoryColor: "#EC4899",
-            account: "CIMB Credit Card",
-            accountIcon: "heroicons:credit-card",
-            date: "2025-01-08T15:45:00",
-            note: "Uniqlo",
-        },
-        {
-            id: 10,
-            description: "Doctor Visit",
-            amount: -150.0,
-            type: "expense",
-            category: "Healthcare",
-            categoryIcon: "heroicons:heart",
-            categoryColor: "#EF4444",
-            account: "Cash Wallet",
-            accountIcon: "heroicons:banknotes",
-            date: "2025-01-07T10:30:00",
-            note: "General checkup",
-        },
-    ]);
+    const { data: transactionsData, status, error, refresh } = await useAsyncData("transactions", () => client("/api/transactions"));
 
-    // State
     const quickFilter = ref("all");
 
-    // Computed
     const categories = computed(() => {
-        return [...new Set(transactions.value.map((t) => t.category))];
+        if (!transactionsData.value?.transactions) return [];
+        return [...new Set(transactionsData.value.transactions.map((t) => t.category.name))];
     });
 
     const deleteTransaction = (id) => {

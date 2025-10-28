@@ -18,10 +18,21 @@ class TransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::where('user_id', Auth::id())
+            ->select([
+                'id',
+                'account_id',
+                'category_id',
+                'name',
+                'description',
+                'debit',
+                'credit',
+                'transaction_date',
+            ])
             ->with([
-                'accounts:name,icon',
-                'categories:name,icon,color,type'
-            ])->get();
+                'account:id,name,icon',
+                'category:id,name,icon,color,type'
+            ])
+            ->get();
 
         $total_income = Transaction::totalIncome();
         $total_expenses = Transaction::totalExpenses();
