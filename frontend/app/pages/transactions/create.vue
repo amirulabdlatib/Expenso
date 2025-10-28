@@ -19,17 +19,7 @@
                         <!-- Account -->
                         <div>
                             <label for="account" class="block text-sm font-medium text-gray-700 mb-2"> Account <span class="text-red-500">*</span> </label>
-                            <VSelect
-                                v-model="form.account_id"
-                                :options="accounts"
-                                :reduce="(account) => account.id"
-                                label="name"
-                                placeholder="Select an account"
-                                class="vue-select-custom"
-                                :clearable="true"
-                                :get-option-label="(account) => `${account.name} - MYR ${parseFloat(account.balance).toFixed(2)}`"
-                                :disabled="isLoading"
-                            >
+                            <VSelect v-model="form.account_id" :options="accounts" :reduce="(account) => account.id" label="name" placeholder="Select an account" class="vue-select-custom" :clearable="true" :disabled="isLoading">
                                 <template #no-options>No accounts found</template>
                             </VSelect>
                             <p v-if="errors.account_id" class="text-red-400">{{ errors.account_id[0] }}</p>
