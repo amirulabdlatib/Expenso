@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
+    // TODO:: Add receipt file
     protected $fillable = [
         'user_id',
         'account_id',
