@@ -21,7 +21,7 @@
                         <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 text-green-500" />
                     </div>
                     <p class="text-sm text-gray-600 mb-1">Total Income</p>
-                    <p class="text-2xl font-bold text-green-600">{{ formatCurrency(totalIncome) }}</p>
+                    <p class="text-2xl font-bold text-green-600">{{ formatCurrency(0) }}</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -29,7 +29,7 @@
                         <Icon name="heroicons:arrow-trending-down" class="w-8 h-8 text-red-500" />
                     </div>
                     <p class="text-sm text-gray-600 mb-1">Total Expenses</p>
-                    <p class="text-2xl font-bold text-red-600">{{ formatCurrency(totalExpenses) }}</p>
+                    <p class="text-2xl font-bold text-red-600">{{ formatCurrency(0) }}</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -37,7 +37,7 @@
                         <Icon name="heroicons:banknotes" class="w-8 h-8 text-indigo-500" />
                     </div>
                     <p class="text-sm text-gray-600 mb-1">Net Balance</p>
-                    <p class="text-2xl font-bold" :class="netBalance >= 0 ? 'text-green-600' : 'text-red-600'">{{ formatCurrency(netBalance) }}</p>
+                    <p class="text-2xl font-bold text-green-600">{{ formatCurrency(0) }}</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -55,24 +55,24 @@
                     <!-- Search -->
                     <div class="md:col-span-2 relative">
                         <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                        <input v-model="searchQuery" type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        <input type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                     </div>
 
                     <!-- Type Filter -->
-                    <select v-model="filterType" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="all">All Types</option>
                         <option value="income">Income</option>
                         <option value="expense">Expense</option>
                     </select>
 
                     <!-- Category Filter -->
-                    <select v-model="filterCategory" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="all">All Categories</option>
                         <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
                     </select>
 
                     <!-- Sort -->
-                    <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="date-desc">Latest First</option>
                         <option value="date-asc">Oldest First</option>
                         <option value="amount-desc">Highest Amount</option>
@@ -106,7 +106,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-                            <tr v-for="transaction in filteredTransactions" :key="transaction.id" class="hover:bg-gray-50 transition-colors">
+                            <tr v-for="transaction in transactions" :key="transaction.id" class="hover:bg-gray-50 transition-colors">
                                 <!-- Date & Time -->
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">{{ formatDate(transaction.date) }}</div>
@@ -170,19 +170,9 @@
                     </table>
                 </div>
 
-                <!-- Empty State -->
-                <div v-if="filteredTransactions.length === 0" class="text-center py-12">
-                    <Icon name="heroicons:document-text" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No transactions found</h3>
-                    <p class="text-gray-600 mb-6">Try adjusting your filters or add a new transaction</p>
-                    <NuxtLink to="/transactions/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                        <Icon name="heroicons:plus" class="w-5 h-5" />
-                    </NuxtLink>
-                </div>
-
                 <!-- Pagination -->
-                <div v-if="filteredTransactions.length > 0" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                    <div class="text-sm text-gray-600">Showing {{ filteredTransactions.length }} of {{ transactions.length }} transactions</div>
+                <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                    <div class="text-sm text-gray-600">Showing {{ transactions.length }} of {{ transactions.length }} transactions</div>
                     <div class="flex items-center space-x-2">
                         <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
                         <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium">1</button>
@@ -343,76 +333,11 @@
     ]);
 
     // State
-    const searchQuery = ref("");
-    const filterType = ref("all");
-    const filterCategory = ref("all");
-    const sortBy = ref("date-desc");
     const quickFilter = ref("all");
 
     // Computed
     const categories = computed(() => {
         return [...new Set(transactions.value.map((t) => t.category))];
-    });
-
-    const totalIncome = computed(() => {
-        return transactions.value.filter((t) => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
-    });
-
-    const totalExpenses = computed(() => {
-        return Math.abs(transactions.value.filter((t) => t.type === "expense").reduce((sum, t) => sum + t.amount, 0));
-    });
-
-    const netBalance = computed(() => {
-        return totalIncome.value - totalExpenses.value;
-    });
-
-    const filteredTransactions = computed(() => {
-        let filtered = transactions.value;
-
-        // Search filter
-        if (searchQuery.value) {
-            filtered = filtered.filter(
-                (t) => t.description.toLowerCase().includes(searchQuery.value.toLowerCase()) || t.category.toLowerCase().includes(searchQuery.value.toLowerCase()) || t.account.toLowerCase().includes(searchQuery.value.toLowerCase())
-            );
-        }
-
-        // Type filter
-        if (filterType.value !== "all") {
-            filtered = filtered.filter((t) => t.type === filterType.value);
-        }
-
-        // Category filter
-        if (filterCategory.value !== "all") {
-            filtered = filtered.filter((t) => t.category === filterCategory.value);
-        }
-
-        // Quick date filter
-        const now = new Date();
-        if (quickFilter.value === "today") {
-            filtered = filtered.filter((t) => {
-                const transDate = new Date(t.date);
-                return transDate.toDateString() === now.toDateString();
-            });
-        } else if (quickFilter.value === "week") {
-            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-            filtered = filtered.filter((t) => new Date(t.date) >= weekAgo);
-        } else if (quickFilter.value === "month") {
-            const monthAgo = new Date(now.getFullYear(), now.getMonth(), 1);
-            filtered = filtered.filter((t) => new Date(t.date) >= monthAgo);
-        }
-
-        // Sort
-        if (sortBy.value === "date-desc") {
-            filtered = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date));
-        } else if (sortBy.value === "date-asc") {
-            filtered = [...filtered].sort((a, b) => new Date(a.date) - new Date(b.date));
-        } else if (sortBy.value === "amount-desc") {
-            filtered = [...filtered].sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
-        } else if (sortBy.value === "amount-asc") {
-            filtered = [...filtered].sort((a, b) => Math.abs(a.amount) - Math.abs(b.amount));
-        }
-
-        return filtered;
     });
 
     const deleteTransaction = (id) => {
