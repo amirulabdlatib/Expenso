@@ -157,7 +157,7 @@
                                         <NuxtLink :to="`/transactions/${transaction.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors">
                                             <Icon name="heroicons:eye" class="w-4 h-4" />
                                         </NuxtLink>
-                                        <NuxtLink :to="`/transactions/edit/${transaction.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <NuxtLink :to="`/transactions/${transaction.id}/edit`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors">
                                             <Icon name="heroicons:pencil" class="w-4 h-4" />
                                         </NuxtLink>
                                         <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteTransaction(transaction.id)">

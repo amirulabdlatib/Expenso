@@ -7,9 +7,9 @@
                     <NuxtLink to="/transactions" class="p-2 rounded-lg hover:bg-white transition-colors">
                         <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                     </NuxtLink>
-                    <h1 class="text-3xl font-bold text-gray-900">Edit Transaction</h1>
+                    <h1 class="text-3xl font-bold text-gray-900">Show Transaction</h1>
                 </div>
-                <p class="text-gray-600 ml-14">Update your transaction details</p>
+                <p class="text-gray-600 ml-14">See your transaction in details</p>
             </div>
 
             <!-- Form Card -->
@@ -157,7 +157,7 @@
 
 <script setup>
     useHead({
-        title: "Create Transaction - Expenso",
+        title: "Show Transaction - Expenso",
     });
 
     definePageMeta({
