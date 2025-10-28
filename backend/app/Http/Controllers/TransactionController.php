@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TransactionType;
-use Carbon\Carbon;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,16 +25,14 @@ class TransactionController extends Controller
 
         $total_income = Transaction::totalIncome();
         $total_expenses = Transaction::totalExpenses();
-        $total_transaction_this_month = Transaction::where('user_id', Auth::id())
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
+        $total_transaction = Transaction::where('user_id', Auth::id())
             ->count();
 
         return response()->json([
             'transactions' => $transactions,
             'total_income' => $total_income,
             'total_expenses' => $total_expenses,
-            'total_transaction_this_month' => $total_transaction_this_month,
+            'total_transaction_this_month' => $total_transaction,
         ], Response::HTTP_OK);
     }
 
