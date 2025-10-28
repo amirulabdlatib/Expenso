@@ -169,11 +169,18 @@
 
                                         <!-- Category -->
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center space-x-2">
+                                            <div v-if="transaction.category" class="flex items-center space-x-2">
                                                 <div :style="{ backgroundColor: transaction.category.color + '20' }" class="w-8 h-8 rounded-lg flex items-center justify-center">
                                                     <Icon :name="transaction.category.icon" class="w-4 h-4" :style="{ color: transaction.category.color }" />
                                                 </div>
                                                 <span class="text-sm text-gray-900">{{ transaction.category.name }}</span>
+                                            </div>
+
+                                            <div v-else class="flex items-center space-x-2">
+                                                <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-100">
+                                                    <Icon name="heroicons:arrow-path" class="w-4 h-4 text-blue-600" />
+                                                </div>
+                                                <span class="text-sm text-gray-900">Transfer</span>
                                             </div>
                                         </td>
 
@@ -187,15 +194,21 @@
 
                                         <!-- Type -->
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span :class="[transaction.category.type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600', 'px-3 py-1 text-xs font-medium rounded-full']">
+                                            <span v-if="transaction.category" :class="[transaction.category.type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600', 'px-3 py-1 text-xs font-medium rounded-full']">
                                                 {{ transaction.category.type === "income" ? "Income" : "Expense" }}
                                             </span>
+
+                                            <span v-else class="bg-blue-100 text-blue-600 px-3 py-1 text-xs font-medium rounded-full"> Transfer </span>
                                         </td>
 
                                         <!-- Amount -->
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
-                                            <span :class="[transaction.category.type === 'income' ? 'text-green-600' : 'text-red-600', 'text-sm font-semibold']">
+                                            <span v-if="transaction.category" :class="[transaction.category.type === 'income' ? 'text-green-600' : 'text-red-600', 'text-sm font-semibold']">
                                                 {{ transaction.category.type === "income" ? "+" : "-" }}{{ formatCurrency(transaction.category.type === "income" ? transaction.credit : transaction.debit) }}
+                                            </span>
+
+                                            <span v-else class="text-blue-600 text-sm font-semibold">
+                                                {{ formatCurrency(transaction.debit || transaction.credit || 0) }}
                                             </span>
                                         </td>
 
@@ -257,7 +270,7 @@
 
     const categories = computed(() => {
         if (!transactionsData.value?.transactions) return [];
-        return [...new Set(transactionsData.value.transactions.map((t) => t.category.name))];
+        return [...new Set(transactionsData.value.transactions.filter((t) => t.category !== null).map((t) => t.category.name))];
     });
 
     const deleteTransaction = (id) => {
