@@ -55,7 +55,7 @@
                     <!-- Search -->
                     <div class="md:col-span-2 relative">
                         <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                        <input v-model="searchQuery" type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" >
+                        <input v-model="searchQuery" type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                     </div>
 
                     <!-- Type Filter -->
@@ -200,6 +200,13 @@
     useHead({
         title: "Transactions - Expenso",
     });
+
+    definePageMeta({
+        middleware: ["sanctum:auth"],
+    });
+
+    const { formatCurrency } = useCurrency();
+    const { formatDate, formatTime } = useUtils();
 
     // Dummy Data
     const transactions = ref([
@@ -407,31 +414,6 @@
 
         return filtered;
     });
-
-    // Methods
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat("en-MY", {
-            style: "currency",
-            currency: "MYR",
-        }).format(amount);
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-MY", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        });
-    };
-
-    const formatTime = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleTimeString("en-MY", {
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    };
 
     const deleteTransaction = (id) => {
         if (confirm("Are you sure you want to delete this transaction?")) {
