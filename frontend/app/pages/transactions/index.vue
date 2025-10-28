@@ -104,6 +104,7 @@
                                 <option value="all">All Types</option>
                                 <option value="income">Income</option>
                                 <option value="expense">Expense</option>
+                                <option value="transfer">Transfer</option>
                             </select>
 
                             <!-- Category Filter -->
@@ -114,10 +115,10 @@
 
                             <!-- Sort -->
                             <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                <option value="date-desc">Latest First</option>
-                                <option value="date-asc">Oldest First</option>
-                                <option value="amount-desc">Highest Amount</option>
-                                <option value="amount-asc">Lowest Amount</option>
+                                <option value="date-desc">Latest</option>
+                                <option value="date-asc">Oldest</option>
+                                <option value="amount-desc">Highest</option>
+                                <option value="amount-asc">Lowest</option>
                             </select>
                         </div>
 
