@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
+use App\Models\Account;
 
 class TransactionController extends Controller
 {
@@ -45,14 +46,31 @@ class TransactionController extends Controller
     public function store(StoreTransactionRequest $request)
     {
         $data = $request->validated();
-        Log::info($data);
+        $data['user_id'] = Auth::id();
+        $amount = $data['amount'];
+        $type = $data['type'];
 
-        if ($data['type'] == TransactionType::Income) {
-        } elseif ($data['type'] == TransactionType::Expense) {
+        $account_id = $data['account_id'];
+        $account = Account::find($account_id);
+
+        unset($data['amount']);
+        unset($data['type']);
+
+        if ($type == TransactionType::Income->value) {
+            $data['credit'] = $amount;
+            $account->balance = $account->balance + $amount;
+            $account->save();
+        } elseif ($type == TransactionType::Expense->value) {
+            $data['debit'] = $amount;
+            $account->balance = $account->balance - $amount;
+            $account->save();
+        } elseif ($type == TransactionType::Transfer->value) {
+            return response()->noContent();
         } else {
+            return response()->noContent();
         }
 
-        // Transaction::create($request->validated());
+        Transaction::create($data);
 
         return response()->json([
             'message' => ' Transaction created.'
