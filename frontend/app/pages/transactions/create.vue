@@ -152,6 +152,7 @@
                                     @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                                 />
                             </div>
+                            <p v-show="showCurrentBalance">Current Balance: MYR {{ getCurrentBalanceAccount?.balance }}</p>
                             <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
 
@@ -282,6 +283,17 @@
 
     const filteredCategories = computed(() => {
         return categories.value.filter((category) => category.type === form.type).sort((a, b) => a.name.localeCompare(b.name));
+    });
+
+    const getCurrentBalanceAccount = computed(() => {
+        return accounts.value.find((account) => account.id === form.account_id);
+    });
+
+    const showCurrentBalance = computed(() => {
+        if ((form.type == "expense" || form.type == "transfer") && getCurrentBalanceAccount) {
+            return true;
+        }
+        return false;
     });
 
     onMounted(() => {
