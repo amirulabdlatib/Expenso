@@ -145,6 +145,7 @@
                                     type="number"
                                     step="0.01"
                                     min="0"
+                                    :max="maxLimit"
                                     placeholder="0.00"
                                     class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
                                     :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
@@ -152,7 +153,7 @@
                                     @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                                 />
                             </div>
-                            <p v-show="showCurrentBalance">Current Balance: MYR {{ getCurrentBalanceAccount?.balance }}</p>
+                            <p v-show="showCurrentBalance" class="text-gray-400 font-light">Current Balance: MYR {{ getCurrentAccount?.balance }}</p>
                             <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
 
@@ -285,15 +286,22 @@
         return categories.value.filter((category) => category.type === form.type).sort((a, b) => a.name.localeCompare(b.name));
     });
 
-    const getCurrentBalanceAccount = computed(() => {
+    const getCurrentAccount = computed(() => {
         return accounts.value.find((account) => account.id === form.account_id);
     });
 
     const showCurrentBalance = computed(() => {
-        if ((form.type == "expense" || form.type == "transfer") && getCurrentBalanceAccount) {
+        if ((form.type == "expense" || form.type == "transfer") && getCurrentAccount.value) {
             return true;
         }
         return false;
+    });
+
+    const maxLimit = computed(() => {
+        if (form.type === "income") {
+            return undefined;
+        }
+        return getCurrentAccount?.value?.balance ? parseFloat(getCurrentAccount?.value.balance) : 0;
     });
 
     onMounted(() => {
