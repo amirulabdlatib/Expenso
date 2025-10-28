@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Models\Account;
@@ -60,17 +59,49 @@ class TransactionController extends Controller
             $data['credit'] = $amount;
             $account->balance = $account->balance + $amount;
             $account->save();
+            Transaction::create($data);
         } elseif ($type == TransactionType::Expense->value) {
             $data['debit'] = $amount;
             $account->balance = $account->balance - $amount;
             $account->save();
+            Transaction::create($data);
         } elseif ($type == TransactionType::Transfer->value) {
-            return response()->noContent();
+            $sentTransaction = Transaction::create([
+                'user_id' => Auth::id(),
+                'account_id' => $account_id,
+                'category_id' => $data['category_id'],
+                'related_account_id' => $data['related_account_id'],
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'debit' => $amount,
+                'credit' => null,
+                'transaction_date' => $data['transaction_date'],
+            ]);
+
+            $receivedTransaction = Transaction::create([
+                'user_id' => Auth::id(),
+                'account_id' => $data['related_account_id'],
+                'category_id' => $data['category_id'],
+                'related_account_id' => $account_id,
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'debit' => null,
+                'credit' => $amount,
+                'transaction_date' => $data['transaction_date'],
+            ]);
+
+            $sentAccount = Account::find($sentTransaction->account_id);
+            $receivedAccount = Account::find($receivedTransaction->account_id);
+
+            $sentAccount->balance = $sentAccount->balance - $amount;
+            $receivedAccount->balance = $receivedAccount->balance + $amount;
+
+            $sentAccount->save();
+            $receivedAccount->save();
         } else {
             return response()->noContent();
         }
 
-        Transaction::create($data);
 
         return response()->json([
             'message' => ' Transaction created.'
