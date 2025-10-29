@@ -153,7 +153,7 @@
                                     @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                                 />
                             </div>
-                            <p v-show="showCurrentBalance" class="text-gray-400 font-light">Current Balance: MYR {{ getCurrentAccount?.balance }}</p>
+                            <p v-show="showCurrentBalance" class="text-gray-400 font-light">Current Balance: MYR {{ getCurrentAccount?.current_balance }}</p>
                             <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
 
@@ -301,7 +301,7 @@
         if (form.type === "income") {
             return undefined;
         }
-        return getCurrentAccount?.value?.balance ? parseFloat(getCurrentAccount?.value.balance) : 0;
+        return getCurrentAccount?.value?.current_balance ? parseFloat(getCurrentAccount?.value.current_balance) : 0;
     });
 
     onMounted(() => {
