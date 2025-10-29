@@ -144,6 +144,23 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
+        $this->revertTransaction($transaction);
+
+        if ($transaction->transfer_pair_id != null) {
+            $relatedTransaction = $transaction->relatedTransaction;
+            if ($relatedTransaction) {
+                $this->revertTransaction($relatedTransaction);
+            }
+            $relatedTransaction->delete();
+        }
+
+        $transaction->delete();
+
+        return response()->noContent();
+    }
+
+    private function revertTransaction(Transaction $transaction)
+    {
         if ($transaction->debit != null) {
             $transaction->account->current_balance += $transaction->debit;
             $transaction->account->save();
@@ -152,24 +169,5 @@ class TransactionController extends Controller
             $transaction->account->current_balance -= $transaction->credit;
             $transaction->account->save();
         }
-
-        if ($transaction->transfer_pair_id != null) {
-            $relatedTransaction = $transaction->relatedTransaction;
-            if ($relatedTransaction) {
-                if ($relatedTransaction->debit != null) {
-                    $relatedTransaction->account->current_balance += $relatedTransaction->debit;
-                    $relatedTransaction->account->save();
-                }
-                if ($relatedTransaction->credit != null) {
-                    $relatedTransaction->account->current_balance -= $relatedTransaction->credit;
-                    $relatedTransaction->account->save();
-                }
-            }
-            $relatedTransaction->delete();
-        }
-
-        $transaction->delete();
-
-        return response()->noContent();
     }
 }
