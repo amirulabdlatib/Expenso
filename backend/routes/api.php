@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\AccountLookupController;
+use App\Http\Controllers\Lookup\AccountLookupController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CategoryLookupController;
+use App\Http\Controllers\Lookup\CategoryLookupController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
