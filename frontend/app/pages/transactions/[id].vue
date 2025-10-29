@@ -14,13 +14,16 @@
                         </div>
                     </div>
                     <div v-if="transaction" class="flex items-center space-x-2">
+                        <NuxtLink :to="`/transactions/${route.params.id}/edit`" class="px-4 py-2 p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" @click="refresh">
+                            <Icon name="heroicons:pencil-square" />
+                        </NuxtLink>
                         <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete transaction" aria-label="Delete transaction" @click="deleteTransaction(route.params.id)">
                             <Icon name="heroicons:trash" />
                         </button>
                     </div>
                     <div v-else class="flex items-center space-x-2">
-                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center space-x-2" @click="refresh">
-                            <Icon name="heroicons:arrow-path" class="w-4 h-4" />
+                        <button class="text-green-600 hover:bg-green-50 rounded-lg transition-colors" @click="refresh">
+                            <Icon name="heroicons:arrow-path" />
                         </button>
                     </div>
                 </div>
