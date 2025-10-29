@@ -70,6 +70,12 @@ class AccountController extends Controller
         $this->authorize('update', $account);
 
         $data = $request->validated();
+
+        if ($request->initial_balance !== $account->initial_balance) {
+            $difference = $request->initial_balance - $account->initial_balance;
+            $data['current_balance'] = $account->current_balance + $difference;
+        }
+
         $account->update($data);
 
         return response()->json([
