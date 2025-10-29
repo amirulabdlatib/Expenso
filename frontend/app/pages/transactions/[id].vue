@@ -62,7 +62,7 @@
                     <div class="text-right">
                         <div class="text-sm text-gray-500">Amount</div>
                         <div
-                            class="text-md font-bold"
+                            class="text-lg font-bold"
                             :class="{
                                 'text-red-600': transaction.type === 'expense',
                                 'text-green-600': transaction.type === 'income',
@@ -109,7 +109,7 @@
                     </div>
 
                     <!-- Category -->
-                    <div>
+                    <div v-if="transaction.category">
                         <label class="block text-sm font-medium text-gray-500 mb-2">Category</label>
                         <div class="flex items-center space-x-3 p-3 rounded-lg">
                             <Icon :name="transaction.category.icon" />
