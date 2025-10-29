@@ -99,7 +99,7 @@
                                 </div>
                                 <div>
                                     <p class="text-xs text-white/80 mb-2 font-medium uppercase tracking-wide">Current Balance</p>
-                                    <p class="text-3xl font-bold text-white">{{ formatCurrency(account.balance) }}</p>
+                                    <p class="text-3xl font-bold text-white">{{ formatCurrency(account.current_balance) }}</p>
                                 </div>
                             </div>
 
