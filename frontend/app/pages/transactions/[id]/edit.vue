@@ -11,10 +11,8 @@
 
             <!-- Main Content -->
             <div v-else>
-                <NoAccountsAlert v-if="accounts.length === 0" />
-
                 <!-- Form Card -->
-                <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
                     <form class="space-y-6" @submit.prevent="handleSubmit">
                         <!-- Account -->
                         <div>
@@ -214,7 +212,7 @@
     import VSelect from "vue-select";
 
     useHead({
-        title: "Create Transaction - Expenso",
+        title: "Edit Transaction - Expenso",
     });
 
     definePageMeta({
@@ -230,8 +228,6 @@
     const route = useRoute();
     const { success, error } = useToast();
     const { getTransactionAccounts, getTransactionCategories, createTransaction, errors } = useTransactions();
-
-    console.log(route.params.id);
 
     const form = reactive({
         type: null,
