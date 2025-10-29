@@ -30,7 +30,7 @@ class StoreAccountRequest extends FormRequest
             'name' => 'required|string|max:255',
             'type' => ['required', new Enum(AccountType::class)],
             'icon' => 'required|string',
-            'balance' => 'required|numeric',
+            'initial_balance' => 'required|numeric',
             'currency' => 'required|string|max:7',
             'is_active' => 'required|boolean',
         ];

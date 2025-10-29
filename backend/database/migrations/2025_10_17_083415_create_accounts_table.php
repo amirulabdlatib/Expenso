@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('icon');
-            $table->decimal('balance')->default(0);
+            $table->decimal('initial_balance');
+            $table->decimal('current_balance');
             $table->string('currency')->default('RM');
             $table->boolean('is_active');
             $table->timestamps();

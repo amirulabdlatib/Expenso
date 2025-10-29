@@ -27,9 +27,9 @@ class AccountController extends Controller
 
         return response()->json([
             'accounts' => $accounts,
-            'totalBalance' => $accounts->sum('balance'),
+            'totalBalance' => $accounts->sum('current_balance'),
             'active_accounts' => $activeAccounts->count(),
-            'activeAccountsBalance' => $activeAccounts->sum('balance'),
+            'activeAccountsBalance' => $activeAccounts->sum('current_balance'),
             'inactiveAccounts' => $inactiveAccounts->count(),
         ], Response::HTTP_OK);
     }
@@ -41,6 +41,7 @@ class AccountController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = Auth::id();
+        $data['current_balance'] = $data['initial_balance'];
 
         Account::create($data);
 

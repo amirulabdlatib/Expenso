@@ -102,7 +102,7 @@
                             </span>
                             <input
                                 id="balance"
-                                v-model.number="form.balance"
+                                v-model.number="form.initial_balance"
                                 type="number"
                                 step="0.01"
                                 placeholder="0.00"
@@ -111,7 +111,7 @@
                                 @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                             />
                         </div>
-                        <p v-if="errors.balance" class="text-red-400">{{ errors.balance[0] }}</p>
+                        <p v-if="errors.initial_balance" class="text-red-400">{{ errors.initial_balance[0] }}</p>
                     </div>
 
                     <!-- Currency -->
@@ -193,7 +193,7 @@
         name: "",
         type: "",
         icon: "",
-        balance: 0,
+        initial_balance: 0,
         currency: "MYR",
         is_active: true,
     });
@@ -218,7 +218,7 @@
         form.name = accountData.name;
         form.type = accountData.type;
         form.icon = accountData.icon;
-        form.balance = accountData.balance;
+        form.initial_balance = accountData.initial_balance;
         form.currency = accountData.currency;
         form.is_active = Boolean(accountData.is_active);
     };

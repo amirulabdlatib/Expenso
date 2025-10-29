@@ -13,7 +13,8 @@ class Account extends Model
         'name',
         'type',
         'icon',
-        'balance',
+        'initial_balance',
+        'current_balance',
         'currency',
         'is_active',
     ];

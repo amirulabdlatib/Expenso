@@ -66,12 +66,12 @@ class TransactionController extends Controller
 
         if ($type == TransactionType::Income->value) {
             $data['credit'] = $amount;
-            $account->balance = $account->balance + $amount;
+            $account->current_balance = $account->current_balance + $amount;
             $account->save();
             Transaction::create($data);
         } elseif ($type == TransactionType::Expense->value) {
             $data['debit'] = $amount;
-            $account->balance = $account->balance - $amount;
+            $account->current_balance = $account->current_balance - $amount;
             $account->save();
             Transaction::create($data);
         } elseif ($type == TransactionType::Transfer->value) {
@@ -102,8 +102,8 @@ class TransactionController extends Controller
             $sentAccount = Account::find($sentTransaction->account_id);
             $receivedAccount = Account::find($receivedTransaction->account_id);
 
-            $sentAccount->balance = $sentAccount->balance - $amount;
-            $receivedAccount->balance = $receivedAccount->balance + $amount;
+            $sentAccount->current_balance = $sentAccount->current_balance - $amount;
+            $receivedAccount->current_balance = $receivedAccount->current_balance + $amount;
 
             $sentAccount->save();
             $receivedAccount->save();
