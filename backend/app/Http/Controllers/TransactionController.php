@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use App\Enums\TransactionType;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -144,17 +145,20 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        $this->revertTransaction($transaction);
+        DB::transaction(function () use ($transaction) {
+            $this->revertTransaction($transaction);
 
-        if ($transaction->transfer_pair_id != null) {
-            $relatedTransaction = $transaction->relatedTransaction;
-            if ($relatedTransaction) {
-                $this->revertTransaction($relatedTransaction);
+            if ($transaction->transfer_pair_id != null) {
+                $relatedTransaction = $transaction->relatedTransaction;
+                if ($relatedTransaction) {
+                    $this->revertTransaction($relatedTransaction);
+                }
+                $relatedTransaction->delete();
             }
-            $relatedTransaction->delete();
-        }
 
-        $transaction->delete();
+            $transaction->delete();
+        });
+
 
         return response()->noContent();
     }
