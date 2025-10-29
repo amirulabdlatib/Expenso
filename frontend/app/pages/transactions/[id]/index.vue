@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div v-if="transaction" class="flex items-center space-x-2">
-                        <NuxtLink :to="`/transactions/${route.params.id}/edit`" class="px-4 py-2 p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" @click="refresh">
+                        <NuxtLink v-if="transaction.type != 'transfer'" :to="`/transactions/${route.params.id}/edit`" class="px-4 py-2 p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" @click="refresh">
                             <Icon name="heroicons:pencil-square" />
                         </NuxtLink>
                         <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete transaction" aria-label="Delete transaction" @click="deleteTransaction(route.params.id)">
