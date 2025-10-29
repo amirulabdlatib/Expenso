@@ -6,6 +6,7 @@ use App\Enums\CategoryType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Transaction extends Model
 {
@@ -15,11 +16,16 @@ class Transaction extends Model
         'account_id',
         'category_id',
         'related_account_id',
+        'transfer_pair_id',
         'name',
         'description',
         'debit',
         'credit',
         'transaction_date',
+    ];
+
+    protected $casts = [
+        'transfer_pair_id' => 'ulid',
     ];
 
     public function user(): BelongsTo
@@ -40,6 +46,12 @@ class Transaction extends Model
     public function relatedAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'related_account_id');
+    }
+
+    public function relatedTransaction(): HasOne
+    {
+        return $this->hasOne(Transaction::class, 'transfer_pair_id', 'transfer_id')
+            ->where('id', '!=', $this->id);
     }
 
     public static function totalIncome()

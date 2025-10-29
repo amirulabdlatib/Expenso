@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TransactionType;
+use App\Models\Account;
 use App\Models\Transaction;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Enums\TransactionType;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
-use App\Models\Account;
 
 class TransactionController extends Controller
 {
@@ -75,6 +76,9 @@ class TransactionController extends Controller
             $account->save();
             Transaction::create($data);
         } elseif ($type == TransactionType::Transfer->value) {
+
+            $transferPairId = Str::ulid();
+
             $sentTransaction = Transaction::create([
                 'user_id' => Auth::id(),
                 'account_id' => $account_id,
@@ -85,6 +89,7 @@ class TransactionController extends Controller
                 'debit' => $amount,
                 'credit' => null,
                 'transaction_date' => $data['transaction_date'],
+                'transfer_pair_id' => $transferPairId,
             ]);
 
             $receivedTransaction = Transaction::create([
@@ -97,6 +102,7 @@ class TransactionController extends Controller
                 'debit' => null,
                 'credit' => $amount,
                 'transaction_date' => $data['transaction_date'],
+                'transfer_pair_id' => $transferPairId,
             ]);
 
             $sentAccount = Account::find($sentTransaction->account_id);
