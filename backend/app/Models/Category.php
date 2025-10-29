@@ -17,19 +17,19 @@ class Category extends Model
         'parent_id',
     ];
 
-    public function user():BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     public function children(): HasMany
     {
-        return $this->hasMany(Category::class,'parent_id');
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Category::class,'parent_id');
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 
     public function transactions(): HasMany
