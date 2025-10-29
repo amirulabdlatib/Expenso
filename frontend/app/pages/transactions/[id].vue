@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div v-if="transaction" class="flex items-center space-x-2">
-                        <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete transaction" aria-label="Delete transaction" @click="deleteTransaction">
+                        <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete transaction" aria-label="Delete transaction" @click="deleteTransaction(route.params.id)">
                             <Icon name="heroicons:trash" />
                         </button>
                     </div>
