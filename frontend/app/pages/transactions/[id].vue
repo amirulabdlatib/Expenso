@@ -1,156 +1,137 @@
 <template>
-    <!-- TODO:: Show detail transaction -->
     <div class="min-h-screen bg-gray-50 pt-6">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Page Header -->
             <div class="mb-8">
-                <div class="flex items-center space-x-3 mb-2">
-                    <NuxtLink to="/transactions" class="p-2 rounded-lg hover:bg-white transition-colors">
-                        <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
-                    </NuxtLink>
-                    <h1 class="text-3xl font-bold text-gray-900">Show Transaction</h1>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                        <NuxtLink to="/transactions" class="p-2 rounded-lg hover:bg-white transition-colors">
+                            <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
+                        </NuxtLink>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">Transaction Details</h1>
+                            <p class="text-gray-500 text-sm">View your transaction details</p>
+                        </div>
+                    </div>
+                    <div v-if="transaction" class="flex items-center space-x-2">
+                        <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete transaction" aria-label="Delete transaction" @click="deleteTransaction">
+                            <Icon name="heroicons:trash" />
+                        </button>
+                    </div>
+                    <div v-else class="flex items-center space-x-2">
+                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center space-x-2" @click="refresh">
+                            <Icon name="heroicons:arrow-path" class="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
-                <p class="text-gray-600 ml-14">See your transaction in details</p>
             </div>
 
-            <!-- Form Card -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
-                <form class="space-y-6" @submit.prevent="handleSubmit">
-                    <!-- Account -->
+            <!-- Loading State -->
+            <div v-if="pending" class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+                <p class="mt-4 text-gray-600">Loading transaction...</p>
+            </div>
+
+            <!-- Error State -->
+            <div v-else-if="error" class="bg-white rounded-xl shadow-sm border border-red-200 p-8">
+                <div class="text-center">
+                    <Icon name="heroicons:exclamation-circle" class="w-16 h-16 text-red-500 mx-auto mb-4" />
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Error Loading Transaction</h3>
+                    <p class="text-gray-600">{{ error.statusMessage }}</p>
+                    <NuxtLink to="/transactions" class="inline-block mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"> Back to Transactions </NuxtLink>
+                </div>
+            </div>
+
+            <!-- Transaction Details Card -->
+            <div v-else-if="transaction" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+                <!-- Transaction Type Badge -->
+                <div class="flex justify-between items-start mb-6">
                     <div>
-                        <label for="account" class="block text-sm font-medium text-gray-700 mb-2"> Account <span class="text-red-500">*</span> </label>
-                        <select id="account" v-model.number="form.account_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
-                            <option value="" disabled>Select an account</option>
-                            <option value="1">Cash</option>
-                            <option value="2">Bank Account</option>
-                            <option value="3">Credit Card</option>
-                        </select>
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                            :class="{
+                                'bg-red-100 text-red-700': transaction.type === 'expense',
+                                'bg-green-100 text-green-700': transaction.type === 'income',
+                                'bg-blue-100 text-blue-700': transaction.type === 'transfer',
+                            }"
+                        >
+                            <Icon :name="transaction.type === 'expense' ? 'heroicons:arrow-trending-down' : transaction.type === 'income' ? 'heroicons:arrow-trending-up' : 'heroicons:arrow-path'" class="w-4 h-4 mr-1" />
+                            {{ transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) }}
+                        </span>
                     </div>
-                    <!-- Transaction Name -->
+                    <div class="text-right">
+                        <div class="text-sm text-gray-500">Amount</div>
+                        <div
+                            class="text-md font-bold"
+                            :class="{
+                                'text-red-600': transaction.type === 'expense',
+                                'text-green-600': transaction.type === 'income',
+                                'text-blue-600': transaction.type === 'transfer',
+                            }"
+                        >
+                            {{ transaction.account.currency }} {{ Number(transaction.amount).toFixed(2) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction Info -->
+                <div class="space-y-6">
+                    <!-- Name -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Transaction Name <span class="text-red-500">*</span> </label>
-                        <input
-                            id="name"
-                            v-model="form.name"
-                            type="text"
-                            placeholder="e.g., Grocery Shopping"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            required
-                        />
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Transaction Name</label>
+                        <p class="text-lg font-semibold text-gray-900">{{ transaction.name }}</p>
                     </div>
 
                     <!-- Description -->
-                    <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2"> Description (Optional) </label>
-                        <textarea
-                            id="description"
-                            v-model="form.description"
-                            rows="4"
-                            placeholder="Add any notes about this transaction..."
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
-                        />
+                    <div v-if="transaction.description">
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Description</label>
+                        <p class="text-gray-700">{{ transaction.description }}</p>
                     </div>
 
-                    <!-- Transaction Type -->
+                    <!-- Account -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"> Transaction Type <span class="text-red-500">*</span> </label>
-                        <div class="grid grid-cols-3 gap-3">
-                            <button type="button" class="relative p-4 border-2 rounded-lg transition-all hover:border-red-500" :class="form.type === 'expense' ? 'border-red-500 bg-red-50' : 'border-gray-200'" @click="form.type = 'expense'">
-                                <Icon name="heroicons:arrow-trending-down" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'expense' ? 'text-red-500' : 'text-gray-400'" />
-                                <span class="text-sm font-medium block" :class="form.type === 'expense' ? 'text-red-700' : 'text-gray-700'">Expense</span>
-                            </button>
-
-                            <button
-                                type="button"
-                                class="relative p-4 border-2 rounded-lg transition-all hover:border-green-500"
-                                :class="form.type === 'income' ? 'border-green-500 bg-green-50' : 'border-gray-200'"
-                                @click="form.type = 'income'"
-                            >
-                                <Icon name="heroicons:arrow-trending-up" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'income' ? 'text-green-500' : 'text-gray-400'" />
-                                <span class="text-sm font-medium block" :class="form.type === 'income' ? 'text-green-700' : 'text-gray-700'">Income</span>
-                            </button>
-
-                            <button
-                                type="button"
-                                class="relative p-4 border-2 rounded-lg transition-all hover:border-blue-500"
-                                :class="form.type === 'transfer' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'"
-                                @click="form.type = 'transfer'"
-                            >
-                                <Icon name="heroicons:arrow-path" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'transfer' ? 'text-blue-500' : 'text-gray-400'" />
-                                <span class="text-sm font-medium block" :class="form.type === 'transfer' ? 'text-blue-700' : 'text-gray-700'">Transfer</span>
-                            </button>
+                        <label class="block text-sm font-medium text-gray-500 mb-2">
+                            {{ transaction.type === "transfer" ? "From Account" : "Account" }}
+                        </label>
+                        <div class="flex items-center space-x-3 p-3 rounded-lg">
+                            <Icon :name="transaction.account.icon" />
+                            <span class="font-medium text-gray-900">{{ transaction.account.name }}</span>
                         </div>
                     </div>
 
                     <!-- Related Account (for transfers) -->
-                    <div v-if="form.type === 'transfer'">
-                        <label for="related_account" class="block text-sm font-medium text-gray-700 mb-2"> To Account <span class="text-red-500">*</span> </label>
-                        <select
-                            id="related_account"
-                            v-model.number="form.related_account_id"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            :required="form.type === 'transfer'"
-                        >
-                            <option value="" disabled>Select destination account</option>
-                            <option value="1">Cash</option>
-                            <option value="2">Bank Account</option>
-                            <option value="3">Credit Card</option>
-                        </select>
+                    <div v-if="transaction.type === 'transfer' && transaction.related_account">
+                        <label class="block text-sm font-medium text-gray-500 mb-2">To Account</label>
+                        <div class="flex items-center space-x-3 p-3 rounded-lg">
+                            <Icon :name="transaction.related_account.icon" />
+                            <span class="font-medium text-gray-900">{{ transaction.related_account.name }}</span>
+                        </div>
                     </div>
 
                     <!-- Category -->
                     <div>
-                        <label for="category" class="block text-sm font-medium text-gray-700 mb-2"> </label>
-                        <select id="category" v-model.number="form.category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
-                            <option value="" disabled>Select a category</option>
-                            <option value="1">🍔 Food & Dining</option>
-                            <option value="2">🚗 Transportation</option>
-                            <option value="3">🏠 Housing</option>
-                            <option value="4">🎮 Entertainment</option>
-                            <option value="5">💼 Salary</option>
-                        </select>
-                    </div>
-
-                    <!-- Amount -->
-                    <div>
-                        <label for="amount" class="block text-sm font-medium text-gray-700 mb-2"> Amount <span class="text-red-500">*</span> </label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-lg">MYR</span>
-                            <input
-                                id="amount"
-                                v-model.number="form.amount"
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="0.00"
-                                class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
-                                required
-                                @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
-                            />
+                        <label class="block text-sm font-medium text-gray-500 mb-2">Category</label>
+                        <div class="flex items-center space-x-3 p-3 rounded-lg">
+                            <Icon :name="transaction.category.icon" />
+                            <div>
+                                <div class="font-medium text-gray-900">{{ transaction.category.name }}</div>
+                                <div class="text-sm text-gray-500 capitalize">{{ transaction.category.type }}</div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Date and Time -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label for="date" class="block text-sm font-medium text-gray-700 mb-2"> Date <span class="text-red-500">*</span> </label>
-                            <input id="date" v-model="form.date" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required />
+                            <label class="block text-sm font-medium text-gray-500 mb-1">Date</label>
+                            <p class="text-gray-900 font-medium">{{ formatDate(transaction.transaction_date) }}</p>
                         </div>
-
                         <div>
-                            <label for="time" class="block text-sm font-medium text-gray-700 mb-2"> Time <span class="text-red-500">*</span> </label>
-                            <input id="time" v-model="form.time" type="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required />
+                            <label class="block text-sm font-medium text-gray-500 mb-1">Time</label>
+                            <p class="text-gray-900 font-medium">{{ formatTime(transaction.transaction_date) }}</p>
                         </div>
                     </div>
-
-                    <!-- Form Actions -->
-                    <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end gap-3 pt-6 border-t border-gray-200">
-                        <NuxtLink to="/transactions" class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"> Cancel </NuxtLink>
-                        <button type="submit" class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2">
-                            <span>Create </span>
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -158,34 +139,31 @@
 
 <script setup>
     useHead({
-        title: "Show Transaction - Expenso",
+        title: "Transaction Details - Expenso",
     });
 
     definePageMeta({
         middleware: ["sanctum:auth"],
     });
 
-    const now = new Date();
-    const form = reactive({
-        type: "expense",
-        name: "",
-        amount: 0,
-        date: now.toISOString().split("T")[0], // YYYY-MM-DD
-        time: now.toTimeString().split(" ")[0].substring(0, 5), // HH:MM
-        account_id: "",
-        category_id: "",
-        related_account_id: "",
-        description: "",
-    });
+    const route = useRoute();
+    const client = useSanctumClient();
+    const { formatDate, formatTime } = useUtils();
+    const { success, error: toastError } = useToast();
+    const { deleteTransaction: deleteAction } = useTransactions();
 
-    const handleSubmit = () => {
-        const datetime = `${form.date} ${form.time}:00`;
-        const { date, time, ...formData } = form;
-        const data = { ...formData, datetime };
+    const { data: transaction, pending, error, refresh } = await useAsyncData(`transaction-${route.params.id}`, () => client(`/api/transactions/${route.params.id}`));
 
-        console.log("Form submitted:", data);
-
-        // TODO: API request will go here
-        // For now, just log the form data
+    const deleteTransaction = async (id) => {
+        if (confirm("Are you sure you want to delete this transaction?")) {
+            try {
+                await deleteAction(id);
+                success("Transaction deleted!");
+                navigateTo("/transactions");
+            } catch (err) {
+                console.log(err);
+                toastError("Transaction fail to delete.");
+            }
+        }
     };
 </script>

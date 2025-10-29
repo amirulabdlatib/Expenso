@@ -127,9 +127,30 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Transaction $transaction)
     {
-        //
+
+        $type = $this->getTransactionType($transaction);
+
+        $amount = $transaction->debit ?? $transaction->credit;
+
+        $transaction->load([
+            'account:id,name,icon,currency',
+            'category:id,name,icon,type',
+            'relatedAccount:id,name,icon,currency'
+        ]);
+
+        return response()->json([
+            'id' => $transaction->id,
+            'type' => $type,
+            'name' => $transaction->name,
+            'description' => $transaction->description,
+            'amount' => $amount,
+            'transaction_date' => $transaction->transaction_date,
+            'account' => $transaction->account,
+            'category' => $transaction->category,
+            'related_account' => $transaction->relatedAccount,
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -173,5 +194,18 @@ class TransactionController extends Controller
             $transaction->account->current_balance -= $transaction->credit;
             $transaction->account->save();
         }
+    }
+
+    private function getTransactionType(Transaction $transaction): string
+    {
+        if ($transaction->transfer_pair_id) {
+            return 'transfer';
+        }
+
+        if ($transaction->debit) {
+            return 'expense';
+        }
+
+        return 'income';
     }
 }
