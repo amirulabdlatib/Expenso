@@ -259,8 +259,10 @@
         middleware: ["sanctum:auth"],
     });
 
+    const { deleteTransaction: deleteAction } = useTransactions();
     const { formatCurrency } = useCurrency();
     const { formatDate, formatTime } = useUtils();
+    const { success, error: toastError } = useToast();
     const client = useSanctumClient();
 
     const { data: transactionsData, status, error, refresh } = await useAsyncData("transactions", () => client("/api/transactions"));
@@ -274,11 +276,15 @@
         return [...new Set(transactionsData.value.transactions.filter((t) => t.category !== null).map((t) => t.category.name))];
     });
 
-    const deleteTransaction = (id) => {
+    const deleteTransaction = async (id) => {
         if (confirm("Are you sure you want to delete this transaction?")) {
-            const index = transactions.value.findIndex((t) => t.id === id);
-            if (index !== -1) {
-                transactions.value.splice(index, 1);
+            try {
+                await deleteAction(id);
+                success("Transaction deleted!");
+                await refresh();
+            } catch (err) {
+                console.log(err);
+                toastError("Transaction fail to delete.");
             }
         }
     };

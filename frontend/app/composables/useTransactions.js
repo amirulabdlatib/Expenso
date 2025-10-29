@@ -37,10 +37,24 @@ export const useTransactions = () => {
         }
     }
 
+    async function deleteTransaction(id) {
+        try {
+            const response = await sanctumClient(`/api/transactions/${id}`, {
+                method: "DELETE",
+            });
+
+            return response;
+        } catch (err) {
+            errors.value = err.data.errors;
+            throw err;
+        }
+    }
+
     return {
         errors,
         getTransactionAccounts,
         getTransactionCategories,
         createTransaction,
+        deleteTransaction,
     };
 };

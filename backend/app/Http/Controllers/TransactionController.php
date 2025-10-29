@@ -136,8 +136,19 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Transaction $transaction)
     {
-        //
+        if ($transaction->debit != null) {
+            $transaction->account->current_balance += $transaction->debit;
+            $transaction->account->save();
+        }
+        if ($transaction->credit != null) {
+            $transaction->account->current_balance -= $transaction->credit;
+            $transaction->account->save();
+        }
+
+        $transaction->delete();
+
+        return response()->noContent();
     }
 }
