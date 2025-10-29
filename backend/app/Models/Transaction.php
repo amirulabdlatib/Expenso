@@ -24,10 +24,6 @@ class Transaction extends Model
         'transaction_date',
     ];
 
-    protected $casts = [
-        'transfer_pair_id' => 'ulid',
-    ];
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -50,7 +46,7 @@ class Transaction extends Model
 
     public function relatedTransaction(): HasOne
     {
-        return $this->hasOne(Transaction::class, 'transfer_pair_id', 'transfer_id')
+        return $this->hasOne(Transaction::class, 'transfer_pair_id', 'transfer_pair_id')
             ->where('id', '!=', $this->id);
     }
 

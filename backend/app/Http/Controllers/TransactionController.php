@@ -153,6 +153,21 @@ class TransactionController extends Controller
             $transaction->account->save();
         }
 
+        if ($transaction->transfer_pair_id != null) {
+            $relatedTransaction = $transaction->relatedTransaction;
+            if ($relatedTransaction) {
+                if ($relatedTransaction->debit != null) {
+                    $relatedTransaction->account->current_balance += $relatedTransaction->debit;
+                    $relatedTransaction->account->save();
+                }
+                if ($relatedTransaction->credit != null) {
+                    $relatedTransaction->account->current_balance -= $relatedTransaction->credit;
+                    $relatedTransaction->account->save();
+                }
+            }
+            $relatedTransaction->delete();
+        }
+
         $transaction->delete();
 
         return response()->noContent();
