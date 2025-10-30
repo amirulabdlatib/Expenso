@@ -274,7 +274,7 @@
             if (newType !== "transfer" && newType !== "" && categories.value.length === 0) {
                 fetchCategories();
             }
-            if (newType === "transfer") {
+            if (newType) {
                 form.category_id = null;
             } else {
                 form.related_account_id = null;
