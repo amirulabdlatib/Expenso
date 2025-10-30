@@ -22,6 +22,16 @@ export const useTransactions = () => {
         }
     }
 
+    async function getTransactionForEdit(id) {
+        try {
+            const response = await sanctumClient(`/api/transactions/${id}/edit`);
+            return response;
+        } catch (err) {
+            errors.value = err.data.errors;
+            throw err;
+        }
+    }
+
     async function createTransaction(form) {
         try {
             const response = await sanctumClient("/api/transactions", {
@@ -56,5 +66,6 @@ export const useTransactions = () => {
         getTransactionCategories,
         createTransaction,
         deleteTransaction,
+        getTransactionForEdit,
     };
 };
