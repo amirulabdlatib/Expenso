@@ -15,9 +15,7 @@ class CategoryLookupController extends Controller
      */
     public function __invoke()
     {
-        $categories = Category::where('user_id', Auth::id())
-            ->select(['id', 'name', 'type'])
-            ->get();
+        $categories = Category::getCategories();
 
         return response()->json([
             'categories' => $categories,

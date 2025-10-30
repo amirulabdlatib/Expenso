@@ -15,10 +15,7 @@ class AccountLookupController extends Controller
      */
     public function __invoke()
     {
-        $accounts = Account::where('user_id', Auth::id())
-            ->where('is_active', true)
-            ->select(['id', 'name', 'current_balance'])
-            ->get();
+        $accounts = Account::getActiveAccounts();
 
         return response()->json([
             'accounts' => $accounts,

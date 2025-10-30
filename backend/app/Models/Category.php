@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Category extends Model
 {
@@ -35,5 +37,24 @@ class Category extends Model
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Scope a query to only include records belonging to the currently authenticated user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForCurrentUser(Builder $query)
+    {
+        return $query->where('user_id', Auth::id());
+    }
+
+    public static function getCategories()
+    {
+        return static::query()
+            ->forCurrentUser()
+            ->select(['id', 'name', 'type'])
+            ->get();
     }
 }
