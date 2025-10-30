@@ -9,9 +9,11 @@
                     <!-- Account -->
                     <div>
                         <label for="account" class="block text-sm font-medium text-gray-700 mb-2"> Account <span class="text-red-500">*</span> </label>
-                        <VSelect v-model="form.account_id" :options="accounts" :reduce="(account) => account.id" label="name" placeholder="Select an account" class="vue-select-custom" :clearable="true" :disabled="isLoading">
-                            <template #no-options>No accounts found</template>
-                        </VSelect>
+                        <ClientOnly>
+                            <VSelect v-model="form.account_id" :options="accounts" :reduce="(account) => account.id" label="name" placeholder="Select an account" class="vue-select-custom" :clearable="true" :disabled="isLoading">
+                                <template #no-options>No accounts found</template>
+                            </VSelect>
+                        </ClientOnly>
                         <p v-if="errors.account_id" class="text-red-400">{{ errors.account_id[0] }}</p>
                     </div>
 
@@ -63,60 +65,29 @@
                                 <Icon name="heroicons:arrow-trending-up" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'income' ? 'text-green-500' : 'text-gray-400'" />
                                 <span class="text-sm font-medium block" :class="form.type === 'income' ? 'text-green-700' : 'text-gray-700'">Income</span>
                             </button>
-
-                            <button
-                                type="button"
-                                class="relative p-4 border-2 rounded-lg transition-all"
-                                :class="[form.type === 'transfer' ? 'border-blue-500 bg-blue-50' : 'border-gray-200', accounts.length > 1 && form.account_id ? 'hover:border-blue-500 cursor-pointer' : 'opacity-50 cursor-not-allowed']"
-                                :disabled="accounts.length <= 1 || !form.account_id"
-                                @click="accounts.length > 1 && form.account_id && (form.type = 'transfer')"
-                            >
-                                <Icon name="heroicons:arrow-path" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'transfer' ? 'text-blue-500' : 'text-gray-400'" />
-                                <span class="text-sm font-medium block" :class="form.type === 'transfer' ? 'text-blue-700' : 'text-gray-700'">Transfer</span>
-                            </button>
                         </div>
                         <p v-if="errors.type" class="text-red-400">{{ errors.type[0] }}</p>
                     </div>
 
                     <!-- Categories dropdown -->
-                    <div v-if="form.type == 'expense' || form.type == 'income'">
+                    <div>
                         <label for="category" class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
+                        <ClientOnly>
+                            <VSelect
+                                v-model="form.category_id"
+                                :options="filteredCategories"
+                                :reduce="(category) => category.id"
+                                label="name"
+                                placeholder="Select a category"
+                                class="vue-select-custom"
+                                :clearable="true"
+                                :disabled="isLoading"
+                            >
+                                <template #no-options>No categories found</template>
+                            </VSelect>
+                        </ClientOnly>
 
-                        <!-- Loading Categories -->
-                        <div v-if="isFetchingCategories" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">Loading categories...</div>
-
-                        <!-- Category Select -->
-                        <VSelect
-                            v-else
-                            v-model="form.category_id"
-                            :options="filteredCategories"
-                            :reduce="(category) => category.id"
-                            label="name"
-                            placeholder="Select a category"
-                            class="vue-select-custom"
-                            :clearable="true"
-                            :disabled="isLoading"
-                        >
-                            <template #no-options>No categories found</template>
-                        </VSelect>
                         <p v-if="errors.category_id" class="text-red-400">{{ errors.category_id[0] }}</p>
-                    </div>
-
-                    <!-- Related Account (for transfers) -->
-                    <div v-if="form.type === 'transfer'">
-                        <label for="related_account" class="block text-sm font-medium text-gray-700 mb-2"> To Account <span class="text-red-500">*</span> </label>
-                        <select
-                            id="related_account"
-                            v-model.number="form.related_account_id"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                            :required="form.type === 'transfer'"
-                            :disabled="isLoading"
-                        >
-                            <option value="null" disabled>Select destination account</option>
-                            <option v-for="account in transferredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
-                        </select>
-                        <p v-if="errors.related_account_id" class="text-red-400">{{ errors.related_account_id[0] }}</p>
                     </div>
 
                     <!-- Amount -->
@@ -206,7 +177,6 @@
     });
 
     const now = new Date();
-    const isFetchingCategories = ref(false);
     const isLoading = ref(false);
     const accounts = ref([]);
     const categories = ref([]);
@@ -221,7 +191,6 @@
         time: now.toTimeString().split(" ")[0].substring(0, 5),
         account_id: null,
         category_id: null,
-        related_account_id: null,
         description: null,
     });
 
@@ -249,22 +218,15 @@
         form.description = data.transaction.description;
     };
 
-    const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
-
     const fetchCategories = async (data) => {
         categories.value = data.categories;
     };
 
     watch(
         () => form.type,
-        (newType) => {
-            if (newType !== "transfer" && newType !== "" && categories.value.length === 0) {
-                categories.value = data.categories;
-            }
-            if (newType === "transfer") {
+        (newType, oldType) => {
+            if (oldType !== null) {
                 form.category_id = null;
-            } else {
-                form.related_account_id = null;
             }
         }
     );
@@ -278,7 +240,7 @@
     });
 
     const showCurrentBalance = computed(() => {
-        if ((form.type == "expense" || form.type == "transfer") && getCurrentAccount.value) {
+        if (form.type == "expense" && getCurrentAccount.value) {
             return true;
         }
         return false;
