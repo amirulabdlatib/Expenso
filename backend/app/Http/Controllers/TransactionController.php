@@ -12,6 +12,7 @@ use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TransactionController extends Controller
 {
@@ -156,6 +157,15 @@ class TransactionController extends Controller
 
     public function edit(Transaction $transaction)
     {
+        $type = $this->getTransactionType($transaction);
+
+        if ($type == TransactionType::Transfer->value) {
+            throw new HttpException(
+                Response::HTTP_FORBIDDEN,
+                'Transfer transactions cannot be edited.'
+            );
+        }
+
         $accounts = Account::getActiveAccounts();
         $categories = Category::getCategories();
 
