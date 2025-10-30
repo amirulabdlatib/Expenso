@@ -14,11 +14,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
 
-    Route::resource('accounts', AccountController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('transactions', TransactionController::class);
-
+    Route::apiResource('accounts', AccountController::class);
+    Route::get('/accounts/{id}', [AccountController::class, 'show']);
     Route::get('/getActiveAccountCount', [AccountController::class, 'getActiveAccountCount']);
     Route::get('/lookup/accounts', AccountLookupController::class);
+
+
+    Route::apiResource('categories', CategoryController::class);
     Route::get('/lookup/categories', CategoryLookupController::class);
+
+    Route::resource('transactions', TransactionController::class);
 });
