@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Enums\TransactionType;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
-use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -150,6 +151,30 @@ class TransactionController extends Controller
             'account' => $transaction->account,
             'category' => $transaction->category,
             'related_account' => $transaction->relatedAccount,
+        ], Response::HTTP_OK);
+    }
+
+    public function edit(Transaction $transaction)
+    {
+        $accounts = Account::getActiveAccounts();
+        $categories = Category::getCategories();
+
+        $transaction['amount'] = $transaction->credit ?? $transaction->debit;
+
+        unset($transaction['credit']);
+        unset($transaction['debit']);
+        unset($transaction['created_at']);
+        unset($transaction['updated_at']);
+
+        $transaction->load([
+            'account:id,name',
+            'category:id,name,type',
+        ]);
+
+        return response()->json([
+            'accounts' => $accounts,
+            'categories' => $categories,
+            'transaction' => $transaction,
         ], Response::HTTP_OK);
     }
 
