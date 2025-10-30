@@ -27,7 +27,6 @@ class TransactionController extends Controller
                 'account_id',
                 'category_id',
                 'name',
-                'description',
                 'debit',
                 'credit',
                 'transaction_date',
