@@ -8,6 +8,17 @@
                 <p class="mt-4 text-gray-600">Loading details...</p>
             </div>
 
+            <div v-else-if="isError" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div class="flex items-start">
+                    <Icon name="heroicons:exclamation-circle" class="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
+                    <div class="flex-1">
+                        <h3 class="text-sm font-medium text-red-800 mb-1">Error Loading Transaction</h3>
+                        <p v-if="errors.statusCode == 403" class="text-sm text-red-700">You are not allowed to edit this transaction details</p>
+                        <p v-else class="text-sm text-red-700">{{ errors.statusMessage }}</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Form Card -->
             <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
                 <form class="space-y-6" @submit.prevent="handleUpdate">
@@ -184,6 +195,7 @@
     const now = new Date();
     const isLoading = ref(false);
     const isFetchingData = ref(false);
+    const isError = ref(false);
     const accounts = ref([]);
     const categories = ref([]);
     const route = useRoute();
@@ -207,8 +219,10 @@
             fetchCategories(data);
             accounts.value = data.accounts;
             populateForm(data);
+            isError.value = false;
         } catch (err) {
-            console.log(err);
+            errors.value = err;
+            isError.value = true;
         } finally {
             isFetchingData.value = false;
         }
