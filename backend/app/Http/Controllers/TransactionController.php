@@ -35,7 +35,7 @@ class TransactionController extends Controller
                 'account:id,name,icon',
                 'category:id,name,icon,color,type'
             ])
-            ->latest()
+            ->latest('transaction_date')
             ->get();
 
         $total_income = Transaction::totalIncome();
