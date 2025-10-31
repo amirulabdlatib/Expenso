@@ -221,7 +221,8 @@
             populateForm(data);
             isError.value = false;
         } catch (err) {
-            if (err.statusCode != 422) {
+            console.error("Error fetching transaction:", err);
+            if (err.statusCode !== 422) {
                 errors.value = err;
                 isError.value = true;
             }
