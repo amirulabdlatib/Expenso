@@ -12,6 +12,8 @@ use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
+use App\Http\Requests\UpdateTransactionRequest;
+use Illuminate\Support\Facades\Response as FacadesResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TransactionController extends Controller
@@ -190,9 +192,14 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
-        //
+        $this->revertTransaction($transaction);
+        $transaction->update($request->validated());
+
+        return response()->json([
+            'message' => 'Transaction updated successfully.'
+        ], Response::HTTP_OK);
     }
 
     /**
