@@ -221,8 +221,10 @@
             populateForm(data);
             isError.value = false;
         } catch (err) {
-            errors.value = err;
-            isError.value = true;
+            if (err.statusCode != 422) {
+                errors.value = err;
+                isError.value = true;
+            }
         } finally {
             isFetchingData.value = false;
         }
