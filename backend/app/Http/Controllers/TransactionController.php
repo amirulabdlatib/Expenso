@@ -65,69 +65,71 @@ class TransactionController extends Controller
         $data['user_id'] = Auth::id();
         $amount = $data['amount'];
         $type = $data['type'];
-
         $account_id = $data['account_id'];
-        $account = Account::find($account_id);
 
         unset($data['amount']);
         unset($data['type']);
 
-        if ($type == TransactionType::Income->value) {
-            $data['credit'] = $amount;
-            $account->current_balance = $account->current_balance + $amount;
-            $account->save();
-            Transaction::create($data);
-        } elseif ($type == TransactionType::Expense->value) {
-            $data['debit'] = $amount;
-            $account->current_balance = $account->current_balance - $amount;
-            $account->save();
-            Transaction::create($data);
-        } elseif ($type == TransactionType::Transfer->value) {
+        return DB::transaction(function () use ($type, $amount, $account_id, $data) {
+            $account = Account::findOrFail($account_id);
 
-            $transferPairId = Str::ulid();
+            if ($type == TransactionType::Income->value) {
+                $data['credit'] = $amount;
+                $data['debit'] = null;
+                $account->current_balance = $account->current_balance + $amount;
+                $account->save();
+                Transaction::create($data);
+            } elseif ($type == TransactionType::Expense->value) {
+                $data['debit'] = $amount;
+                $data['credit'] = null;
+                $account->current_balance = $account->current_balance - $amount;
+                $account->save();
+                Transaction::create($data);
+            } elseif ($type == TransactionType::Transfer->value) {
+                $transferPairId = Str::ulid();
 
-            $sentTransaction = Transaction::create([
-                'user_id' => Auth::id(),
-                'account_id' => $account_id,
-                'category_id' => $data['category_id'],
-                'related_account_id' => $data['related_account_id'],
-                'name' => $data['name'],
-                'description' => "Transfer out: {$transferPairId} " . $data['description'],
-                'debit' => $amount,
-                'credit' => null,
-                'transaction_date' => $data['transaction_date'],
-                'transfer_pair_id' => $transferPairId,
-            ]);
+                $sentTransaction = Transaction::create([
+                    'user_id' => Auth::id(),
+                    'account_id' => $account_id,
+                    'category_id' => $data['category_id'],
+                    'related_account_id' => $data['related_account_id'],
+                    'name' => $data['name'],
+                    'description' => "Transfer out: {$transferPairId} " . $data['description'],
+                    'debit' => $amount,
+                    'credit' => null,
+                    'transaction_date' => $data['transaction_date'],
+                    'transfer_pair_id' => $transferPairId,
+                ]);
 
-            $receivedTransaction = Transaction::create([
-                'user_id' => Auth::id(),
-                'account_id' => $data['related_account_id'],
-                'category_id' => $data['category_id'],
-                'related_account_id' => $account_id,
-                'name' => $data['name'],
-                'description' => "Transfer in: {$transferPairId} " . $data['description'],
-                'debit' => null,
-                'credit' => $amount,
-                'transaction_date' => $data['transaction_date'],
-                'transfer_pair_id' => $transferPairId,
-            ]);
+                $receivedTransaction = Transaction::create([
+                    'user_id' => Auth::id(),
+                    'account_id' => $data['related_account_id'],
+                    'category_id' => $data['category_id'],
+                    'related_account_id' => $account_id,
+                    'name' => $data['name'],
+                    'description' => "Transfer in: {$transferPairId} " . $data['description'],
+                    'debit' => null,
+                    'credit' => $amount,
+                    'transaction_date' => $data['transaction_date'],
+                    'transfer_pair_id' => $transferPairId,
+                ]);
 
-            $sentAccount = Account::find($sentTransaction->account_id);
-            $receivedAccount = Account::find($receivedTransaction->account_id);
+                $sentAccount = Account::findOrFail($sentTransaction->account_id);
+                $receivedAccount = Account::findOrFail($receivedTransaction->account_id);
 
-            $sentAccount->current_balance = $sentAccount->current_balance - $amount;
-            $receivedAccount->current_balance = $receivedAccount->current_balance + $amount;
+                $sentAccount->current_balance = $sentAccount->current_balance - $amount;
+                $receivedAccount->current_balance = $receivedAccount->current_balance + $amount;
 
-            $sentAccount->save();
-            $receivedAccount->save();
-        } else {
-            return response()->noContent();
-        }
+                $sentAccount->save();
+                $receivedAccount->save();
+            } else {
+                throw new HttpException(Response::HTTP_BAD_REQUEST, 'Invalid transaction type.');
+            }
 
-
-        return response()->json([
-            'message' => ' Transaction created.'
-        ], Response::HTTP_CREATED);
+            return response()->json([
+                'message' => 'Transaction created.'
+            ], Response::HTTP_CREATED);
+        });
     }
 
     /**

@@ -71,7 +71,7 @@ class AccountController extends Controller
 
         $data = $request->validated();
 
-        if ($request->initial_balance !== $account->initial_balance) {
+        if ($data['initial_balance'] !== $account->initial_balance) {
             $difference = $request->initial_balance - $account->initial_balance;
             $data['current_balance'] = $account->current_balance + $difference;
         }

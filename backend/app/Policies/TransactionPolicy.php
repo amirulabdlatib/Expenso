@@ -9,7 +9,7 @@ class TransactionPolicy
 {
 
     /**
-     * Determine whether the user can edit the model.
+     * Determine whether the user can view the model.
      */
     public function view(User $user, Transaction $transaction): bool
     {
@@ -17,7 +17,7 @@ class TransactionPolicy
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can edit the model.
      */
     public function edit(User $user, Transaction $transaction): bool
     {

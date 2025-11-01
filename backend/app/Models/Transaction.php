@@ -47,6 +47,7 @@ class Transaction extends Model
     public function relatedTransaction(): HasOne
     {
         return $this->hasOne(Transaction::class, 'transfer_pair_id', 'transfer_pair_id')
+            ->whereNotNull('transfer_pair_id')
             ->where('id', '!=', $this->id);
     }
 
