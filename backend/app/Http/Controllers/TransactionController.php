@@ -13,11 +13,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
-use Illuminate\Support\Facades\Response as FacadesResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class TransactionController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -132,6 +135,7 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
+        $this->authorize('view', $transaction);
 
         $type = $this->getTransactionType($transaction);
 
@@ -158,6 +162,8 @@ class TransactionController extends Controller
 
     public function edit(Transaction $transaction)
     {
+        $this->authorize('edit', $transaction);
+
         $type = $this->getTransactionType($transaction);
 
         if ($type == TransactionType::Transfer->value) {
@@ -194,6 +200,7 @@ class TransactionController extends Controller
      */
     public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
+        $this->authorize('update', $transaction);
 
         DB::transaction(function () use ($request, $transaction) {
             $this->revertTransaction($transaction);
@@ -231,6 +238,8 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
+        $this->authorize('delete', $transaction);
+
         DB::transaction(function () use ($transaction) {
             $this->revertTransaction($transaction);
 
