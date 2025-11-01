@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Lookup;
 
 use App\Models\Category;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 

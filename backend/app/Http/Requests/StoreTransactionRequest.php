@@ -72,7 +72,6 @@ class StoreTransactionRequest extends FormRequest
             'name.max' => 'Transaction name cannot exceed 255 characters.',
             'amount.required' => 'Amount is required.',
             'amount.min' => 'Amount must be at least 0.01.',
-            'amount.max' => 'Amount cannot exceed 9,999,999.99.',
             'account_id.required' => 'Account is required.',
             'account_id.exists' => 'The selected account does not exist or does not belong to you.',
             'category_id.required_if' => 'Category is required for income or expense transactions.',
