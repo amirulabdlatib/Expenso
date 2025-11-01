@@ -79,7 +79,10 @@
                                     form.type === type.value ? 'border-indigo-500 bg-indigo-50 shadow-sm' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
                                     isLoading ? 'opacity-50 cursor-not-allowed' : '',
                                 ]"
-                                @click="form.type = type.value"
+                                @click="
+                                    form.type = type.value;
+                                    form.icon = type.icon;
+                                "
                             >
                                 <Icon :name="type.icon" class="w-8 h-8 mb-2" :class="form.type === type.value ? 'text-indigo-600' : 'text-gray-600'" />
                                 <span class="text-xs md:text-sm font-medium text-center" :class="form.type === type.value ? 'text-indigo-900' : 'text-gray-700'">
@@ -88,28 +91,6 @@
                             </button>
                         </div>
                         <p v-if="errors.type" class="text-red-400 mt-2">{{ errors.type[0] }}</p>
-                    </div>
-
-                    <!-- Icon Selection -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-3"> Account Icon <span class="text-red-500">*</span> </label>
-                        <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
-                            <button
-                                v-for="iconOption in accountIcons"
-                                :key="iconOption"
-                                type="button"
-                                :disabled="isLoading"
-                                :class="[
-                                    'flex items-center justify-center p-3 md:p-4 rounded-lg border-2 transition-all',
-                                    form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
-                                    isLoading ? 'opacity-50 cursor-not-allowed' : '',
-                                ]"
-                                @click="form.icon = iconOption"
-                            >
-                                <Icon :name="iconOption" class="w-6 h-6" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
-                            </button>
-                        </div>
-                        <p v-if="errors.icon" class="text-red-400">{{ errors.icon[0] }}</p>
                     </div>
 
                     <!-- Initial Balance -->
@@ -121,15 +102,16 @@
                             </span>
                             <input
                                 id="balance"
-                                v-model="form.balance"
+                                v-model.number="form.initial_balance"
                                 type="number"
                                 step="0.01"
                                 placeholder="0.00"
                                 class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                 :disabled="isLoading"
+                                @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
                             />
                         </div>
-                        <p v-if="errors.balance" class="text-red-400">{{ errors.balance[0] }}</p>
+                        <p v-if="errors.initial_balance" class="text-red-400">{{ errors.initial_balance[0] }}</p>
                     </div>
 
                     <!-- Currency -->
@@ -196,7 +178,7 @@
         middleware: ["sanctum:auth"],
     });
 
-    const { accountTypes, accountIcons, currencies } = useAccountConstants();
+    const { accountTypes, currencies } = useAccountConstants();
     const isFetchData = ref(true);
     const fetchError = ref(null);
     const { getAccount, updateAccount, errors } = useAccount();
@@ -211,7 +193,7 @@
         name: "",
         type: "",
         icon: "",
-        balance: 0,
+        initial_balance: 0,
         currency: "MYR",
         is_active: true,
     });
@@ -236,7 +218,7 @@
         form.name = accountData.name;
         form.type = accountData.type;
         form.icon = accountData.icon;
-        form.balance = accountData.balance;
+        form.initial_balance = accountData.initial_balance;
         form.currency = accountData.currency;
         form.is_active = Boolean(accountData.is_active);
     };

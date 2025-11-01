@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     compatibilityDate: "2025-07-15",
     devtools: { enabled: true },
     modules: ["nuxt-auth-sanctum", "@nuxtjs/google-fonts", "@nuxt/icon", "@nuxt/eslint", "@pinia/nuxt"],
-    css: ["~/assets/css/main.css"],
+    css: ["~/assets/css/main.css", "vue-select/dist/vue-select.css"],
 
     vite: {
         plugins: [tailwindcss()],
