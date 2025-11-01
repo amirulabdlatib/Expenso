@@ -21,7 +21,7 @@
 
             <!-- Form Card -->
             <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
-                <form class="space-y-6" @submit.prevent="handleUpdate">
+                <form class="space-y-6" @submit.prevent="handleUpdate(route.params.id)">
                     <!-- Account -->
                     <div>
                         <label for="account" class="block text-sm font-medium text-gray-700 mb-2"> Account <span class="text-red-500">*</span> </label>
@@ -199,7 +199,8 @@
     const accounts = ref([]);
     const categories = ref([]);
     const route = useRoute();
-    const { getTransactionForEdit, errors } = useTransactions();
+    const { getTransactionForEdit, updateTransaction, errors } = useTransactions();
+    const { success, error: toastError } = useToast();
 
     const form = reactive({
         type: null,
@@ -279,12 +280,19 @@
         return getCurrentAccount?.value?.current_balance ? parseFloat(getCurrentAccount?.value.current_balance) : 0;
     });
 
-    const handleUpdate = () => {
+    const handleUpdate = async (id) => {
         isLoading.value = true;
+        const transaction_date = `${form.date} ${form.time}:00`;
+        const { date, time, ...formData } = form;
+        const updateDataForm = { ...formData, transaction_date };
 
         try {
-            console.log("update");
+            await updateTransaction(updateDataForm, id);
+            isError.value = false;
+            success("Transaction updated.");
+            navigateTo("/transactions");
         } catch (err) {
+            toastError("Transaction fail to update.");
             console.log(err);
         } finally {
             isLoading.value = false;

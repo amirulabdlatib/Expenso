@@ -194,12 +194,36 @@ class TransactionController extends Controller
      */
     public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
-        $this->revertTransaction($transaction);
-        $transaction->update($request->validated());
 
-        return response()->json([
-            'message' => 'Transaction updated successfully.'
-        ], Response::HTTP_OK);
+        DB::transaction(function () use ($request, $transaction) {
+            $this->revertTransaction($transaction);
+            $data = $request->validated();
+            $data['user_id'] = Auth::id();
+            $amount = $data['amount'];
+            $type = $data['type'];
+
+            $account = Account::find($request->account_id);
+
+            if ($type == TransactionType::Income->value) {
+                $data['credit'] = $amount;
+                $data['debit'] = null;
+                $account->current_balance = $account->current_balance + $amount;
+            } elseif ($type == TransactionType::Expense->value) {
+                $data['debit'] = $amount;
+                $data['credit'] = null;
+                $account->current_balance = $account->current_balance - $amount;
+            }
+
+            $account->save();
+
+            unset($data['amount']);
+            unset($data['type']);
+            $transaction->update($data);
+
+            return response()->json([
+                'message' => 'Transaction updated successfully.'
+            ], Response::HTTP_OK);
+        });
     }
 
     /**

@@ -47,6 +47,21 @@ export const useTransactions = () => {
         }
     }
 
+    async function updateTransaction(form, id) {
+        try {
+            const response = await sanctumClient(`/api/transactions/${id}`, {
+                method: "PUT",
+                body: form,
+            });
+            return response;
+        } catch (err) {
+            if (err.statusCode == 422) {
+                errors.value = err.data.errors;
+            }
+            throw err;
+        }
+    }
+
     async function deleteTransaction(id) {
         try {
             const response = await sanctumClient(`/api/transactions/${id}`, {
@@ -67,5 +82,6 @@ export const useTransactions = () => {
         createTransaction,
         deleteTransaction,
         getTransactionForEdit,
+        updateTransaction,
     };
 };
