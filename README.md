@@ -6,46 +6,6 @@ A full-stack expense tracking application built with modern web technologies.
 
 **Under Development** - This project is currently in active development.
 
-## ✨ Current Features
-
-### Account Management
-
--   Create and manage multiple financial accounts (bank accounts, e-wallets, cash, etc.)
--   Track real-time account balances
--   Set initial balance for each account
--   Active/inactive account status toggle
--   View total balance across all accounts
--   Separate balance tracking for active and inactive accounts
--   Authorization-protected account operations
-
-### Transaction Management
-
--   **Income Tracking** - Record income with automatic balance increase
--   **Expense Tracking** - Record expenses with automatic balance deduction
--   **Account Transfers** - Transfer money between accounts with paired transactions
--   View complete transaction history sorted by date
--   Detailed transaction information including date, amount, and description
--   Monthly income and expense summaries
--   Total transaction count tracking
--   Edit transactions (income and expenses only)
--   Delete transactions with automatic balance reversion
--   Authorization-protected transaction operations
-
-### Category Management
-
--   Create custom categories for income and expenses
--   Organize categories with parent-child hierarchy (2-level depth)
--   Visual customization with icons and colors
--   Type-based categorization (income/expense)
--   Prevention of nested child categories (max 2 levels)
--   View categorized transactions
-
-### Security & Data Protection
-
--   User authentication and authorization
--   Policy-based access control for accounts and transactions
--   User-specific data isolation
--   Secure API endpoints with Laravel Sanctum
 
 ## 🛠️ Tech Stack
 
@@ -93,9 +53,46 @@ npm install
 npm run dev
 ```
 
-## 📝 Features
+## 📝 Features (Available)
 
-_Coming soon..._
+### Account Management
+
+-   Create and manage multiple financial accounts (bank accounts, e-wallets, cash, etc.)
+-   Track real-time account balances
+-   Set initial balance for each account
+-   Active/inactive account status toggle
+-   View total balance across all accounts
+-   Separate balance tracking for active and inactive accounts
+-   Authorization-protected account operations
+
+### Transaction Management
+
+-   **Income Tracking** - Record income with automatic balance increase
+-   **Expense Tracking** - Record expenses with automatic balance deduction
+-   **Account Transfers** - Transfer money between accounts with paired transactions
+-   View complete transaction history sorted by date
+-   Detailed transaction information including date, amount, and description
+-   Monthly income and expense summaries
+-   Total transaction count tracking
+-   Edit transactions (income and expenses only)
+-   Delete transactions with automatic balance reversion
+-   Authorization-protected transaction operations
+
+### Category Management
+
+-   Create custom categories for income and expenses
+-   Organize categories with parent-child hierarchy (2-level depth)
+-   Visual customization with icons and colors
+-   Type-based categorization (income/expense)
+-   Prevention of nested child categories (max 2 levels)
+-   View categorized transactions
+
+### Security & Data Protection
+
+-   User authentication and authorization
+-   Policy-based access control for accounts and transactions
+-   User-specific data isolation
+-   Secure API endpoints with Laravel Sanctum
 
 ## 🤝 Contributing
 
