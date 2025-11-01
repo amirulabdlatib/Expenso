@@ -204,7 +204,7 @@ class TransactionController extends Controller
     {
         $this->authorize('update', $transaction);
 
-        DB::transaction(function () use ($request, $transaction) {
+        return DB::transaction(function () use ($request, $transaction) {
             $this->revertTransaction($transaction);
             $data = $request->validated();
             $data['user_id'] = Auth::id();
@@ -249,8 +249,8 @@ class TransactionController extends Controller
                 $relatedTransaction = $transaction->relatedTransaction;
                 if ($relatedTransaction) {
                     $this->revertTransaction($relatedTransaction);
+                    $relatedTransaction->delete();
                 }
-                $relatedTransaction->delete();
             }
 
             $transaction->delete();
