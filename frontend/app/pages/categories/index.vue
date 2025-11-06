@@ -170,8 +170,11 @@
             success("Category deleted successfully.");
             refresh();
         } catch (err) {
-            console.error("Delete failed:", err);
-            toastError("Failed to delete category!");
+            if (err.statusCode === 422) {
+                toastError(err.message);
+            } else {
+                toastError("Failed to delete category.");
+            }
         }
     };
 </script>

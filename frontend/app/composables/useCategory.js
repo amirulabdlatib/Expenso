@@ -23,7 +23,12 @@ export const useCategory = () => {
                 method: "DELETE",
             });
         } catch (err) {
-            console.log(err);
+            if (err.statusCode === 422) {
+                const errorMessage = err?.data?.message;
+                const customError = new Error(errorMessage);
+                customError.statusCode = 422;
+                throw customError;
+            }
             throw err;
         }
     }
