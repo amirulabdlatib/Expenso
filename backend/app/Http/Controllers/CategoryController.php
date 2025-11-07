@@ -52,7 +52,7 @@ class CategoryController extends Controller
                 'error' => 'This category is currently in use.'
             ], 422);
         }
-        $category->deledte();
+        $category->delete();
         return response()->noContent();
     }
 }
