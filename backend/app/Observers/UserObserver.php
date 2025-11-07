@@ -13,41 +13,41 @@ class UserObserver
             ['name' => 'Salary', 'type' => 'income', 'icon' => 'heroicons:currency-dollar', 'color' => 'green', 'parent_id' => null],
             ['name' => 'Dividend', 'type' => 'income', 'icon' => 'heroicons:building-office', 'color' => 'purple', 'parent_id' => null],
             ['name' => 'Gift', 'type' => 'income', 'icon' => 'heroicons:gift', 'color' => 'sky', 'parent_id' => null],
-            
+
             // Expense Categories - Food
             ['name' => 'Food', 'type' => 'expense', 'icon' => 'heroicons:shopping-cart', 'color' => 'fuchsia', 'parent_id' => null],
-            
+
             // Expense Categories - Transportation
             ['name' => 'Transportation', 'type' => 'expense', 'icon' => 'heroicons:truck', 'color' => 'amber', 'parent_id' => null],
-            
+
             // Expense Categories - Utilities
             ['name' => 'Utilities Bill', 'type' => 'expense', 'icon' => 'heroicons:bolt', 'color' => 'teal', 'parent_id' => null],
-            
+
             // Expense Categories - Housing
             ['name' => 'Rent', 'type' => 'expense', 'icon' => 'heroicons:home', 'color' => 'purple', 'parent_id' => null],
-            
+
             // Health
             ['name' => 'Health', 'type' => 'expense', 'icon' => 'heroicons:bolt', 'color' => 'red', 'parent_id' => null],
-            
+
             // Entertainment
             ['name' => 'Entertainment', 'type' => 'expense', 'icon' => 'heroicons:musical-note', 'color' => 'green', 'parent_id' => null],
-            
+
             // Shopping
             ['name' => 'Shopping', 'type' => 'expense', 'icon' => 'heroicons:credit-card', 'color' => 'cyan', 'parent_id' => null],
-            
+
             // Education
             ['name' => 'Education', 'type' => 'expense', 'icon' => 'heroicons:building-office', 'color' => 'sky', 'parent_id' => null],
-            
+
             // Loan
             ['name' => 'Loan', 'type' => 'expense', 'icon' => 'heroicons:light-bulb', 'color' => 'lime', 'parent_id' => null],
-            
+
             // Subscription
             ['name' => 'Subscription', 'type' => 'expense', 'icon' => 'heroicons:device-phone-mobile', 'color' => 'teal', 'parent_id' => null],
         ];
 
         foreach ($defaultCategories as $category) {
             $createdCategory = $user->categories()->create($category);
-            
+
             $this->createSubcategories($user, $createdCategory);
         }
     }
@@ -72,11 +72,24 @@ class UserObserver
                 ['name' => 'Prepaid', 'icon' => 'heroicons:bolt', 'color' => 'yellow'],
             ],
             'Salary' => [
+                ['name' => 'Full-Time', 'icon' => 'heroicons:light-bulb', 'color' => 'teal'],
+                ['name' => 'Part-Time', 'icon' => 'heroicons:banknotes', 'color' => 'emerald'],
+                ['name' => 'Freelance', 'icon' => 'heroicons:building-office', 'color' => 'teal'],
+                ['name' => 'One-off', 'icon' => 'heroicons:wifi', 'color' => 'blue'],
+            ],
+            'Dividend' => [
                 ['name' => 'Asnb', 'icon' => 'heroicons:light-bulb', 'color' => 'teal'],
                 ['name' => 'Tng', 'icon' => 'heroicons:banknotes', 'color' => 'emerald'],
                 ['name' => 'Tabung Haji', 'icon' => 'heroicons:building-office', 'color' => 'teal'],
                 ['name' => 'EPF', 'icon' => 'heroicons:wifi', 'color' => 'blue'],
             ],
+            'Gift' => [
+                ['name' => 'Cash Gift', 'icon' => 'heroicons:currency-dollar', 'color' => 'emerald'],
+                ['name' => 'Birthday Gift', 'icon' => 'heroicons:gift', 'color' => 'rose'],
+                ['name' => 'Wedding Gift', 'icon' => 'heroicons:sparkles', 'color' => 'fuchsia'],
+                ['name' => 'Festive Gift', 'icon' => 'heroicons:star', 'color' => 'yellow'],
+            ],
+
             'Health' => [
                 ['name' => 'Medicine/Pharmacy', 'icon' => 'heroicons:heart', 'color' => 'fuchsia'],
                 ['name' => 'Clinic', 'icon' => 'heroicons:heart', 'color' => 'blue'],
@@ -99,6 +112,11 @@ class UserObserver
             ],
             'Subscription' => [
                 ['name' => 'Claude', 'icon' => 'heroicons:musical-note', 'color' => 'teal'],
+            ],
+            'Rent' => [
+                ['name' => 'House Rent', 'icon' => 'heroicons:home-modern', 'color' => 'purple'],
+                ['name' => 'Room Rent', 'icon' => 'heroicons:home', 'color' => 'indigo'],
+                ['name' => 'Deposit', 'icon' => 'heroicons:banknotes', 'color' => 'amber'],
             ],
         ];
 
