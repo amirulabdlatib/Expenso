@@ -318,14 +318,19 @@
             if (newType !== "transfer" && newType !== "" && categories.value.length === 0) {
                 fetchCategories();
             }
-            if (newType) {
-                form.category_id = null;
-                selectedParentCategory.value = null;
+            if (newType == "transfer") {
+                resetCategory();
             } else {
                 form.related_account_id = null;
+                resetCategory();
             }
         }
     );
+
+    const resetCategory = () => {
+        form.category_id = null;
+        selectedParentCategory.value = null;
+    };
 
     const getCurrentAccount = computed(() => {
         return accounts.value.find((account) => account.id === form.account_id);
@@ -350,22 +355,21 @@
     });
 
     const handleSubmit = async () => {
-        // isLoading.value = true;
+        isLoading.value = true;
         const transaction_date = `${form.date} ${form.time}:00`;
         const { date, time, ...formData } = form;
         const data = { ...formData, transaction_date };
 
-        console.log(data);
-        // try {
-        //     await createTransaction(data);
-        //     success("Transaction created successfully.");
-        //     navigateTo("/transactions");
-        // } catch (err) {
-        //     console.log(err);
-        //     error("Transaction fail to create.");
-        // } finally {
-        //     isLoading.value = false;
-        // }
+        try {
+            await createTransaction(data);
+            success("Transaction created successfully.");
+            navigateTo("/transactions");
+        } catch (err) {
+            console.log(err);
+            error("Transaction fail to create.");
+        } finally {
+            isLoading.value = false;
+        }
     };
 </script>
 
