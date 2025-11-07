@@ -46,6 +46,12 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        if ($category->transactions()->exists()) {
+            return response()->json([
+                'message' => 'Cannot delete category because it has associated transactions.',
+                'error' => 'This category is currently in use.'
+            ], 422);
+        }
         $category->delete();
         return response()->noContent();
     }

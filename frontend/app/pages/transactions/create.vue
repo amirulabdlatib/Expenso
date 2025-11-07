@@ -100,21 +100,42 @@
                             <!-- Loading Categories -->
                             <div v-if="isFetchingCategories" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">Loading categories...</div>
 
-                            <!-- Category Select -->
-                            <VSelect
-                                v-else
-                                v-model="form.category_id"
-                                :options="filteredCategories"
-                                :reduce="(category) => category.id"
-                                label="name"
-                                placeholder="Select a category"
-                                class="vue-select-custom"
-                                :clearable="true"
-                                :disabled="isLoading"
-                            >
-                                <template #no-options>No categories found</template>
-                            </VSelect>
-                            <p v-if="errors.category_id" class="text-red-400">{{ errors.category_id[0] }}</p>
+                            <!-- Category and Subcategory Selects -->
+                            <div v-else class="space-y-4">
+                                <!-- Parent Category Select -->
+                                <VSelect
+                                    v-model="selectedParentCategory"
+                                    :options="parentCategories"
+                                    :reduce="(category) => category.id"
+                                    label="name"
+                                    placeholder="Select a category"
+                                    class="vue-select-custom"
+                                    :clearable="true"
+                                    :disabled="isLoading"
+                                    @update:model-value="onParentCategoryChange"
+                                >
+                                    <template #no-options>No categories found</template>
+                                </VSelect>
+
+                                <!-- Subcategory Select (only shown if parent has children) -->
+                                <div v-if="availableSubcategories.length > 0">
+                                    <label for="subcategory" class="block text-sm font-medium text-gray-700 mb-2"> Subcategory <span class="text-red-500">*</span> </label>
+                                    <VSelect
+                                        v-model="form.category_id"
+                                        :options="availableSubcategories"
+                                        :reduce="(category) => category.id"
+                                        label="name"
+                                        placeholder="Select a subcategory"
+                                        class="vue-select-custom"
+                                        :clearable="true"
+                                        :disabled="isLoading"
+                                    >
+                                        <template #no-options>No subcategories found</template>
+                                    </VSelect>
+                                </div>
+                            </div>
+
+                            <p v-if="errors.category_id" class="text-red-400 mt-2">{{ errors.category_id[0] }}</p>
                         </div>
 
                         <!-- Related Account (for transfers) -->
@@ -227,6 +248,7 @@
     const isLoading = ref(false);
     const accounts = ref([]);
     const categories = ref([]);
+    const selectedParentCategory = ref(null);
     const { success, error } = useToast();
     const { getTransactionAccounts, getTransactionCategories, createTransaction, errors } = useTransactions();
 
@@ -243,6 +265,28 @@
     });
 
     const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
+
+    const parentCategories = computed(() => {
+        return categories.value.filter((category) => category.type === form.type && !category.parent_id);
+    });
+
+    const availableSubcategories = computed(() => {
+        if (!selectedParentCategory.value) return [];
+        return categories.value.filter((category) => category.parent_id === selectedParentCategory.value);
+    });
+
+    const onParentCategoryChange = (parentId) => {
+        // If parent has no children, set it as the selected category
+        const subcategories = categories.value.filter((cat) => cat.parent_id === parentId);
+
+        if (subcategories.length === 0) {
+            // Parent category has no children, use it directly
+            form.category_id = parentId;
+        } else {
+            // Parent has children, clear category_id until subcategory is selected
+            form.category_id = null;
+        }
+    };
 
     const fetchAccounts = async () => {
         isFetchingAccounts.value = true;
@@ -274,17 +318,19 @@
             if (newType !== "transfer" && newType !== "" && categories.value.length === 0) {
                 fetchCategories();
             }
-            if (newType) {
-                form.category_id = null;
+            if (newType == "transfer") {
+                resetCategory();
             } else {
                 form.related_account_id = null;
+                resetCategory();
             }
         }
     );
 
-    const filteredCategories = computed(() => {
-        return categories.value.filter((category) => category.type === form.type).sort((a, b) => a.name.localeCompare(b.name));
-    });
+    const resetCategory = () => {
+        form.category_id = null;
+        selectedParentCategory.value = null;
+    };
 
     const getCurrentAccount = computed(() => {
         return accounts.value.find((account) => account.id === form.account_id);

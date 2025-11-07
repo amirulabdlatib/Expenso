@@ -54,7 +54,9 @@ class Category extends Model
     {
         return static::query()
             ->forCurrentUser()
-            ->select(['id', 'name', 'type'])
+            ->select(['id', 'name', 'type', 'parent_id'])
+            ->orderBy('parent_id')
+            ->orderBy('name')
             ->get();
     }
 }
