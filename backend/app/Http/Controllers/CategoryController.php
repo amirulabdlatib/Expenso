@@ -6,9 +6,12 @@ use App\Models\Category;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCategoryRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CategoryController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         $categories = Category::where('user_id', Auth::id())
@@ -46,6 +49,8 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        $this->authorize('delete', $category);
+
         if ($category->transactions()->exists()) {
             return response()->json([
                 'message' => 'Cannot delete category because it has associated transactions.',
