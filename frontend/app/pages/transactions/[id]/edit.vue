@@ -182,6 +182,8 @@
 </template>
 
 <script setup>
+    // TODO searching across categories
+    // TODO update the category into category and subcategory
     import VSelect from "vue-select";
 
     useHead({
@@ -277,7 +279,7 @@
         if (form.type === "income") {
             return undefined;
         }
-        return getCurrentAccount?.value?.current_balance ? parseFloat(getCurrentAccount?.value.current_balance) : 0;
+        return getCurrentAccount?.value?.current_balance ? parseFloat(getCurrentAccount?.value.current_balance) + form.amount : 0;
     });
 
     const handleUpdate = async (id) => {
