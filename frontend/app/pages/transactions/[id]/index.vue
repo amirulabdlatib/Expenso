@@ -9,7 +9,7 @@
                             <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                         </NuxtLink>
                         <div>
-                            <h1 class="text-xl font-bold text-gray-900">Transaction Details</h1>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-900">Transaction Details</h1>
                             <p class="text-gray-500 text-sm">View your transaction details</p>
                         </div>
                     </div>

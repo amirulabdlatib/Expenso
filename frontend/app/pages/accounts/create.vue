@@ -8,7 +8,7 @@
                         <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                     </NuxtLink>
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Create New Account</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">Create New Account</h1>
                         <p class="text-gray-600 text-sm md:text-base mt-1">Add a new financial account to track your money</p>
                     </div>
                 </div>
