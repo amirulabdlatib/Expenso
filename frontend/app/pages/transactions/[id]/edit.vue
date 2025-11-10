@@ -207,7 +207,6 @@
 </template>
 
 <script setup>
-    // TODO searching across categories
     import VSelect from "vue-select";
 
     useHead({
