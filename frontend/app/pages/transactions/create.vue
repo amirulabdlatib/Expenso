@@ -232,7 +232,6 @@
 </template>
 
 <script setup>
-    import '~/assets/css/vue-select-custom.css';
     import VSelect from "vue-select";
 
     useHead({

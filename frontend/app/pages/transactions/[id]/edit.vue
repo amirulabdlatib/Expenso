@@ -209,7 +209,6 @@
 <script setup>
     // TODO searching across categories
     import VSelect from "vue-select";
-    import '~/assets/css/vue-select-custom.css';
 
     useHead({
         title: "Edit Transaction - Expenso",
