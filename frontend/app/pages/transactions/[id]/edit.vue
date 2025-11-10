@@ -88,22 +88,47 @@
                     <!-- Categories dropdown -->
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
-                        <ClientOnly>
+                        
+                        <!-- Loading Categories -->
+                        <div v-if="isFetchingCategories" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">Loading categories...</div>
+
+                        <!-- Category and Subcategory Selects -->
+                        <div v-else class="space-y-4">
+                            <!-- Parent Category Select -->
                             <VSelect
-                                v-model="form.category_id"
-                                :options="filteredCategories"
-                                :reduce="(category) => category.id"
+                                v-model="selectedParentCategory"
+                                :options="parentCategories"
+                                :reduce="(category) => category"
                                 label="name"
                                 placeholder="Select a category"
                                 class="vue-select-custom"
                                 :clearable="true"
                                 :disabled="isLoading"
+                                @update:model-value="onParentCategoryChange"
                             >
                                 <template #no-options>No categories found</template>
                             </VSelect>
-                        </ClientOnly>
 
-                        <p v-if="errors.category_id" class="text-red-400">{{ errors.category_id[0] }}</p>
+                            <!-- Subcategory Select (only shown if parent has children) -->
+                            <div v-if="selectedParentCategory && hasSubcategories">
+                                <label for="subcategory" class="block text-sm font-medium text-gray-700 mb-2"> Subcategory <span class="text-red-500">*</span> </label>
+                                <VSelect
+                                    v-model="form.category_id"
+                                    :options="availableSubcategories"
+                                    :reduce="(category) => category.id"
+                                    label="name"
+                                    placeholder="Select a subcategory"
+                                    class="vue-select-custom"
+                                    :clearable="true"
+                                    :disabled="isLoading"
+                                    :required="true"
+                                >
+                                    <template #no-options>No subcategories found</template>
+                                </VSelect>
+                            </div>
+                        </div>
+
+                        <p v-if="errors.category_id" class="text-red-400 mt-2">{{ errors.category_id[0] }}</p>
                     </div>
 
                     <!-- Amount -->
@@ -183,7 +208,6 @@
 
 <script setup>
     // TODO searching across categories
-    // TODO update the category into category and subcategory
     import VSelect from "vue-select";
 
     useHead({
@@ -203,6 +227,8 @@
     const route = useRoute();
     const { getTransactionForEdit, updateTransaction, errors } = useTransactions();
     const { success, error: toastError } = useToast();
+    const selectedParentCategory = ref(null);
+    const isFetchingCategories = ref(false);
 
     const form = reactive({
         type: null,
@@ -219,7 +245,7 @@
         isFetchingData.value = true;
         try {
             const data = await getTransactionForEdit(route.params.id);
-            fetchCategories(data);
+            categories.value = data.categories;
             accounts.value = data.accounts;
             populateForm(data);
             isError.value = false;
@@ -236,32 +262,58 @@
 
     const populateForm = (data) => {
         const transactionDate = new Date(data.transaction.transaction_date);
+        const category = data.transaction.category;
 
-        form.type = data.transaction.category.type;
+        form.type = category.type;
         form.name = data.transaction.name;
         form.amount = data.transaction.amount;
         form.date = transactionDate.toISOString().split("T")[0];
         form.time = transactionDate.toTimeString().split(" ")[0].substring(0, 5);
         form.account_id = data.transaction.account.id;
-        form.category_id = data.transaction.category.id;
         form.description = data.transaction.description;
+
+        const categoryInList = categories.value.find(c => c.id === category.id);
+
+        if (categoryInList.parent_id) {
+            const parentCategory = categories.value.find(c => c.id === categoryInList.parent_id);
+            selectedParentCategory.value = parentCategory;
+        } else {
+            selectedParentCategory.value = categoryInList;
+        }
+        form.category_id = categoryInList.id;
     };
 
-    const fetchCategories = async (data) => {
-        categories.value = data.categories;
+    const onParentCategoryChange = (parentCategory) => {
+        form.category_id = null;
+        if (parentCategory && !hasSubcategories.value) {
+            form.category_id = parentCategory.id;
+        }
     };
 
     watch(
         () => form.type,
         (newType, oldType) => {
             if (oldType !== null) {
+                selectedParentCategory.value = null;
                 form.category_id = null;
             }
         }
     );
 
-    const filteredCategories = computed(() => {
-        return categories.value.filter((category) => category.type === form.type).sort((a, b) => a.name.localeCompare(b.name));
+    const parentCategories = computed(() => {
+        return categories.value.filter(category => category.type === form.type && !category.parent_id);
+    });
+
+    const hasSubcategories = computed(() => {
+        return selectedParentCategory.value 
+            ? categories.value.some(cat => cat.parent_id === selectedParentCategory.value.id)
+            : false;
+    });
+
+    const availableSubcategories = computed(() => {
+        return selectedParentCategory.value
+            ? categories.value.filter(category => category.parent_id === selectedParentCategory.value.id)
+            : [];
     });
 
     const getCurrentAccount = computed(() => {
@@ -283,6 +335,11 @@
     });
 
     const handleUpdate = async (id) => {
+        if (selectedParentCategory.value && hasSubcategories.value && !form.category_id) {
+            alert("Please select a subcategory");
+            return;
+        }
+        
         isLoading.value = true;
         const transaction_date = `${form.date} ${form.time}:00`;
         const { date, time, ...formData } = form;
