@@ -373,39 +373,3 @@
     };
 </script>
 
-<style scoped>
-    :deep(.vue-select-custom .vs__dropdown-toggle) {
-        padding: 0.75rem 1rem;
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-    }
-
-    :deep(.vue-select-custom .vs__search) {
-        outline: none;
-    }
-
-    :deep(.vue-select-custom .vs__search:focus) {
-        outline: none;
-    }
-
-    :deep(.vue-select-custom.vs--open .vs__dropdown-toggle) {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
-    }
-
-    :deep(.vue-select-custom .vs__dropdown-menu) {
-        border: 1px solid #d1d5db;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        margin-top: 0.25rem;
-    }
-
-    :deep(.vue-select-custom .vs__dropdown-option--highlight) {
-        background-color: #6366f1;
-        color: white;
-    }
-
-    :deep(.vue-select-custom .vs__selected) {
-        margin: 0;
-    }
-</style>
