@@ -35,9 +35,7 @@
                             <h1 class="text-2xl font-semibold text-gray-900">{{ data.name }}</h1>
                             <p class="text-sm text-gray-500">
                                 {{ data.type === "income" ? "Income" : "Expense" }} Category
-                                <span v-if="data.parent" class="block text-gray-400">
-                                    Parent: {{ data.parent.name }}
-                                </span>
+                                <span v-if="data.parent" class="block text-gray-400"> Parent: {{ data.parent.name }} </span>
                             </p>
                         </div>
                     </div>
@@ -86,11 +84,8 @@
     const route = useRoute();
     const { getColorClasses } = useCategoryConstant();
 
-    const { data: categoryData, pending, error, refresh } = await useAsyncData(`category-${route.params.id}`, async () => {
+    const { data, pending, error, refresh } = await useAsyncData(`category-${route.params.id}`, async () => {
         const response = await client(`/api/categories/${route.params.id}`);
         return response.category;
     });
-
-    // Create a reactive reference to the category data
-    const data = computed(() => categoryData.value);
 </script>
