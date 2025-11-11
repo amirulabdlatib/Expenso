@@ -47,6 +47,16 @@ class CategoryController extends Controller
         ], Response::HTTP_CREATED);
     }
 
+    public function show(Category $category)
+    {
+        $this->authorize('view', $category);
+        $category->load(['parent', 'children']);
+
+        return response()->json([
+            'category' => $category,
+        ], Response::HTTP_OK);
+    }
+
     public function destroy(Category $category)
     {
         $this->authorize('delete', $category);

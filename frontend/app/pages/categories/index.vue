@@ -19,8 +19,7 @@
                 <div class="flex border-b border-gray-200">
                     <button
                         :class="[activeTab === 'all' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
-                        @click="activeTab = 'all'"
-                    >
+                        @click="activeTab = 'all'">
                         All
                         <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'all' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">
                             {{ categories?.length || 0 }}
@@ -28,8 +27,7 @@
                     </button>
                     <button
                         :class="[activeTab === 'expense' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
-                        @click="activeTab = 'expense'"
-                    >
+                        @click="activeTab = 'expense'">
                         Expenses
                         <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'expense' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">
                             {{ expenseCategories.length }}
@@ -37,8 +35,7 @@
                     </button>
                     <button
                         :class="[activeTab === 'income' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
-                        @click="activeTab = 'income'"
-                    >
+                        @click="activeTab = 'income'">
                         Income
                         <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'income' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">
                             {{ incomeCategories.length }}
@@ -87,9 +84,8 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <!-- TODO::Edit -->
                             <NuxtLink :to="`/categories/${category.id}`" class="p-2 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">
-                                <Icon name="heroicons:pencil" class="w-4 h-4" />
+                                <Icon name="heroicons:eye" class="w-4 h-4" />
                             </NuxtLink>
                             <button class="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="handleDelete(category.id)">
                                 <Icon name="heroicons:trash" class="w-4 h-4" />
@@ -101,7 +97,7 @@
                     <div v-if="category.children && category.children.length > 0" class="mt-4 pt-4 border-t border-gray-100">
                         <p class="text-xs text-gray-500 mb-2">Subcategories:</p>
                         <div class="flex flex-wrap gap-2">
-                            <span v-for="sub in category.children" :key="sub.id" class="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                            <span v-for="sub in category.children" :key="sub.id" class="px-2 py-1 text-xs bg-gray-100 text-gray-600 hover:bg-indigo-700 hover:text-white rounded-full transition-all duration-200 ease-in-out">
                                 {{ sub.name }}
                             </span>
                         </div>
