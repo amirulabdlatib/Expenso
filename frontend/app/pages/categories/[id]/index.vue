@@ -39,9 +39,14 @@
                             </p>
                         </div>
                     </div>
-                    <button :disabled="pending" class="p-2 text-gray-500 hover:text-indigo-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" title="Refresh data" @click="refresh()">
-                        <Icon :name="pending ? 'svg-spinners:ring-resize' : 'heroicons:arrow-path'" class="w-5 h-5" />
-                    </button>
+                    <div class="flex items-center space-x-1">
+                        <NuxtLink :to="`/categories/${data.id}/edit`" class="p-2 text-gray-500 hover:text-indigo-600 transition-colors" title="Edit category">
+                            <Icon name="heroicons:pencil-square" class="w-5 h-5" />
+                        </NuxtLink>
+                        <button :disabled="pending" class="p-2 text-gray-500 hover:text-indigo-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" title="Refresh data" @click="refresh()">
+                            <Icon :name="pending ? 'svg-spinners:ring-resize' : 'heroicons:arrow-path'" class="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -3,7 +3,7 @@
 </template>
 <script setup>
     useHead({
-        title: "Account Details - Expenso",
+        title: "Edit Category Details - Expenso",
     });
     definePageMeta({
         middleware: ["sanctum:auth"],
