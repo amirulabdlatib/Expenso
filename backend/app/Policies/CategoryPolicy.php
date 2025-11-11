@@ -7,6 +7,12 @@ use App\Models\Category;
 
 class CategoryPolicy
 {
+
+    public function view(User $user, Category $category): bool
+    {
+        return $user->id === $category->user_id;
+    }
+
     /**
      * Determine whether the user can delete the model.
      */

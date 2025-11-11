@@ -49,6 +49,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
+        $this->authorize('view', $category);
         $category->load(['parent', 'children']);
 
         return response()->json([
