@@ -49,11 +49,8 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        $category->load('transactions');
+        $category->load(['parent', 'children']);
 
-        if (!$category->parent_id) {
-            $category = $category->load(['children.transactions']);
-        }
         return response()->json([
             'category' => $category,
         ], Response::HTTP_OK);
