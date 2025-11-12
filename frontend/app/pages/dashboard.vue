@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <p class="text-sm text-gray-600 mb-1">Total Balance</p>
-                <p class="text-2xl font-bold text-gray-900">RM 24,850.00</p>
+                <p class="text-2xl font-bold text-gray-900">RM {{ data?.total_balance ?? 0 }}</p>
                 <p class="text-sm text-green-600 mt-2 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="m5 12 7-7 7 7" />
@@ -41,8 +41,8 @@
                     </div>
                 </div>
                 <p class="text-sm text-gray-600 mb-1">Monthly Income</p>
-                <p class="text-2xl font-bold text-gray-900">+RM 8,500</p>
-                <p class="text-sm text-gray-500 mt-2">October 2025</p>
+                <p class="text-2xl font-bold text-gray-900">RM {{ data?.monthly_income ?? 0 }}</p>
+                <p class="text-sm text-gray-500 mt-2">{{ currentMonthYear }}</p>
             </div>
 
             <!-- Expenses -->
@@ -56,8 +56,8 @@
                     </div>
                 </div>
                 <p class="text-sm text-gray-600 mb-1">Monthly Expenses</p>
-                <p class="text-2xl font-bold text-gray-900">-RM 3,200</p>
-                <p class="text-sm text-gray-500 mt-2">October 2025</p>
+                <p class="text-2xl font-bold text-gray-900">{{ data?.monthly_expenses ?? 0 }}</p>
+                <p class="text-sm text-gray-500 mt-2">{{ currentMonthYear }}</p>
             </div>
 
             <!-- Savings -->
@@ -290,4 +290,12 @@
     });
 
     const { capitalizedName } = useNameDisplay();
+    const { formatMonthYear } = useUtils();
+    const client = useSanctumClient();
+
+    const currentMonthYear = formatMonthYear();
+
+    const { data, pending, error, refresh } = await useAsyncData("dashboard", () => client("/api/dashboard"));
+
+    console.log(data.value);
 </script>

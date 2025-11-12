@@ -1,18 +1,21 @@
 <?php
 
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\Lookup\AccountLookupController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Lookup\CategoryLookupController;
-use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\Lookup\AccountLookupController;
+use App\Http\Controllers\Lookup\CategoryLookupController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::apiResource('accounts', AccountController::class);
     Route::get('/accounts/{id}', [AccountController::class, 'show']);

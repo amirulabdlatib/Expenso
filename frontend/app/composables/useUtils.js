@@ -12,6 +12,13 @@ export const useUtils = () => {
             year: "numeric",
         });
     }
+    function formatMonthYear(dateString = null) {
+        const date = dateString ? new Date(dateString) : new Date();
+        return date.toLocaleDateString("en-MY", {
+            month: "long",
+            year: "numeric",
+        });
+    }
 
     function formatTime(dateString) {
         const date = new Date(dateString);
@@ -37,5 +44,6 @@ export const useUtils = () => {
         formatDate,
         formatTime,
         formatDateTime,
+        formatMonthYear,
     };
 };
