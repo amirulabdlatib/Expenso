@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CategoryController extends Controller
@@ -63,6 +64,23 @@ class CategoryController extends Controller
 
         return response()->json([
             'category' => $category,
+        ]);
+    }
+
+    public function update(UpdateCategoryRequest $request, Category $category)
+    {
+        $this->authorize('update', $category);
+        $validated_data = $request->validated();
+
+        if ($category->children()->exists() && $request['type'] !== $category['type']) {
+            $category->children()->update([
+                'type' => $validated_data['type'],
+            ]);
+        }
+
+        $category->update($validated_data);
+        return response()->json([
+            'message' => 'Category updated successfully.'
         ]);
     }
 

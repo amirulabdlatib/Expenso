@@ -34,7 +34,7 @@
                     <p class="text-gray-600 ml-14">Update category to organize your expenses and income</p>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <form class="p-6 md:p-8">
+                    <form class="p-6 md:p-8" @submit.prevent="handleUpdate">
                         <div class="space-y-6">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Category Name <span class="text-red-500">*</span> </label>
@@ -174,13 +174,13 @@
         middleware: ["sanctum:auth"],
     });
 
-    const { errors } = useCategory();
+    const { updateCategory, errors } = useCategory();
     const { categoryTypes, categoryIcons, categoryColors } = useCategoryConstant();
     const { capitalizeWord } = useUtils();
-    // const { success, error } = useToast();
+    const { success, error } = useToast();
     const route = useRoute();
-
     const isUpdating = ref(false);
+
     const form = reactive({
         name: "",
         type: "",
@@ -208,18 +208,22 @@
     const categoriesLoading = computed(() => categoriesStatus.value === "pending");
     const isSubCategory = computed(() => categoriesData.value.category.parent_id);
 
-    // const handleSubmit = async () => {
-    //     isUpdating.value = true;
+    const handleUpdate = async () => {
+        isUpdating.value = true;
 
-    //     try {
-    //         await createCategory(form);
-    //         success("Category created successfully.");
-    //         navigateTo("/categories");
-    //     } catch (err) {
-    //         console.error("Category creation failed:", err);
-    //         error("Category creation failed!");
-    //     } finally {
-    //         isUpdating.value = false;
-    //     }
-    // };
+        try {
+            await updateCategory(form, route.params.id);
+            success("Category updated successfully.");
+            if (form.parent_id) {
+                navigateTo(`categories/${parent_id}`);
+            } else {
+                navigateTo("/categories");
+            }
+        } catch (err) {
+            console.error("Category update failed:", err);
+            error("Category update failed!");
+        } finally {
+            isUpdating.value = false;
+        }
+    };
 </script>
