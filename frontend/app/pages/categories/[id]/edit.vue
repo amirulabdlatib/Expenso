@@ -73,20 +73,24 @@
                                         type="button"
                                         :disabled="isUpdating || isSubCategory"
                                         class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
-                                        :class="[form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isUpdating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
+                                        :class="[
+                                            form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
+                                            isUpdating ? 'opacity-50 cursor-not-allowed' : isSubCategory ? 'opacity-70 cursor-not-allowed bg-gray-50' : 'cursor-pointer',
+                                        ]"
                                         @click="form.type = type.value">
                                         <div class="flex items-start space-x-3">
                                             <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
                                                 <Icon :name="type.icon" class="w-5 h-5" :class="type.iconColor" />
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-semibold text-gray-900">{{ type.label }}</p>
-                                                <p class="text-xs text-gray-500 mt-1">{{ type.description }}</p>
+                                                <p class="text-sm font-semibold" :class="isSubCategory ? 'text-gray-500' : 'text-gray-900'">{{ type.label }}</p>
+                                                <p class="text-xs mt-1" :class="isSubCategory ? 'text-gray-400' : 'text-gray-500'">{{ type.description }}</p>
                                             </div>
                                         </div>
-                                        <div v-if="form.type === type.value" class="absolute top-3 right-3 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center">
+                                        <div v-if="form.type === type.value" class="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center" :class="isSubCategory ? 'bg-gray-400' : 'bg-indigo-600'">
                                             <Icon name="heroicons:check" class="w-3 h-3 text-white" />
                                         </div>
+                                        <div v-if="isSubCategory && form.type === type.value" class="absolute inset-0 bg-white/30 rounded-md"></div>
                                     </button>
                                 </div>
                                 <p v-if="errors.type" class="mt-1 text-sm text-red-500">{{ errors.type[0] }}</p>
