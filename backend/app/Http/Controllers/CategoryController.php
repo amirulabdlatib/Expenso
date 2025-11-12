@@ -57,6 +57,14 @@ class CategoryController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function edit(Category $category)
+    {
+        $category->load('parent');
+        return response()->json([
+            'category' => $category,
+        ]);
+    }
+
     public function destroy(Category $category)
     {
         $this->authorize('delete', $category);

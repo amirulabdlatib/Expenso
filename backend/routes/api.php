@@ -20,7 +20,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/lookup/accounts', AccountLookupController::class);
 
 
-    Route::apiResource('categories', CategoryController::class);
+    Route::resource('categories', CategoryController::class);
     Route::get('/lookup/categories', CategoryLookupController::class);
 
     Route::resource('transactions', TransactionController::class);
