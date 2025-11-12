@@ -25,57 +25,11 @@
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Total Balance -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
-                                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
-                                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-1">Total Balance</p>
-                    <p class="text-2xl font-bold text-gray-900">RM {{ data?.total_balance ?? 0 }}</p>
-                    <p class="text-sm text-green-600 mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m5 12 7-7 7 7" />
-                            <path d="M12 19V5" />
-                        </svg>
-                        +12.5% from last month
-                    </p>
-                </div>
-
+                <DashboardStatsTotalBalance :total-balance="data?.total_balance ?? 0" />
                 <!-- Income -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2v20" />
-                                <path d="m5 9 7-7 7 7" />
-                            </svg>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-1">Monthly Income</p>
-                    <p class="text-2xl font-bold text-gray-900">RM {{ data?.monthly_income ?? 0 }}</p>
-                    <p class="text-sm text-gray-500 mt-2">{{ currentMonthYear }}</p>
-                </div>
-
+                <DashboardStatsIncome :monthly-income="data?.monthly_income ?? 0" />
                 <!-- Expenses -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2v20" />
-                                <path d="m19 15-7 7-7-7" />
-                            </svg>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-1">Monthly Expenses</p>
-                    <p class="text-2xl font-bold text-gray-900">RM {{ data?.monthly_expenses ?? 0 }}</p>
-                    <p class="text-sm text-gray-500 mt-2">{{ currentMonthYear }}</p>
-                </div>
-
+                <DashboardStatsExpenses :monthly-expenses="data?.monthly_expenses ?? 0" />
                 <!-- Savings -->
                 <DashboardStatsSavings />
             </div>
@@ -140,11 +94,9 @@
         title: "Dashboard - Expenso",
     });
 
-    const { formatMonthYear, formatRelativeDate } = useUtils();
+    const { formatRelativeDate } = useUtils();
     const { getColorClasses } = useCategoryConstant();
     const client = useSanctumClient();
-
-    const currentMonthYear = formatMonthYear();
 
     const { data, pending, error, refresh } = await useAsyncData("dashboard", () => client("/api/dashboard"));
 
