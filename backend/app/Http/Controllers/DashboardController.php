@@ -7,17 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-
-    private int $currentUser;
-
-    public function __construct()
-    {
-        $this->currentUser = Auth::id();
-    }
-
     public function index()
     {
-        $user = $this->currentUser;
         return response()->json([]);
     }
 
