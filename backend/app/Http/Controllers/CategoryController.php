@@ -59,7 +59,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $category->load('parent');
+        $this->authorize('edit', $category);
+
         return response()->json([
             'category' => $category,
         ]);

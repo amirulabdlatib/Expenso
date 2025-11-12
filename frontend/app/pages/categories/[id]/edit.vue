@@ -1,200 +1,148 @@
 <template>
     <div class="min-h-screen bg-gray-50">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="mb-8">
-                <div class="flex items-center space-x-3 mb-3">
-                    <NuxtLink to="/categories" class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all">
-                        <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
-                    </NuxtLink>
-                    <h1 class="text-xl font-bold text-gray-900">Edit Category</h1>
-                </div>
-                <p class="text-gray-600 ml-14">Update category to organize your expenses and income</p>
+            <!-- Loading State -->
+            <div v-if="categoriesLoading" class="flex flex-col items-center justify-center py-12">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600 mb-4"></div>
+                <p class="text-gray-600">Loading category data...</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <form class="p-6 md:p-8">
-                    <div class="space-y-6">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Category Name <span class="text-red-500">*</span> </label>
-                            <input
-                                id="name"
-                                v-model="form.name"
-                                type="text"
-                                placeholder="e.g., Food & Dining, Transportation, Entertainment"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :disabled="isLoading" />
-                            <p v-if="errors.name" class="mt-1 text-sm text-red-500">{{ errors.name[0] }}</p>
-                        </div>
 
-                        <div v-if="!categoriesLoading && parentCategories.length !== 0" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                                    <Icon name="heroicons:folder-minus" class="w-5 h-5 text-indigo-600" />
-                                </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-gray-900">Make this a subcategory</p>
-                                    <p class="text-xs text-gray-500">Nest this under an existing parent category</p>
-                                </div>
+            <!-- Error State -->
+            <div v-else-if="fetchDataError" class="bg-white rounded-xl shadow-sm border border-red-200 p-6 mb-6">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                        <Icon name="heroicons:exclamation-triangle" class="w-8 h-8 text-red-600" />
+                    </div>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Failed to load category</h2>
+                    <p class="text-gray-600 mb-6">We couldn't load the category data. {{ fetchDataError.statusMessage || "Please try again." }}</p>
+                    <button :disabled="categoriesLoading" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center space-x-2 disabled:opacity-50" @click="refresh()">
+                        <Icon v-if="categoriesLoading" name="heroicons:arrow-path" class="w-4 h-4 animate-spin" />
+                        <span>{{ categoriesLoading ? "Refreshing..." : "Try Again" }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <template v-else>
+                <div class="mb-8">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <NuxtLink to="/categories" class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all">
+                            <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
+                        </NuxtLink>
+                        <h1 class="text-xl font-bold text-gray-900">Edit Category</h1>
+                    </div>
+                    <p class="text-gray-600 ml-14">Update category to organize your expenses and income</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <form class="p-6 md:p-8">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2"> Category Name <span class="text-red-500">*</span> </label>
+                                <input
+                                    id="name"
+                                    v-model="form.name"
+                                    type="text"
+                                    placeholder="e.g., Food & Dining, Transportation, Entertainment"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    :disabled="isLoading" />
+                                <p v-if="errors.name" class="mt-1 text-sm text-red-500">{{ errors.name[0] }}</p>
                             </div>
+
+                            <!-- Category Type -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3"> Category Type <span class="text-red-500">*</span> </label>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <button
+                                        v-for="type in categoryTypes"
+                                        :key="type.value"
+                                        type="button"
+                                        :disabled="isLoading"
+                                        class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
+                                        :class="[form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
+                                        @click="form.type = type.value">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
+                                                <Icon :name="type.icon" class="w-5 h-5" :class="type.iconColor" />
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-semibold text-gray-900">{{ type.label }}</p>
+                                                <p class="text-xs text-gray-500 mt-1">{{ type.description }}</p>
+                                            </div>
+                                        </div>
+                                        <div v-if="form.type === type.value" class="absolute top-3 right-3 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center">
+                                            <Icon name="heroicons:check" class="w-3 h-3 text-white" />
+                                        </div>
+                                    </button>
+                                </div>
+                                <p v-if="errors.type" class="mt-1 text-sm text-red-500">{{ errors.type[0] }}</p>
+                            </div>
+
+                            <!-- Category Icon -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3"> Choose Icon <span class="text-red-500">*</span> </label>
+                                <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
+                                    <button
+                                        v-for="iconOption in categoryIcons"
+                                        :key="iconOption"
+                                        type="button"
+                                        :disabled="isLoading"
+                                        class="aspect-square p-3 border-2 rounded-lg transition-all duration-200 hover:scale-105"
+                                        :class="[form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : '']"
+                                        @click="form.icon = iconOption">
+                                        <Icon :name="iconOption" class="w-full h-full" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
+                                    </button>
+                                </div>
+                                <p v-if="errors.icon" class="mt-1 text-sm text-red-500">{{ errors.icon[0] }}</p>
+                            </div>
+
+                            <!-- Color Selection -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3"> Color <span class="text-red-500">*</span> </label>
+                                <div class="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-2">
+                                    <button
+                                        v-for="colorOption in categoryColors"
+                                        :key="colorOption.value"
+                                        type="button"
+                                        :disabled="isLoading"
+                                        class="aspect-square rounded-lg transition-all duration-200 hover:scale-110 relative"
+                                        :class="[colorOption.class, isLoading ? 'opacity-50 cursor-not-allowed' : '']"
+                                        @click="form.color = colorOption.value">
+                                        <div v-if="form.color === colorOption.value" class="absolute inset-0 flex items-center justify-center">
+                                            <Icon name="heroicons:check" class="w-5 h-5 text-white drop-shadow-lg" />
+                                        </div>
+                                    </button>
+                                </div>
+                                <p v-if="errors.color" class="mt-1 text-sm text-red-500">{{ errors.color[0] }}</p>
+                            </div>
+                        </div>
+                        <!-- Form Actions -->
+                        <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end gap-3 pt-6 mt-8 border-t border-gray-200">
+                            <NuxtLink
+                                to="/categories"
+                                class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                                :class="isLoading ? 'pointer-events-none opacity-50' : ''">
+                                Cancel
+                            </NuxtLink>
                             <button
-                                type="button"
+                                type="submit"
                                 :disabled="isLoading"
-                                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                :class="isSubcategory ? 'bg-indigo-600' : 'bg-gray-200'"
-                                @click="isSubcategory = !isSubcategory">
-                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out" :class="isSubcategory ? 'translate-x-5' : 'translate-x-0'" />
+                                class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span v-if="!isLoading" class="flex items-center space-x-2">
+                                    <span>Create</span>
+                                </span>
+                                <span v-else class="flex items-center space-x-2">
+                                    <span>Creating...</span>
+                                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                    </svg>
+                                </span>
                             </button>
                         </div>
-
-                        <div v-if="isSubcategory" class="space-y-3">
-                            <label class="block text-sm font-medium text-gray-700"> Parent Category <span class="text-red-500">*</span> </label>
-
-                            <!-- Loading State -->
-                            <div v-if="categoriesLoading" class="flex items-center justify-center py-8">
-                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                            </div>
-
-                            <!-- Parent Categories Grid -->
-                            <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <button
-                                    v-for="category in parentCategories"
-                                    :key="category.id"
-                                    type="button"
-                                    :disabled="isLoading"
-                                    class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
-                                    :class="[form.parent_id === category.id ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
-                                    @click="selectParentCategory(category)">
-                                    <div class="flex items-start space-x-3">
-                                        <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="getColorClasses(category.color).bgClass">
-                                            <Icon :name="category.icon" class="w-5 h-5" :class="getColorClasses(category.color).textClass" />
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-semibold text-gray-900">{{ category.name }}</p>
-                                            <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full mt-1" :class="category.type === 'expense' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'">
-                                                {{ capitalizeWord(category.type) }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div v-if="form.parent_id === category.id" class="absolute top-3 right-3 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center">
-                                        <Icon name="heroicons:check" class="w-3 h-3 text-white" />
-                                    </div>
-                                </button>
-                            </div>
-
-                            <!-- Empty State -->
-                            <div v-if="!categoriesLoading && parentCategories.length === 0" class="text-center py-8 px-4 border-2 border-dashed border-gray-300 rounded-lg">
-                                <Icon name="heroicons:folder-open" class="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                                <p class="text-sm text-gray-600">No parent categories available</p>
-                                <p class="text-xs text-gray-500 mt-1">Create a main category first</p>
-                            </div>
-
-                            <p v-if="errors.parent_id" class="mt-1 text-sm text-red-500">{{ errors.parent_id[0] }}</p>
-                        </div>
-
-                        <!-- Category Type -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3"> Category Type <span class="text-red-500">*</span> </label>
-
-                            <!-- Info message when parent is selected -->
-                            <div v-if="isSubcategory && form.parent_id" class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start space-x-2">
-                                <Icon name="heroicons:information-circle" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                                <p class="text-sm text-blue-700">
-                                    Type automatically set to match parent category: <span class="font-semibold">{{ capitalizeWord(form.type) }}</span>
-                                </p>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <button
-                                    v-for="type in categoryTypes"
-                                    :key="type.value"
-                                    type="button"
-                                    :disabled="isLoading || (isSubcategory && form.parent_id !== null)"
-                                    class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
-                                    :class="[
-                                        form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
-                                        isLoading || (isSubcategory && form.parent_id !== null) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
-                                    ]"
-                                    @click="!isSubcategory && (form.type = type.value)">
-                                    <div class="flex items-start space-x-3">
-                                        <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
-                                            <Icon :name="type.icon" class="w-5 h-5" :class="type.iconColor" />
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-semibold text-gray-900">{{ type.label }}</p>
-                                            <p class="text-xs text-gray-500 mt-1">{{ type.description }}</p>
-                                        </div>
-                                    </div>
-                                    <div v-if="form.type === type.value" class="absolute top-3 right-3 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center">
-                                        <Icon name="heroicons:check" class="w-3 h-3 text-white" />
-                                    </div>
-                                </button>
-                            </div>
-                            <p v-if="errors.type" class="mt-1 text-sm text-red-500">{{ errors.type[0] }}</p>
-                        </div>
-
-                        <!-- Category Icon -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3"> Choose Icon <span class="text-red-500">*</span> </label>
-                            <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
-                                <button
-                                    v-for="iconOption in categoryIcons"
-                                    :key="iconOption"
-                                    type="button"
-                                    :disabled="isLoading"
-                                    class="aspect-square p-3 border-2 rounded-lg transition-all duration-200 hover:scale-105"
-                                    :class="[form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : '']"
-                                    @click="form.icon = iconOption">
-                                    <Icon :name="iconOption" class="w-full h-full" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
-                                </button>
-                            </div>
-                            <p v-if="errors.icon" class="mt-1 text-sm text-red-500">{{ errors.icon[0] }}</p>
-                        </div>
-
-                        <!-- Color Selection -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3"> Color <span class="text-red-500">*</span> </label>
-                            <div class="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-2">
-                                <button
-                                    v-for="colorOption in categoryColors"
-                                    :key="colorOption.value"
-                                    type="button"
-                                    :disabled="isLoading"
-                                    class="aspect-square rounded-lg transition-all duration-200 hover:scale-110 relative"
-                                    :class="[colorOption.class, isLoading ? 'opacity-50 cursor-not-allowed' : '']"
-                                    @click="form.color = colorOption.value">
-                                    <div v-if="form.color === colorOption.value" class="absolute inset-0 flex items-center justify-center">
-                                        <Icon name="heroicons:check" class="w-5 h-5 text-white drop-shadow-lg" />
-                                    </div>
-                                </button>
-                            </div>
-                            <p v-if="errors.color" class="mt-1 text-sm text-red-500">{{ errors.color[0] }}</p>
-                        </div>
-                    </div>
-                    <!-- Form Actions -->
-                    <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end gap-3 pt-6 mt-8 border-t border-gray-200">
-                        <NuxtLink
-                            to="/categories"
-                            class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                            :class="isLoading ? 'pointer-events-none opacity-50' : ''">
-                            Cancel
-                        </NuxtLink>
-                        <button
-                            type="submit"
-                            :disabled="isLoading"
-                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span v-if="!isLoading" class="flex items-center space-x-2">
-                                <span>Create</span>
-                            </span>
-                            <span v-else class="flex items-center space-x-2">
-                                <span>Creating...</span>
-                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                </svg>
-                            </span>
-                        </button>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -209,14 +157,11 @@
     });
 
     const { errors } = useCategory();
-    const { categoryTypes, categoryIcons, categoryColors, getColorClasses } = useCategoryConstant();
-    const { capitalizeWord } = useUtils();
+    const { categoryTypes, categoryIcons, categoryColors } = useCategoryConstant();
     // const { success, error } = useToast();
     const route = useRoute();
 
     const isLoading = ref(false);
-    const isSubcategory = ref(false);
-
     const form = reactive({
         name: "",
         type: "",
@@ -227,23 +172,21 @@
 
     const { data: categoriesData, status: categoriesStatus, error: fetchDataError, refresh } = await useSanctumFetch(`/api/categories/${route.params.id}/edit`);
 
-    const parentCategories = computed(() => {
-        return categoriesData.value?.categories?.filter((cat) => cat?.parent_id == null) || [];
-    });
+    watch(
+        () => categoriesData.value?.category,
+        (category) => {
+            if (category) {
+                form.name = category.name;
+                form.type = category.type;
+                form.icon = category.icon;
+                form.color = category.color;
+                form.parent_id = category.parent_id;
+            }
+        },
+        { immediate: true }
+    );
 
     const categoriesLoading = computed(() => categoriesStatus.value === "pending");
-
-    watch(isSubcategory, (newValue) => {
-        if (!newValue) {
-            form.parent_id = null;
-            form.type = "";
-        }
-    });
-
-    const selectParentCategory = (category) => {
-        form.parent_id = category.id;
-        form.type = category.type;
-    };
 
     // const handleSubmit = async () => {
     //     isLoading.value = true;
