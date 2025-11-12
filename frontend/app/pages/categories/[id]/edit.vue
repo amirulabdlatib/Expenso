@@ -23,10 +23,10 @@
             </div>
 
             <!-- Success State -->
-            <template v-else>
+            <div v-else>
                 <div class="mb-8">
                     <div class="flex items-center space-x-3 mb-3">
-                        <NuxtLink to="/categories" class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all">
+                        <NuxtLink :to="`/categories/${route.params.id}`" class="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all">
                             <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                         </NuxtLink>
                         <h1 class="text-xl font-bold text-gray-900">Edit Category</h1>
@@ -160,7 +160,7 @@
                         </div>
                     </form>
                 </div>
-            </template>
+            </div>
         </div>
     </div>
 </template>
