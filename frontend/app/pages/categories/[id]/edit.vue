@@ -44,7 +44,7 @@
                                     type="text"
                                     placeholder="e.g., Food & Dining, Transportation, Entertainment"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                    :disabled="isLoading" />
+                                    :disabled="isUpdating" />
                                 <p v-if="errors.name" class="mt-1 text-sm text-red-500">{{ errors.name[0] }}</p>
                             </div>
 
@@ -52,14 +52,28 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-3"> Category Type <span class="text-red-500">*</span> </label>
 
+                                <div v-if="isSubCategory" class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <Icon name="heroicons:information-circle" class="h-5 w-5 text-blue-400" />
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm text-blue-700">
+                                                This is a subcategory. The type is inherited from the parent category:
+                                                <span class="font-medium">{{ capitalizeWord(categoriesData.category.type) }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <button
                                         v-for="type in categoryTypes"
                                         :key="type.value"
                                         type="button"
-                                        :disabled="isLoading"
+                                        :disabled="isUpdating || isSubCategory"
                                         class="relative p-4 border-2 rounded-lg transition-all duration-200 text-left"
-                                        :class="[form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
+                                        :class="[form.type === type.value ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isUpdating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']"
                                         @click="form.type = type.value">
                                         <div class="flex items-start space-x-3">
                                             <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
@@ -86,9 +100,9 @@
                                         v-for="iconOption in categoryIcons"
                                         :key="iconOption"
                                         type="button"
-                                        :disabled="isLoading"
+                                        :disabled="isUpdating"
                                         class="aspect-square p-3 border-2 rounded-lg transition-all duration-200 hover:scale-105"
-                                        :class="[form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isLoading ? 'opacity-50 cursor-not-allowed' : '']"
+                                        :class="[form.icon === iconOption ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50', isUpdating ? 'opacity-50 cursor-not-allowed' : '']"
                                         @click="form.icon = iconOption">
                                         <Icon :name="iconOption" class="w-full h-full" :class="form.icon === iconOption ? 'text-indigo-600' : 'text-gray-600'" />
                                     </button>
@@ -104,9 +118,9 @@
                                         v-for="colorOption in categoryColors"
                                         :key="colorOption.value"
                                         type="button"
-                                        :disabled="isLoading"
+                                        :disabled="isUpdating"
                                         class="aspect-square rounded-lg transition-all duration-200 hover:scale-110 relative"
-                                        :class="[colorOption.class, isLoading ? 'opacity-50 cursor-not-allowed' : '']"
+                                        :class="[colorOption.class, isUpdating ? 'opacity-50 cursor-not-allowed' : '']"
                                         @click="form.color = colorOption.value">
                                         <div v-if="form.color === colorOption.value" class="absolute inset-0 flex items-center justify-center">
                                             <Icon name="heroicons:check" class="w-5 h-5 text-white drop-shadow-lg" />
@@ -121,18 +135,18 @@
                             <NuxtLink
                                 to="/categories"
                                 class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                                :class="isLoading ? 'pointer-events-none opacity-50' : ''">
+                                :class="isUpdating ? 'pointer-events-none opacity-50' : ''">
                                 Cancel
                             </NuxtLink>
                             <button
                                 type="submit"
-                                :disabled="isLoading"
+                                :disabled="isUpdating"
                                 class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <span v-if="!isLoading" class="flex items-center space-x-2">
-                                    <span>Create</span>
+                                <span v-if="!isUpdating" class="flex items-center space-x-2">
+                                    <span>Update</span>
                                 </span>
                                 <span v-else class="flex items-center space-x-2">
-                                    <span>Creating...</span>
+                                    <span>Updating...</span>
                                     <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -158,10 +172,11 @@
 
     const { errors } = useCategory();
     const { categoryTypes, categoryIcons, categoryColors } = useCategoryConstant();
+    const { capitalizeWord } = useUtils();
     // const { success, error } = useToast();
     const route = useRoute();
 
-    const isLoading = ref(false);
+    const isUpdating = ref(false);
     const form = reactive({
         name: "",
         type: "",
@@ -187,9 +202,10 @@
     );
 
     const categoriesLoading = computed(() => categoriesStatus.value === "pending");
+    const isSubCategory = computed(() => categoriesData.value.category.parent_id);
 
     // const handleSubmit = async () => {
-    //     isLoading.value = true;
+    //     isUpdating.value = true;
 
     //     try {
     //         await createCategory(form);
@@ -199,7 +215,7 @@
     //         console.error("Category creation failed:", err);
     //         error("Category creation failed!");
     //     } finally {
-    //         isLoading.value = false;
+    //         isUpdating.value = false;
     //     }
     // };
 </script>
