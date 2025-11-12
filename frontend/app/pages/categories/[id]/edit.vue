@@ -214,11 +214,7 @@
         try {
             await updateCategory(form, route.params.id);
             success("Category updated successfully.");
-            if (form.parent_id) {
-                navigateTo(`/categories/${route.params.id}`);
-            } else {
-                navigateTo("/categories");
-            }
+            navigateTo(`/categories/${route.params.id}`);
         } catch (err) {
             console.error("Category update failed:", err);
             error("Category update failed!");
