@@ -17,6 +17,21 @@ export const useCategory = () => {
         }
     }
 
+    async function updateCategory(form, id) {
+        try {
+            const response = await sanctumClient(`/api/categories/${id}`, {
+                method: "PUT",
+                body: form,
+            });
+            return response;
+        } catch (err) {
+            if (err.statusCode == 422) {
+                errors.value = err.data.errors;
+            }
+            throw err;
+        }
+    }
+
     async function deleteCategory(id) {
         try {
             await sanctumClient(`/api/categories/${id}`, {
@@ -36,6 +51,7 @@ export const useCategory = () => {
     return {
         errors,
         createCategory,
+        updateCategory,
         deleteCategory,
     };
 };
