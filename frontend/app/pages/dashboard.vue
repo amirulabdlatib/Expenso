@@ -91,62 +91,35 @@
                     <NuxtLink to="/transactions" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> View All → </NuxtLink>
                 </div>
 
-                <div class="space-y-4">
+                <div v-if="recentTransactions.length > 0" class="space-y-4">
                     <!-- Transaction Item -->
-                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
+                    <div v-for="transaction in recentTransactions" :key="transaction.id" class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-2xl">☕</div>
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" :class="getColorClasses(transaction.category.color).bgClass">
+                                <Icon :name="transaction.category.icon" class="w-6 h-6" :class="getColorClasses(transaction.category.color).textClass" />
+                            </div>
                             <div>
-                                <p class="font-medium text-gray-900">Starbucks Coffee</p>
-                                <p class="text-sm text-gray-500">Food & Dining • Today, 10:30 AM</p>
+                                <p class="font-medium text-gray-900">{{ transaction.name }}</p>
+                                <p class="text-sm text-gray-500">{{ transaction.category.name }} • {{ formatRelativeDate(transaction.transaction_date) }}</p>
                             </div>
                         </div>
-                        <p class="text-lg font-semibold text-red-600">-RM 15.00</p>
+                        <p v-if="transaction.credit" class="text-lg font-semibold text-green-600">RM {{ transaction.credit }}</p>
+                        <p v-else class="text-lg font-semibold text-red-600">RM {{ transaction.debit }}</p>
                     </div>
+                </div>
 
-                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">🚗</div>
-                            <div>
-                                <p class="font-medium text-gray-900">Petrol Station</p>
-                                <p class="text-sm text-gray-500">Transport • Yesterday, 8:00 PM</p>
-                            </div>
-                        </div>
-                        <p class="text-lg font-semibold text-red-600">-RM 80.00</p>
+                <div v-else class="text-center py-8 px-4">
+                    <div class="mx-auto w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                        <Icon name="heroicons:document-text" class="w-8 h-8 text-blue-500" />
                     </div>
-
-                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">💰</div>
-                            <div>
-                                <p class="font-medium text-gray-900">Monthly Salary</p>
-                                <p class="text-sm text-gray-500">Income • Oct 1, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-lg font-semibold text-green-600">+RM 8,500.00</p>
-                    </div>
-
-                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-2xl">🛒</div>
-                            <div>
-                                <p class="font-medium text-gray-900">Grocery Shopping</p>
-                                <p class="text-sm text-gray-500">Shopping • Oct 12, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-lg font-semibold text-red-600">-RM 245.50</p>
-                    </div>
-
-                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">📱</div>
-                            <div>
-                                <p class="font-medium text-gray-900">Phone Bill</p>
-                                <p class="text-sm text-gray-500">Bills • Oct 10, 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-lg font-semibold text-red-600">-RM 120.00</p>
-                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">No transactions yet</h3>
+                    <p class="text-gray-500 mb-6">Start tracking your expenses and income to see them here</p>
+                    <NuxtLink
+                        to="/transactions/create"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <Icon name="heroicons:plus" class="-ml-1 mr-2 h-5 w-5" />
+                        Add Transaction
+                    </NuxtLink>
                 </div>
             </div>
 
@@ -290,12 +263,13 @@
     });
 
     const { capitalizedName } = useNameDisplay();
-    const { formatMonthYear } = useUtils();
+    const { formatMonthYear, formatRelativeDate } = useUtils();
+    const { getColorClasses } = useCategoryConstant();
     const client = useSanctumClient();
 
     const currentMonthYear = formatMonthYear();
 
     const { data, pending, error, refresh } = await useAsyncData("dashboard", () => client("/api/dashboard"));
 
-    console.log(data.value);
+    const recentTransactions = computed(() => data.value.transactions);
 </script>

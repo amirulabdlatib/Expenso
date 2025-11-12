@@ -53,7 +53,8 @@ class DashboardService
 
     public function getRecentTransactions()
     {
-        return Transaction::with('category:id,name,type,icon,color')
+        return Transaction::where('user_id', Auth::id())
+            ->with('category:id,name,type,icon,color')
             ->latest('transaction_date')
             ->whereHas('category', function ($query) {
                 $query->whereIn('type', [CategoryType::Income, CategoryType::Expense]);
