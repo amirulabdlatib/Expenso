@@ -5,9 +5,9 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center space-x-3">
-                        <NuxtLink to="/transactions" class="p-2 rounded-lg hover:bg-white transition-colors">
+                        <button class="p-2 rounded-lg hover:bg-white transition-colors" @click="goBack">
                             <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
-                        </NuxtLink>
+                        </button>
                         <div>
                             <h1 class="text-xl md:text-2xl font-bold text-gray-900">Transaction Details</h1>
                             <p class="text-gray-500 text-sm">View your transaction details</p>
@@ -56,8 +56,7 @@
                                 'bg-red-100 text-red-700': transaction.type === 'expense',
                                 'bg-green-100 text-green-700': transaction.type === 'income',
                                 'bg-blue-100 text-blue-700': transaction.type === 'transfer',
-                            }"
-                        >
+                            }">
                             <Icon :name="transaction.type === 'expense' ? 'heroicons:arrow-trending-down' : transaction.type === 'income' ? 'heroicons:arrow-trending-up' : 'heroicons:arrow-path'" class="w-4 h-4 mr-1" />
                             {{ transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) }}
                         </span>
@@ -70,8 +69,7 @@
                                 'text-red-600': transaction.type === 'expense',
                                 'text-green-600': transaction.type === 'income',
                                 'text-blue-600': transaction.type === 'transfer',
-                            }"
-                        >
+                            }">
                             {{ transaction.account.currency }} {{ Number(transaction.amount).toFixed(2) }}
                         </div>
                     </div>
@@ -154,6 +152,12 @@
     const { formatDate, formatTime } = useUtils();
     const { success, error: toastError } = useToast();
     const { deleteTransaction: deleteAction } = useTransactions();
+
+    const router = useRouter();
+
+    const goBack = () => {
+        router.back();
+    };
 
     const { data: transaction, pending, error, refresh } = await useAsyncData(`transaction-${route.params.id}`, () => client(`/api/transactions/${route.params.id}`));
 

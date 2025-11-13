@@ -24,8 +24,10 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->per_page ?? 10;
+
         $transactions = Transaction::where('user_id', Auth::id())
             ->select([
                 'id',
@@ -40,19 +42,71 @@ class TransactionController extends Controller
                 'account:id,name,icon',
                 'category:id,name,icon,color,type'
             ])
-            ->latest('transaction_date')
+            ->when($request->search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->when($request->type && $request->type !== 'all', function ($query) use ($request) {
+                if ($request->type === 'transfer') {
+                    return $query->whereNull('category_id');
+                }
+                return $query->whereHas('category', function ($q) use ($request) {
+                    $q->where('type', $request->type);
+                });
+            })
+            ->when($request->categoryName && $request->categoryName !== 'all', function ($query) use ($request) {
+                return $query->whereHas('category', function ($q) use ($request) {
+                    $q->where('name', $request->categoryName);
+                });
+            })
+            ->when($request->filter && in_array($request->filter, ['today', 'week', 'month']), function ($q) use ($request) {
+                $now = now();
+                return match ($request->filter) {
+                    'today' => $q->whereDate('transaction_date', $now->toDateString()),
+                    'week' => $q->whereBetween('transaction_date', [
+                        $now->copy()->startOfWeek()->toDateString(),
+                        $now->copy()->endOfWeek()->toDateString()
+                    ]),
+                    'month' => $q->whereBetween('transaction_date', [
+                        $now->copy()->startOfMonth()->toDateString(),
+                        $now->copy()->endOfMonth()->toDateString()
+                    ]),
+                    default => $q
+                };
+            })
+            ->when($request->sort, function ($query) use ($request) {
+                return match ($request->sort) {
+                    'date-asc' => $query->oldest('transaction_date'),
+                    'date-desc' => $query->latest('transaction_date'),
+                    'amount-asc' => $query->orderByRaw('COALESCE(debit, credit) ASC'),
+                    'amount-desc' => $query->orderByRaw('COALESCE(debit, credit) DESC'),
+                    default => $query->latest('transaction_date')
+                };
+            }, function ($query) {
+                return $query->latest('transaction_date');
+            })
+            ->paginate($perPage);
+
+        $categories = Category::whereHas('transactions', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+            ->select('name')
+            ->distinct()
+            ->orderBy('name')
             ->get();
 
-        $total_income = Transaction::totalIncome();
-        $total_expenses = Transaction::totalExpenses();
-        $total_transaction = Transaction::where('user_id', Auth::id())
-            ->count();
-
         return response()->json([
-            'transactions' => $transactions,
-            'total_income' => $total_income,
-            'total_expenses' => $total_expenses,
-            'total_transaction_this_month' => $total_transaction,
+            'transactions' => $transactions->items(),
+            'pagination' => [
+                'total' => $transactions->total(),
+                'per_page' => $transactions->perPage(),
+                'current_page' => $transactions->currentPage(),
+                'last_page' => $transactions->lastPage(),
+                'from' => $transactions->firstItem(),
+                'to' => $transactions->lastItem(),
+            ],
+            'categories' => $categories,
+            'total_income' => Transaction::totalIncome(),
+            'total_expenses' => Transaction::totalExpenses(),
         ], Response::HTTP_OK);
     }
 
