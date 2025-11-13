@@ -17,8 +17,9 @@
                         <p class="text-sm text-gray-500">{{ transaction.category.name }} • {{ formatRelativeDate(transaction.transaction_date) }}</p>
                     </div>
                 </div>
-                <p v-if="transaction.credit" class="text-lg font-semibold text-green-600">RM {{ transaction.credit }}</p>
-                <p v-else class="text-lg font-semibold text-red-600">RM {{ transaction.debit }}</p>
+                <p v-if="transaction.credit !== null && transaction.credit !== undefined" class="text-lg font-semibold text-green-600">RM {{ formatCurrency(formattransaction.credit) }}</p>
+                <p v-else-if="transaction.debit !== null && transaction.debit !== undefined" class="text-lg font-semibold text-red-600">RM {{ formatCurrency(transaction.debit) }}</p>
+                <p v-else class="text-lg font-semibold text-gray-600">RM 0.00</p>
             </div>
         </div>
 
@@ -41,6 +42,7 @@
 <script setup>
     const { formatRelativeDate } = useUtils();
     const { getColorClasses } = useCategoryConstant();
+    const { formatCurrency } = useCurrency();
 
     defineProps({
         recentTransactions: {

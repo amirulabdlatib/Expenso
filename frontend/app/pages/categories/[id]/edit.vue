@@ -60,7 +60,7 @@
                                         <div class="ml-3">
                                             <p class="text-sm text-blue-700">
                                                 This is a subcategory. The type is inherited from the parent category:
-                                                <span class="font-medium">{{ capitalizeWord(categoriesData.category.type) }}</span>
+                                                <span class="font-medium">{{ capitalizeWord(categoriesData.category?.type) }}</span>
                                             </p>
                                         </div>
                                     </div>
@@ -206,7 +206,7 @@
     );
 
     const categoriesLoading = computed(() => categoriesStatus.value === "pending");
-    const isSubCategory = computed(() => categoriesData.value.category.parent_id);
+    const isSubCategory = computed(() => categoriesData.value?.category?.parent_id);
 
     const handleUpdate = async () => {
         isUpdating.value = true;

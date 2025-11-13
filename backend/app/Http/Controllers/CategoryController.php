@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -72,13 +73,14 @@ class CategoryController extends Controller
         $this->authorize('update', $category);
         $validated_data = $request->validated();
 
-        if ($category->children()->exists() && $request['type'] !== $category['type']) {
-            $category->children()->update([
-                'type' => $validated_data['type'],
-            ]);
-        }
-
-        $category->update($validated_data);
+        DB::transaction(function () use ($category, $validated_data) {
+            if ($category->children()->exists() && $validated_data['type'] !== $category['type']) {
+                $category->children()->update([
+                    'type' => $validated_data['type'],
+                ]);
+            }
+            $category->update($validated_data);
+        });
         return response()->json([
             'message' => 'Category updated successfully.'
         ]);
