@@ -86,10 +86,6 @@
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-900">Filters</h3>
-                            <button class="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 text-sm font-medium" @click="refreshData()">
-                                <Icon name="heroicons:arrow-path" class="w-4 h-4" />
-                                <span>Refresh</span>
-                            </button>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -356,14 +352,6 @@
         await router.push({ query });
         await refresh();
         isSearching.value = false;
-    };
-
-    const refreshData = async () => {
-        searchQuery.value = "";
-        const query = { ...route.query };
-        delete query.q;
-        await router.push({ query });
-        await refresh();
     };
 
     const clearSearch = async () => {
