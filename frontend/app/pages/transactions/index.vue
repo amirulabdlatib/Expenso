@@ -307,6 +307,10 @@
         transactionFilterType.value = route.query.type;
     }
 
+    if (route.query.categoryName) {
+        categoryName.value = route.query.categoryName;
+    }
+
     const {
         data: transactionsData,
         status,
@@ -361,9 +365,9 @@
         const query = { ...route.query };
 
         if (categoryName.value && categoryName.value !== "all") {
-            query.type = categoryName.value;
+            query.categoryName = categoryName.value;
         } else {
-            delete query.type;
+            delete query.categoryName;
         }
 
         await router.push({ query });
