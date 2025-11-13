@@ -302,7 +302,6 @@
     const route = useRoute();
     const router = useRouter();
 
-    // Initialize search query from URL if present
     if (route.query.q) {
         searchQuery.value = route.query.q;
     }
@@ -330,7 +329,6 @@
         return [...new Set(transactionsData.value.transactions.filter((t) => t.category !== null).map((t) => t.category.name))];
     });
 
-    // Search handler
     const handleSearch = async () => {
         isSearching.value = true;
         const query = { ...route.query };
