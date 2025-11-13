@@ -259,13 +259,38 @@
 
                         <!-- Pagination -->
                         <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                            <div class="text-sm text-gray-600">Showing {{ transactionsData.transactions.length }} of {{ transactionsData.transactions.length }} transactions</div>
+                            <div class="text-sm text-gray-600">Showing {{ transactionsData.pagination.from }} to {{ transactionsData.pagination.to }} of {{ transactionsData.pagination.total }} entries</div>
                             <div class="flex items-center space-x-2">
-                                <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
-                                <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium">1</button>
-                                <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">2</button>
-                                <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">3</button>
-                                <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">Next</button>
+                                <button
+                                    class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+                                    :disabled="transactionsData.pagination.current_page === 1"
+                                    @click="changePage(transactionsData.pagination.current_page - 1)">
+                                    Previous
+                                </button>
+
+                                <!-- Page numbers -->
+                                <template v-for="pageNumber in getPageNumbers" :key="pageNumber">
+                                    <button v-if="pageNumber === '...'" class="px-3 py-1 text-gray-600" disabled>
+                                        {{ pageNumber }}
+                                    </button>
+                                    <button
+                                        v-else
+                                        class="px-3 py-1 border rounded-lg"
+                                        :class="{
+                                            'border-indigo-500 bg-indigo-50 text-indigo-600': pageNumber === transactionsData.pagination.current_page,
+                                            'border-gray-300 text-gray-600 hover:bg-gray-50': pageNumber !== transactionsData.pagination.current_page,
+                                        }"
+                                        @click="changePage(pageNumber)">
+                                        {{ pageNumber }}
+                                    </button>
+                                </template>
+
+                                <button
+                                    class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+                                    :disabled="transactionsData.pagination.current_page === transactionsData.pagination.last_page"
+                                    @click="changePage(transactionsData.pagination.current_page + 1)">
+                                    Next
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -322,6 +347,11 @@
         sortBy.value = route.query.sort;
     }
 
+    const page = computed(() => {
+        const page = parseInt(route.query.page) || 1;
+        return page > 0 ? page : 1;
+    });
+
     const {
         data: transactionsData,
         status,
@@ -335,6 +365,8 @@
                 categoryName: categoryName.value || "all",
                 filter: quickFilter.value !== "all" ? quickFilter.value : undefined,
                 sort: sortBy.value || "date-desc",
+                page: page.value,
+                per_page: 10, // Match the default in the backend
             },
         })
     );
@@ -357,6 +389,9 @@
         } else {
             delete query.q;
         }
+        
+        // Reset to first page when searching
+        query.page = 1;
 
         await router.push({ query });
         await refresh();
@@ -372,6 +407,9 @@
         } else {
             delete query.type;
         }
+        
+        // Reset to first page when changing transaction type filter
+        query.page = 1;
 
         await router.push({ query });
         await refresh();
@@ -387,6 +425,9 @@
         } else {
             delete query.categoryName;
         }
+        
+        // Reset to first page when changing category filter
+        query.page = 1;
 
         await router.push({ query });
         await refresh();
@@ -403,6 +444,9 @@
         } else {
             delete query.filter;
         }
+        
+        // Reset to first page when applying quick filter
+        query.page = 1;
 
         await router.push({ query });
         await refresh();
@@ -418,6 +462,8 @@
         } else {
             delete query.sort;
         }
+
+        query.page = 1;
 
         await router.push({ query });
         await refresh();
@@ -435,6 +481,45 @@
         await refresh();
         isClearing.value = false;
     };
+
+    // Change page handler
+    const changePage = async (page) => {
+        if (page < 1 || page > transactionsData.value.pagination.last_page) return;
+
+        const query = { ...route.query, page };
+        await router.push({ query });
+        await refresh();
+    };
+
+    const getPageNumbers = computed(() => {
+        if (!transactionsData.value?.pagination) return [];
+
+        const current = transactionsData.value.pagination.current_page;
+        const last = transactionsData.value.pagination.last_page;
+        const delta = 1;
+        const range = [];
+
+        for (let i = Math.max(2, current - delta); i <= Math.min(last - 1, current + delta); i++) {
+            range.push(i);
+        }
+
+        if (current - delta > 2) {
+            range.unshift("...");
+        }
+
+        if (current + delta < last - 1) {
+            range.push("...");
+        }
+
+        if (last > 1) {
+            range.unshift(1);
+            range.push(last);
+        } else {
+            range.unshift(1);
+        }
+
+        return range;
+    });
 
     const deleteTransaction = async (id) => {
         if (confirm("Are you sure you want to delete this transaction?")) {

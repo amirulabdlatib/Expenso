@@ -26,6 +26,8 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
+        $perPage = $request->per_page ?? 10;
+
         $transactions = Transaction::where('user_id', Auth::id())
             ->select([
                 'id',
@@ -82,7 +84,7 @@ class TransactionController extends Controller
             }, function ($query) {
                 return $query->latest('transaction_date');
             })
-            ->get();
+            ->paginate($perPage);
 
         $categories = Category::whereHas('transactions', function ($query) {
             $query->where('user_id', Auth::id());
@@ -93,7 +95,15 @@ class TransactionController extends Controller
             ->get();
 
         return response()->json([
-            'transactions' => $transactions,
+            'transactions' => $transactions->items(),
+            'pagination' => [
+                'total' => $transactions->total(),
+                'per_page' => $transactions->perPage(),
+                'current_page' => $transactions->currentPage(),
+                'last_page' => $transactions->lastPage(),
+                'from' => $transactions->firstItem(),
+                'to' => $transactions->lastItem(),
+            ],
             'categories' => $categories,
             'total_income' => Transaction::totalIncome(),
             'total_expenses' => Transaction::totalExpenses(),
