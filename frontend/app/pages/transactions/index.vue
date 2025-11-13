@@ -352,7 +352,6 @@
         isClearing.value = true;
         previousSearchQuery.value = searchQuery.value;
         searchQuery.value = "";
-        // Clear the query parameter from URL
         const query = { ...route.query };
         delete query.q;
         await router.push({ query });
