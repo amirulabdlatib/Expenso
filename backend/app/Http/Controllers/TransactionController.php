@@ -56,6 +56,21 @@ class TransactionController extends Controller
                     $q->where('name', $request->categoryName);
                 });
             })
+            ->when($request->filter && in_array($request->filter, ['today', 'week', 'month']), function ($q) use ($request) {
+                $now = now();
+                return match ($request->filter) {
+                    'today' => $q->whereDate('transaction_date', $now->toDateString()),
+                    'week' => $q->whereBetween('transaction_date', [
+                        $now->copy()->startOfWeek()->toDateString(),
+                        $now->copy()->endOfWeek()->toDateString()
+                    ]),
+                    'month' => $q->whereBetween('transaction_date', [
+                        $now->copy()->startOfMonth()->toDateString(),
+                        $now->copy()->endOfMonth()->toDateString()
+                    ]),
+                    default => $q
+                };
+            })
             ->latest('transaction_date')
             ->get();
 

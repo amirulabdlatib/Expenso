@@ -126,16 +126,16 @@
                         <!-- Quick Filters -->
                         <div class="flex items-center space-x-2 mt-4">
                             <span class="text-sm text-gray-600 font-medium">Quick Filter:</span>
-                            <button :class="[quickFilter === 'today' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'today'">
+                            <button :class="[quickFilter === 'today' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="handleQuickFilter('today')">
                                 Today
                             </button>
-                            <button :class="[quickFilter === 'week' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'week'">
+                            <button :class="[quickFilter === 'week' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="handleQuickFilter('week')">
                                 This Week
                             </button>
-                            <button :class="[quickFilter === 'month' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'month'">
+                            <button :class="[quickFilter === 'month' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="handleQuickFilter('month')">
                                 This Month
                             </button>
-                            <button :class="[quickFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="quickFilter = 'all'">
+                            <button :class="[quickFilter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-3 py-1 rounded-lg text-sm transition-colors']" @click="handleQuickFilter('all')">
                                 All Time
                             </button>
                         </div>
@@ -314,6 +314,10 @@
         categoryName.value = route.query.categoryName;
     }
 
+    if (route.query.filter) {
+        quickFilter.value = route.query.filter;
+    }
+
     const {
         data: transactionsData,
         status,
@@ -325,6 +329,7 @@
                 search: searchQuery.value || undefined,
                 type: transactionFilterType.value || "all",
                 categoryName: categoryName.value || "all",
+                filter: quickFilter.value !== "all" ? quickFilter.value : undefined,
             },
         })
     );
@@ -334,6 +339,7 @@
         return transactionsData.value.categories.map((category) => category.name);
     });
 
+    // Computed property to check if any filter is active
     const hasActiveFilters = computed(() => {
         return searchQuery.value || transactionFilterType.value !== "all" || categoryName.value !== "all" || quickFilter.value !== "all";
     });
@@ -375,6 +381,22 @@
             query.categoryName = categoryName.value;
         } else {
             delete query.categoryName;
+        }
+
+        await router.push({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
+    const handleQuickFilter = async (filter) => {
+        isSearching.value = true;
+        quickFilter.value = filter;
+        const query = { ...route.query };
+
+        if (filter && filter !== "all") {
+            query.filter = filter;
+        } else {
+            delete query.filter;
         }
 
         await router.push({ query });
