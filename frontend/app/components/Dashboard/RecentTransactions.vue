@@ -9,12 +9,12 @@
             <!-- Transaction Item -->
             <div v-for="transaction in recentTransactions" :key="transaction.id" class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                 <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" :class="getColorClasses(transaction.category.color).bgClass">
-                        <Icon :name="transaction.category.icon" class="w-6 h-6" :class="getColorClasses(transaction.category.color).textClass" />
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" :class="getColorClasses(transaction.category?.color).bgClass">
+                        <Icon :name="transaction.category?.icon || 'heroicons:cube'" class="w-6 h-6" :class="getColorClasses(transaction.category?.color).textClass" />
                     </div>
                     <div>
                         <p class="font-medium text-gray-900">{{ transaction.name }}</p>
-                        <p class="text-sm text-gray-500">{{ transaction.category.name }} • {{ formatRelativeDate(transaction.transaction_date) }}</p>
+                        <p class="text-sm text-gray-500">{{ transaction.category?.name || 'Uncategorized' }} • {{ formatRelativeDate(transaction.transaction_date) }}</p>
                     </div>
                 </div>
                 <p v-if="transaction.credit" class="text-lg font-semibold text-green-600">RM {{ transaction.credit }}</p>
