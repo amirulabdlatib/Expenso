@@ -24,7 +24,7 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $transactions = Transaction::where('user_id', Auth::id())
             ->select([
@@ -40,6 +40,9 @@ class TransactionController extends Controller
                 'account:id,name,icon',
                 'category:id,name,icon,color,type'
             ])
+            ->when($request->search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
             ->latest('transaction_date')
             ->get();
 

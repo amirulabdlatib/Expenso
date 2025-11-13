@@ -14,8 +14,8 @@
                 </div>
             </div>
 
-            <!-- Loading State -->
-            <div v-if="status === 'pending'" class="flex items-center justify-center py-20">
+            <!-- Loading State (Initial Load Only) -->
+            <div v-if="status === 'pending' && !transactionsData" class="flex items-center justify-center py-20">
                 <div class="text-center">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
                     <p class="text-gray-600">Loading transactions...</p>
@@ -31,9 +31,9 @@
             </div>
 
             <!-- Success State -->
-            <template v-else-if="status === 'success' && transactionsData">
-                <!-- Empty State -->
-                <div v-if="!transactionsData.transactions || transactionsData.transactions.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+            <template v-else-if="transactionsData">
+                <!-- Empty State - No Transactions at All -->
+                <div v-if="(!transactionsData.transactions || transactionsData.transactions.length === 0) && !searchQuery && !isClearing" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                     <Icon name="heroicons:banknotes" class="w-20 h-20 text-gray-300 mx-auto mb-4" />
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">No Transactions Yet</h3>
                     <p class="text-gray-600 mb-6">Get started by adding your first income or expense transaction.</p>
@@ -43,7 +43,7 @@
                     </NuxtLink>
                 </div>
 
-                <!-- Transactions Exist -->
+                <!-- Transactions Exist or Search Results -->
                 <template v-else>
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -86,7 +86,7 @@
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-900">Filters</h3>
-                            <button class="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 text-sm font-medium" @click="refresh()">
+                            <button class="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 text-sm font-medium" @click="refreshData()">
                                 <Icon name="heroicons:arrow-path" class="w-4 h-4" />
                                 <span>Refresh</span>
                             </button>
@@ -96,7 +96,12 @@
                             <!-- Search -->
                             <div class="md:col-span-2 relative">
                                 <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                                <input type="text" placeholder="Search transactions..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                <input
+                                    v-model="searchQuery"
+                                    type="text"
+                                    placeholder="Search transactions..."
+                                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    @input="handleSearch" />
                             </div>
 
                             <!-- Type Filter -->
@@ -140,8 +145,16 @@
                         </div>
                     </div>
 
-                    <!-- Transactions Table -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <!-- Transactions Table with Loading Overlay -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden relative">
+                        <!-- Loading Overlay -->
+                        <div v-if="isSearching || isClearing" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                            <div class="text-center">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-2"></div>
+                                <p class="text-sm text-gray-600">{{ isClearing ? "Loading..." : "Searching..." }}</p>
+                            </div>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full">
                                 <thead class="bg-gray-50 border-b border-gray-200">
@@ -156,6 +169,20 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
+                                    <!-- No Search Results Row -->
+                                    <tr v-if="!transactionsData.transactions || transactionsData.transactions.length === 0">
+                                        <td colspan="7" class="px-6 py-16 text-center">
+                                            <Icon name="heroicons:magnifying-glass-circle" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                                            <h3 class="text-lg font-semibold text-gray-900 mb-2">No Results Found</h3>
+                                            <p class="text-gray-600 mb-4">We couldn't find any transactions matching "{{ searchQuery }}"</p>
+                                            <button class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm" @click="clearSearch">
+                                                <Icon name="heroicons:x-mark" class="w-4 h-4" />
+                                                <span>Clear Search</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Transaction Rows -->
                                     <tr v-for="transaction in transactionsData.transactions" :key="transaction.id" class="hover:bg-gray-50 transition-colors">
                                         <!-- Date & Time -->
                                         <td class="px-6 py-4 whitespace-nowrap">
@@ -264,26 +291,68 @@
     const { success, error: toastError } = useToast();
     const client = useSanctumClient();
 
-    const { data: transactionsData, status, error, refresh } = await useAsyncData("transactions", () => client("/api/transactions"));
-
-    // TODO:: Filter, sorting and searching
+    // Define refs BEFORE useAsyncData
     const quickFilter = ref("all");
+    const searchQuery = ref("");
+    const previousSearchQuery = ref("");
     const isDeleting = ref(false);
+    const isSearching = ref(false);
+    const isClearing = ref(false);
+
+    const {
+        data: transactionsData,
+        status,
+        error,
+        refresh,
+    } = await useAsyncData("transactions", () =>
+        client("/api/transactions", {
+            params: {
+                search: searchQuery.value || undefined,
+            },
+        })
+    );
 
     const categories = computed(() => {
         if (!transactionsData.value?.transactions) return [];
         return [...new Set(transactionsData.value.transactions.filter((t) => t.category !== null).map((t) => t.category.name))];
     });
 
+    // Debounced search handler
+    let searchTimeout;
+    const handleSearch = () => {
+        clearTimeout(searchTimeout);
+        isSearching.value = true;
+        searchTimeout = setTimeout(async () => {
+            await refresh();
+            isSearching.value = false;
+        }, 500); // Wait 500ms after user stops typing
+    };
+
+    const refreshData = () => {
+        searchQuery.value = "";
+        refresh();
+    };
+
+    const clearSearch = async () => {
+        isClearing.value = true;
+        previousSearchQuery.value = searchQuery.value;
+        searchQuery.value = "";
+        await refresh();
+        isClearing.value = false;
+    };
+
     const deleteTransaction = async (id) => {
         if (confirm("Are you sure you want to delete this transaction?")) {
             try {
+                isDeleting.value = true;
                 await deleteAction(id);
                 success("Transaction deleted!");
                 await refresh();
             } catch (err) {
                 console.log(err);
                 toastError("Transaction fail to delete.");
+            } finally {
+                isDeleting.value = false;
             }
         }
     };
