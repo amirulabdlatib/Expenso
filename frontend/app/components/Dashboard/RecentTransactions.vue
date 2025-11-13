@@ -7,7 +7,7 @@
 
         <div v-if="recentTransactions.length > 0" class="space-y-4">
             <!-- Transaction Item -->
-            <div v-for="transaction in recentTransactions" :key="transaction.id" class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
+            <NuxtLink v-for="transaction in recentTransactions" :key="transaction.id" :to="`/transactions/${transaction.id}`" class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" :class="getColorClasses(transaction.category?.color).bgClass">
                         <Icon :name="transaction.category?.icon || 'heroicons:cube'" class="w-6 h-6" :class="getColorClasses(transaction.category?.color).textClass" />
@@ -20,7 +20,7 @@
                 <p v-if="transaction.credit !== null && transaction.credit !== undefined" class="text-lg font-semibold text-green-600">RM {{ formatCurrency(transaction.credit) }}</p>
                 <p v-else-if="transaction.debit !== null && transaction.debit !== undefined" class="text-lg font-semibold text-red-600">RM {{ formatCurrency(transaction.debit) }}</p>
                 <p v-else class="text-lg font-semibold text-gray-600">RM 0.00</p>
-            </div>
+            </NuxtLink>
         </div>
 
         <div v-else class="text-center py-8 px-4">
