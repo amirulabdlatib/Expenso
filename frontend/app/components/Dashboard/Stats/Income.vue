@@ -9,7 +9,7 @@
             </div>
         </div>
         <p class="text-sm text-gray-600 mb-1">Monthly Income</p>
-        <p class="text-2xl font-bold text-gray-900">RM {{ monthlyIncome }}</p>
+        <p class="text-2xl font-bold text-gray-900">RM {{ parseFloat(monthlyIncome) }}</p>
         <p class="text-sm text-gray-500 mt-2">{{ currentMonthYear }}</p>
     </div>
 </template>
@@ -20,8 +20,8 @@
 
     defineProps({
         monthlyIncome: {
-            type: Number,
-            default: 0,
+            type: String,
+            default: "",
         },
     });
 </script>
