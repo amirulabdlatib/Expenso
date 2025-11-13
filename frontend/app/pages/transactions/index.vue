@@ -317,15 +317,11 @@
         return [...new Set(transactionsData.value.transactions.filter((t) => t.category !== null).map((t) => t.category.name))];
     });
 
-    // Debounced search handler
-    let searchTimeout;
-    const handleSearch = () => {
-        clearTimeout(searchTimeout);
+    // Search handler
+    const handleSearch = async () => {
         isSearching.value = true;
-        searchTimeout = setTimeout(async () => {
-            await refresh();
-            isSearching.value = false;
-        }, 500); // Wait 500ms after user stops typing
+        await refresh();
+        isSearching.value = false;
     };
 
     const refreshData = () => {
