@@ -299,6 +299,14 @@
     const isSearching = ref(false);
     const isClearing = ref(false);
 
+    const route = useRoute();
+    const router = useRouter();
+
+    // Initialize search query from URL if present
+    if (route.query.q) {
+        searchQuery.value = route.query.q;
+    }
+
     const {
         data: transactionsData,
         status,
@@ -320,19 +328,34 @@
     // Search handler
     const handleSearch = async () => {
         isSearching.value = true;
+        const query = { ...route.query };
+        if (searchQuery.value) {
+            query.q = searchQuery.value;
+        } else {
+            delete query.q;
+        }
+
+        await router.push({ query });
         await refresh();
         isSearching.value = false;
     };
 
-    const refreshData = () => {
+    const refreshData = async () => {
         searchQuery.value = "";
-        refresh();
+        const query = { ...route.query };
+        delete query.q;
+        await router.push({ query });
+        await refresh();
     };
 
     const clearSearch = async () => {
         isClearing.value = true;
         previousSearchQuery.value = searchQuery.value;
         searchQuery.value = "";
+        // Clear the query parameter from URL
+        const query = { ...route.query };
+        delete query.q;
+        await router.push({ query });
         await refresh();
         isClearing.value = false;
     };
