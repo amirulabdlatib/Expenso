@@ -109,7 +109,7 @@
                             </select>
 
                             <!-- Category Filter -->
-                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <select v-model="categoryName" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="handleCategoryNameFilter">
                                 <option value="all">All Categories</option>
                                 <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
                             </select>
@@ -290,6 +290,7 @@
     const quickFilter = ref("all");
     const searchQuery = ref("");
     const transactionFilterType = ref("all");
+    const categoryName = ref("all");
     const previousSearchQuery = ref("");
     const isDeleting = ref(false);
     const isSearching = ref(false);
@@ -316,6 +317,7 @@
             params: {
                 search: searchQuery.value || undefined,
                 type: transactionFilterType.value || "all",
+                categoryName: categoryName.value || "all",
             },
         })
     );
@@ -345,6 +347,21 @@
 
         if (transactionFilterType.value && transactionFilterType.value !== "all") {
             query.type = transactionFilterType.value;
+        } else {
+            delete query.type;
+        }
+
+        await router.push({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
+    const handleCategoryNameFilter = async () => {
+        isSearching.value = true;
+        const query = { ...route.query };
+
+        if (categoryName.value && categoryName.value !== "all") {
+            query.type = categoryName.value;
         } else {
             delete query.type;
         }

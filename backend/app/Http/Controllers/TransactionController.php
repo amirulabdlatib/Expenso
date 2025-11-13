@@ -51,19 +51,18 @@ class TransactionController extends Controller
                     $q->where('type', $request->type);
                 });
             })
+            ->when($request->categoryName && $request->categoryName !== 'all', function ($query) use ($request) {
+                return $query->whereHas('category', function ($q) use ($request) {
+                    $q->where('name', $request->categoryName);
+                });
+            })
             ->latest('transaction_date')
             ->get();
 
-        $total_income = Transaction::totalIncome();
-        $total_expenses = Transaction::totalExpenses();
-        $total_transaction = Transaction::where('user_id', Auth::id())
-            ->count();
-
         return response()->json([
             'transactions' => $transactions,
-            'total_income' => $total_income,
-            'total_expenses' => $total_expenses,
-            'total_transaction_this_month' => $total_transaction,
+            'total_income' => Transaction::totalIncome(),
+            'total_expenses' => Transaction::totalExpenses(),
         ], Response::HTTP_OK);
     }
 
