@@ -33,7 +33,7 @@
             <!-- Success State -->
             <template v-else-if="transactionsData">
                 <!-- Empty State - No Transactions at All -->
-                <div v-if="(!transactionsData.transactions || transactionsData.transactions.length === 0) && !searchQuery && !isClearing" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                <div v-if="(!transactionsData.transactions || transactionsData.transactions.length === 0) && !hasActiveFilters && !isClearing" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                     <Icon name="heroicons:banknotes" class="w-20 h-20 text-gray-300 mx-auto mb-4" />
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">No Transactions Yet</h3>
                     <p class="text-gray-600 mb-6">Get started by adding your first income or expense transaction.</p>
@@ -170,10 +170,13 @@
                                         <td colspan="7" class="px-6 py-16 text-center">
                                             <Icon name="heroicons:magnifying-glass-circle" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
                                             <h3 class="text-lg font-semibold text-gray-900 mb-2">No Results Found</h3>
-                                            <p class="text-gray-600 mb-4">We couldn't find any transactions matching "{{ searchQuery }}"</p>
+                                            <p class="text-gray-600 mb-4">
+                                                No transactions match your current filters
+                                                <span v-if="searchQuery"> for "{{ searchQuery }}"</span>
+                                            </p>
                                             <button class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm" @click="clearSearch">
                                                 <Icon name="heroicons:x-mark" class="w-4 h-4" />
-                                                <span>Clear Search</span>
+                                                <span>Clear All Filters</span>
                                             </button>
                                         </td>
                                     </tr>
@@ -331,6 +334,10 @@
         return transactionsData.value.categories.map((category) => category.name);
     });
 
+    const hasActiveFilters = computed(() => {
+        return searchQuery.value || transactionFilterType.value !== "all" || categoryName.value !== "all" || quickFilter.value !== "all";
+    });
+
     const handleSearch = async () => {
         isSearching.value = true;
         const query = { ...route.query };
@@ -380,6 +387,8 @@
         previousSearchQuery.value = searchQuery.value;
         searchQuery.value = "";
         transactionFilterType.value = "all";
+        categoryName.value = "all";
+        quickFilter.value = "all";
         await router.push({ query: {} });
         await refresh();
         isClearing.value = false;
