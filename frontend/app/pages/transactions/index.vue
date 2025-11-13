@@ -105,7 +105,7 @@
                             </div>
 
                             <!-- Type Filter -->
-                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <select v-model="transactionFilterType" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="handletransactionFilterType">
                                 <option value="all">All Types</option>
                                 <option value="income">Income</option>
                                 <option value="expense">Expense</option>
@@ -293,6 +293,7 @@
 
     const quickFilter = ref("all");
     const searchQuery = ref("");
+    const transactionFilterType = ref("all");
     const previousSearchQuery = ref("");
     const isDeleting = ref(false);
     const isSearching = ref(false);
@@ -306,6 +307,10 @@
         searchQuery.value = route.query.q;
     }
 
+    if (route.query.type) {
+        transactionFilterType.value = route.query.type;
+    }
+
     const {
         data: transactionsData,
         status,
@@ -315,6 +320,7 @@
         client("/api/transactions", {
             params: {
                 search: searchQuery.value || undefined,
+                type: transactionFilterType.value || "all",
             },
         })
     );
@@ -339,6 +345,21 @@
         isSearching.value = false;
     };
 
+    const handletransactionFilterType = async () => {
+        isSearching.value = true;
+        const query = { ...route.query };
+
+        if (transactionFilterType.value && transactionFilterType.value !== "all") {
+            query.type = transactionFilterType.value;
+        } else {
+            delete query.type;
+        }
+
+        await router.push({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
     const refreshData = async () => {
         searchQuery.value = "";
         const query = { ...route.query };
@@ -351,9 +372,8 @@
         isClearing.value = true;
         previousSearchQuery.value = searchQuery.value;
         searchQuery.value = "";
-        const query = { ...route.query };
-        delete query.q;
-        await router.push({ query });
+        transactionFilterType.value = "all";
+        await router.push({ query: {} });
         await refresh();
         isClearing.value = false;
     };

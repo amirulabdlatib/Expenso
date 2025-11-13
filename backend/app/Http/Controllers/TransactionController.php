@@ -43,6 +43,14 @@ class TransactionController extends Controller
             ->when($request->search, function ($query, $search) {
                 return $query->where('name', 'like', '%' . $search . '%');
             })
+            ->when($request->type && $request->type !== 'all', function ($query) use ($request) {
+                if ($request->type === 'transfer') {
+                    return $query->whereNull('category_id');
+                }
+                return $query->whereHas('category', function ($q) use ($request) {
+                    $q->where('type', $request->type);
+                });
+            })
             ->latest('transaction_date')
             ->get();
 
