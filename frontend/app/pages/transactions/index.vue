@@ -291,7 +291,6 @@
     const { success, error: toastError } = useToast();
     const client = useSanctumClient();
 
-    // Define refs BEFORE useAsyncData
     const quickFilter = ref("all");
     const searchQuery = ref("");
     const previousSearchQuery = ref("");
