@@ -115,7 +115,7 @@
                             </select>
 
                             <!-- Sort -->
-                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="handleSort">
                                 <option value="date-desc">Latest</option>
                                 <option value="date-asc">Oldest</option>
                                 <option value="amount-desc">Highest</option>
@@ -294,6 +294,7 @@
     const searchQuery = ref("");
     const transactionFilterType = ref("all");
     const categoryName = ref("all");
+    const sortBy = ref("date-desc");
     const isDeleting = ref(false);
     const isSearching = ref(false);
     const isClearing = ref(false);
@@ -317,6 +318,10 @@
         quickFilter.value = route.query.filter;
     }
 
+    if (route.query.sort) {
+        sortBy.value = route.query.sort;
+    }
+
     const {
         data: transactionsData,
         status,
@@ -329,6 +334,7 @@
                 type: transactionFilterType.value || "all",
                 categoryName: categoryName.value || "all",
                 filter: quickFilter.value !== "all" ? quickFilter.value : undefined,
+                sort: sortBy.value || "date-desc",
             },
         })
     );
@@ -403,12 +409,28 @@
         isSearching.value = false;
     };
 
+    const handleSort = async () => {
+        isSearching.value = true;
+        const query = { ...route.query };
+
+        if (sortBy.value && sortBy.value !== "date-desc") {
+            query.sort = sortBy.value;
+        } else {
+            delete query.sort;
+        }
+
+        await router.push({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
     const clearSearch = async () => {
         isClearing.value = true;
         searchQuery.value = "";
         transactionFilterType.value = "all";
         categoryName.value = "all";
         quickFilter.value = "all";
+        sortBy.value = "date-desc";
         await router.push({ query: {} });
         await refresh();
         isClearing.value = false;

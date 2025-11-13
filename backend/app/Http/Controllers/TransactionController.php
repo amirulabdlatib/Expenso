@@ -71,7 +71,17 @@ class TransactionController extends Controller
                     default => $q
                 };
             })
-            ->latest('transaction_date')
+            ->when($request->sort, function ($query) use ($request) {
+                return match ($request->sort) {
+                    'date-asc' => $query->oldest('transaction_date'),
+                    'date-desc' => $query->latest('transaction_date'),
+                    'amount-asc' => $query->orderByRaw('COALESCE(debit, credit) ASC'),
+                    'amount-desc' => $query->orderByRaw('COALESCE(debit, credit) DESC'),
+                    default => $query->latest('transaction_date')
+                };
+            }, function ($query) {
+                return $query->latest('transaction_date');
+            })
             ->get();
 
         $categories = Category::whereHas('transactions', function ($query) {
