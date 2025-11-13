@@ -147,6 +147,7 @@
                                 <thead class="bg-gray-50 border-b border-gray-200">
                                     <tr>
                                         <th class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                                        <th class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                         <th class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                                         <th class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Account</th>
                                         <th class="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
@@ -160,6 +161,13 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900">{{ formatDate(transaction.transaction_date) }}</div>
                                             <div class="text-xs text-gray-500">{{ formatTime(transaction.transaction_date) }}</div>
+                                        </td>
+
+                                        <!-- Name -->
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center space-x-2">
+                                                <p class="text-sm text-gray-900">{{ transaction.name }}</p>
+                                            </div>
                                         </td>
 
                                         <!-- Category -->
