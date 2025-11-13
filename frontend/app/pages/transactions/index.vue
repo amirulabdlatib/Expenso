@@ -323,8 +323,8 @@
     );
 
     const categories = computed(() => {
-        if (!transactionsData.value?.transactions) return [];
-        return [...new Set(transactionsData.value.transactions.filter((t) => t.category !== null).map((t) => t.category.name))];
+        if (!transactionsData.value?.categories) return [];
+        return transactionsData.value.categories.map((category) => category.name);
     });
 
     const handleSearch = async () => {

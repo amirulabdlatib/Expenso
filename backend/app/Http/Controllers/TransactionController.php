@@ -59,8 +59,17 @@ class TransactionController extends Controller
             ->latest('transaction_date')
             ->get();
 
+        $categories = Category::whereHas('transactions', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+            ->select('name')
+            ->distinct()
+            ->orderBy('name')
+            ->get();
+
         return response()->json([
             'transactions' => $transactions,
+            'categories' => $categories,
             'total_income' => Transaction::totalIncome(),
             'total_expenses' => Transaction::totalExpenses(),
         ], Response::HTTP_OK);
