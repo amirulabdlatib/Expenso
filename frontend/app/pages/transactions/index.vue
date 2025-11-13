@@ -294,7 +294,6 @@
     const searchQuery = ref("");
     const transactionFilterType = ref("all");
     const categoryName = ref("all");
-    const previousSearchQuery = ref("");
     const isDeleting = ref(false);
     const isSearching = ref(false);
     const isClearing = ref(false);
@@ -406,7 +405,6 @@
 
     const clearSearch = async () => {
         isClearing.value = true;
-        previousSearchQuery.value = searchQuery.value;
         searchQuery.value = "";
         transactionFilterType.value = "all";
         categoryName.value = "all";
