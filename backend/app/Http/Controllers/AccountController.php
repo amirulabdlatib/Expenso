@@ -20,7 +20,7 @@ class AccountController extends Controller
      */
     public function index(Request $request)
     {
-        $accounts = Account::where('user_id', Auth::id())
+        $accounts = Account::forCurrentUser()
             ->select(['id', 'name', 'current_balance', 'currency', 'type', 'icon', 'is_active'])
             ->when($request->search, function ($query, $search) {
                 return $query->where('name', 'like', '%' . $search . '%');
@@ -36,18 +36,18 @@ class AccountController extends Controller
             })
             ->get();
 
-        $activeAccounts = Account::where('user_id', Auth::id())
+        $activeAccounts = Account::forCurrentUser()
             ->where('is_active', true)
             ->count();
 
-        $inactiveAccounts = Account::where('user_id', Auth::id())
-            ->where('is_active', true)
+        $inactiveAccounts = Account::forCurrentUser()
+            ->where('is_active', false)
             ->count();
 
-        $totalBalance = Account::where('user_id', Auth::id())
+        $totalBalance = Account::forCurrentUser()
             ->sum('current_balance');
 
-        $activeAccountsBalance = Account::where('user_id', Auth::id())
+        $activeAccountsBalance = Account::forCurrentUser()
             ->where('is_active', true)->sum('current_balance');
 
 
