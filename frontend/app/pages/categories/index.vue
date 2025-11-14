@@ -44,13 +44,17 @@
                 </div>
             </div>
 
-            <!-- TODO::Searching -->
-            <!-- Search and Filter (UI only, no functionality) -->
+            <!-- Searching -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                 <div class="flex items-center space-x-4">
                     <div class="flex-1 relative">
                         <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                        <input type="text" placeholder="Search categories..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+                        <input
+                            v-model="searchQuery"
+                            type="text"
+                            placeholder="Search categories..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                            @input="handleSearch" />
                     </div>
                 </div>
             </div>
@@ -134,8 +138,42 @@
     const { capitalizeWord } = useUtils();
     const { getColorClasses } = useCategoryConstant();
     const client = useSanctumClient();
+    const route = useRoute();
+    const router = useRouter();
 
-    const { data: categoriesData, status, error, refresh } = await useAsyncData("categories", () => client("api/categories"));
+    const searchQuery = ref("");
+    const isSearching = ref(false);
+
+    if (route.query.search) {
+        searchQuery.value = route.query.search;
+    }
+
+    const {
+        data: categoriesData,
+        status,
+        error,
+        refresh,
+    } = await useAsyncData("categories", () =>
+        client("api/categories", {
+            params: {
+                search: searchQuery.value || undefined,
+            },
+        })
+    );
+
+    const handleSearch = async () => {
+        isSearching.value = true;
+        const query = { ...route.query };
+        if (searchQuery.value) {
+            query.search = searchQuery.value;
+        } else {
+            delete query.search;
+        }
+        await router.replace({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
     const categories = computed(() => categoriesData.value?.categories || []);
 
     const expenseCategories = computed(() => {
