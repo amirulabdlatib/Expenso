@@ -14,8 +14,8 @@
                 </div>
             </div>
 
-            <!-- Loading State -->
-            <div v-if="status === 'pending'" class="text-center py-12">
+            <!-- Initial Loading State -->
+            <div v-if="status === 'pending' && !hasActiveFilters" class="text-center py-12">
                 <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
                 <p class="mt-4 text-gray-600">Loading accounts...</p>
             </div>
@@ -59,25 +59,60 @@
                     </div>
                 </div>
 
-                <!-- TODO::Tab filter -->
-                <!-- Filter and Sort -->
+                <!-- Filter and Searching -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div class="flex items-center space-x-4">
-                            <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">All</button>
+                            <button
+                                :class="['px-4 py-2 rounded-lg transition-colors text-sm font-medium', filterQuery === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+                                @click="
+                                    filterQuery = 'all';
+                                    handleFilter('all');
+                                ">
+                                All
+                            </button>
+
+                            <button
+                                :class="['px-4 py-2 rounded-lg transition-colors text-sm font-medium', filterQuery === 'active' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+                                @click="
+                                    filterQuery = 'active';
+                                    handleFilter('active');
+                                ">
+                                Active
+                            </button>
+
+                            <button
+                                :class="['px-4 py-2 rounded-lg transition-colors text-sm font-medium', filterQuery === 'inactive' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+                                @click="
+                                    filterQuery = 'inactive';
+                                    handleFilter('inactive');
+                                ">
+                                Inactive
+                            </button>
                         </div>
-                        <!-- TODO::Searching -->
                         <div class="flex items-center space-x-3">
                             <div class="relative">
                                 <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                                <input type="text" placeholder="Search accounts..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
+                                <input
+                                    v-model="searchQuery"
+                                    type="text"
+                                    placeholder="Search accounts..."
+                                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
+                                    @input="handleSearch" />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Accounts Container -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <!-- Accounts Container with Loading Overlay -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative">
+                    <!-- Loading Overlay -->
+                    <div v-if="isSearching || isClearing" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                        <div class="text-center">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-2"></div>
+                            <p class="text-sm text-gray-600">{{ isClearing ? "Loading..." : "Searching..." }}</p>
+                        </div>
+                    </div>
                     <div v-if="accountsData?.accounts?.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div v-for="account in accountsData.accounts" :key="account.id" class="bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200 overflow-hidden group">
                             <div class="p-6 bg-gradient-to-br" :class="getAccountColors(account.type).gradient">
@@ -131,15 +166,29 @@
                         </div>
                     </div>
 
-                    <!-- Empty State -->
-                    <div v-else class="p-6 text-center">
+                    <!-- Empty State - No Accounts at All -->
+                    <div v-else-if="!searchQuery" class="p-12 text-center">
                         <Icon name="heroicons:building-library" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">No accounts found</h3>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No Accounts Yet</h3>
                         <p class="text-gray-600 mb-6">Add your first account to start tracking your finances</p>
                         <NuxtLink to="/accounts/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                             <Icon name="heroicons:plus" class="w-5 h-5" />
-                            <span>Add Account</span>
+                            <span>Add Your First Account</span>
                         </NuxtLink>
+                    </div>
+
+                    <!-- No Search Results -->
+                    <div v-else class="p-12 text-center">
+                        <Icon name="heroicons:magnifying-glass-circle" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">No Results Found</h3>
+                        <p class="text-gray-600 mb-4">
+                            No accounts match your current search
+                            <span v-if="searchQuery"> for "{{ searchQuery }}"</span>
+                        </p>
+                        <button class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm" @click="clearSearch">
+                            <Icon name="heroicons:x-mark" class="w-4 h-4" />
+                            <span>Clear Search</span>
+                        </button>
                     </div>
                 </div>
             </template>
@@ -163,17 +212,88 @@
     const { deleteAccount } = useAccount();
     const { success, error: errorToast } = useToast();
     const accountsStore = useAccountsStore();
+    const route = useRoute();
+    const router = useRouter();
 
     const client = useSanctumClient();
+    const searchQuery = ref("");
+    const filterQuery = ref("all");
+    const isSearching = ref(false);
+    const isClearing = ref(false);
 
-    const { data: accountsData, status, error, refresh } = await useAsyncData("accounts", () => client("/api/accounts"));
+    const hasActiveFilters = computed(() => {
+        return searchQuery.value || filterQuery.value !== "all";
+    });
+
+    if (route.query.search) {
+        searchQuery.value = route.query.search;
+    }
+
+    if (route.query.filter) {
+        filterQuery.value = route.query.filter;
+    }
+
+    const {
+        data: accountsData,
+        status,
+        error,
+        refresh,
+    } = await useAsyncData("accounts", () => {
+        return client("/api/accounts", {
+            params: {
+                search: searchQuery.value || undefined,
+                filter: filterQuery.value || "all",
+            },
+        });
+    });
+
+    const handleSearch = async () => {
+        isSearching.value = true;
+        const query = { ...route.query };
+
+        if (searchQuery.value) {
+            query.search = searchQuery.value;
+        } else {
+            delete query.search;
+        }
+
+        await router.replace({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
+    const handleFilter = async (filter) => {
+        isSearching.value = true;
+        const query = { ...route.query };
+
+        if (filter && filter !== "all") {
+            query.filter = filter;
+        } else {
+            delete query.filter;
+        }
+
+        await router.replace({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
+    const clearSearch = async () => {
+        isClearing.value = true;
+        searchQuery.value = "";
+        filterQuery.value = "all";
+        const query = { ...route.query };
+        delete query.search;
+        delete query.filter;
+        await router.replace({ query });
+        await refresh();
+        isClearing.value = false;
+    };
 
     const totalAccounts = computed(() => {
         const data = accountsData.value || {};
         return (data.active_accounts || 0) + (data.inactiveAccounts || 0);
     });
 
-    // Delete modal state
     const showDeleteModal = ref(false);
     const accountToDelete = ref(null);
     const isDeleting = ref(false);

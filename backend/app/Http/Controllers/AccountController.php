@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreAccountRequest;
@@ -17,20 +18,45 @@ class AccountController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $accounts = $user->accounts;
+        $accounts = Account::forCurrentUser()
+            ->select(['id', 'name', 'current_balance', 'currency', 'type', 'icon', 'is_active'])
+            ->when($request->search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->when($request->filter && $request->filter !== 'all', function ($query) use ($request) {
+                if ($request->filter == 'active') {
+                    return $query->where('is_active', true);
+                } elseif ($request->filter == 'inactive') {
+                    return $query->where('is_active', false);
+                } else {
+                    return $query;
+                }
+            })
+            ->get();
 
-        $activeAccounts = $accounts->where('is_active', true);
-        $inactiveAccounts = $accounts->where('is_active', false);
+        $activeAccounts = Account::forCurrentUser()
+            ->where('is_active', true)
+            ->count();
+
+        $inactiveAccounts = Account::forCurrentUser()
+            ->where('is_active', false)
+            ->count();
+
+        $totalBalance = Account::forCurrentUser()
+            ->sum('current_balance');
+
+        $activeAccountsBalance = Account::forCurrentUser()
+            ->where('is_active', true)->sum('current_balance');
+
 
         return response()->json([
             'accounts' => $accounts,
-            'totalBalance' => $accounts->sum('current_balance'),
-            'active_accounts' => $activeAccounts->count(),
-            'activeAccountsBalance' => $activeAccounts->sum('current_balance'),
-            'inactiveAccounts' => $inactiveAccounts->count(),
+            'totalBalance' => $totalBalance,
+            'active_accounts' => $activeAccounts,
+            'activeAccountsBalance' => $activeAccountsBalance,
+            'inactiveAccounts' => $inactiveAccounts,
         ], Response::HTTP_OK);
     }
 
