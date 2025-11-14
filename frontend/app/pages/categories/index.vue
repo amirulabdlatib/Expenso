@@ -111,13 +111,24 @@
 
             <!-- Empty State -->
             <div v-if="status === 'success' && displayedCategories.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-                <Icon name="heroicons:folder-open" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">No categories found</h3>
-                <p class="text-gray-600 mb-6">Get started by creating your first category</p>
-                <NuxtLink to="/categories/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                    <Icon name="heroicons:plus" class="w-5 h-5" />
-                    <span>Create Category</span>
-                </NuxtLink>
+                <template v-if="searchQuery">
+                    <Icon name="heroicons:magnifying-glass" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No results found</h3>
+                    <p class="text-gray-600 mb-6">We couldn't find any categories matching "{{ searchQuery }}"</p>
+                    <button class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors" @click="clearSearch">
+                        <Icon name="heroicons:x-mark" class="w-5 h-5" />
+                        <span>Clear search</span>
+                    </button>
+                </template>
+                <template v-else>
+                    <Icon name="heroicons:folder-open" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No categories found</h3>
+                    <p class="text-gray-600 mb-6">Get started by creating your first category</p>
+                    <NuxtLink to="/categories/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                        <Icon name="heroicons:plus" class="w-5 h-5" />
+                        <span>Create Category</span>
+                    </NuxtLink>
+                </template>
             </div>
         </div>
     </div>
@@ -172,6 +183,11 @@
         await router.replace({ query });
         await refresh();
         isSearching.value = false;
+    };
+
+    const clearSearch = () => {
+        searchQuery.value = "";
+        handleSearch();
     };
 
     const categories = computed(() => categoriesData.value?.categories || []);
