@@ -60,8 +60,21 @@
             </div>
 
             <!-- Loading State -->
-            <div v-if="status === 'pending'" class="flex items-center justify-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div v-if="status === 'pending' || isSearching" class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+                <div class="flex flex-col items-center justify-center space-y-4 py-8">
+                    <div class="relative">
+                        <div class="w-16 h-16 border-4 border-indigo-100 rounded-full"></div>
+                        <div class="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-medium text-gray-900">
+                            {{ isSearching ? "Searching categories..." : "Loading categories..." }}
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            {{ isSearching ? "Finding what you're looking for..." : "Please wait a moment" }}
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <!-- Error State -->
