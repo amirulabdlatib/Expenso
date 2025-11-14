@@ -60,7 +60,7 @@
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-500">Total Income</p>
-                                        <p class="text-lg font-bold text-gray-900">{{ formatCurrency(60000) }}</p>
+                                        <p class="text-lg font-bold text-gray-900">{{ formatCurrency(Number(data?.total_income) ?? 0) }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-500">Total Expenses</p>
-                                        <p class="text-lg font-bold text-gray-900">{{ formatCurrency(45000) }}</p>
+                                        <p class="text-lg font-bold text-gray-900">{{ formatCurrency(Number(data?.total_expenses) ?? 0) }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -81,8 +81,8 @@
                                         <Icon name="heroicons:wallet" class="w-5 h-5 text-indigo-600" />
                                     </div>
                                     <div>
-                                        <p class="text-xs text-gray-500">Net Savings</p>
-                                        <p class="text-lg font-bold text-gray-900">{{ formatCurrency(15000) }}</p>
+                                        <p class="text-xs text-gray-500">Net Balance</p>
+                                        <p class="text-lg font-bold text-gray-900">{{ formatCurrency(Number(data?.net_balance) ?? 0) }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -139,12 +139,12 @@
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="text-center p-4 bg-gray-50 rounded-lg">
                                 <Icon name="heroicons:document-text" class="w-8 h-8 text-indigo-600 mx-auto mb-2" />
-                                <p class="text-2xl font-bold text-gray-900">142</p>
+                                <p class="text-2xl font-bold text-gray-900">{{ data?.total_transactions ?? 0 }}</p>
                                 <p class="text-xs text-gray-600">Transactions</p>
                             </div>
                             <div class="text-center p-4 bg-gray-50 rounded-lg">
                                 <Icon name="heroicons:building-library" class="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                                <p class="text-2xl font-bold text-gray-900">6</p>
+                                <p class="text-2xl font-bold text-gray-900">{{ data?.total_accounts ?? 0 }}</p>
                                 <p class="text-xs text-gray-600">Accounts</p>
                             </div>
                         </div>
@@ -184,7 +184,8 @@
     const { getActivityColor, getActivityIcon } = useActivity();
     const { formatCurrency } = useCurrency();
     const { user } = useSanctumAuth();
-    const sanctumFetch = useSanctumFetch();
+
+    const { data, status, error, refresh } = await useSanctumFetch("api/profile");
 
     const isVerified = computed(() => (user?.isVerified ? "Verified Account" : ""));
 
