@@ -377,7 +377,7 @@
                 filter: quickFilter.value !== "all" ? quickFilter.value : undefined,
                 sort: sortBy.value || "date-desc",
                 page: page.value,
-                per_page: 10, // Match the default in the backend
+                per_page: 50,
             },
         })
     );

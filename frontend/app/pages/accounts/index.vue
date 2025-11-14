@@ -283,6 +283,7 @@
         filterQuery.value = "all";
         const query = { ...route.query };
         delete query.search;
+        delete query.filter;
         await router.replace({ query });
         await refresh();
         isClearing.value = false;
@@ -293,7 +294,6 @@
         return (data.active_accounts || 0) + (data.inactiveAccounts || 0);
     });
 
-    // ...
     const showDeleteModal = ref(false);
     const accountToDelete = ref(null);
     const isDeleting = ref(false);

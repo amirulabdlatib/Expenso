@@ -44,20 +44,37 @@
                 </div>
             </div>
 
-            <!-- TODO::Searching -->
-            <!-- Search and Filter (UI only, no functionality) -->
+            <!-- Searching -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                 <div class="flex items-center space-x-4">
                     <div class="flex-1 relative">
                         <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                        <input type="text" placeholder="Search categories..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+                        <input
+                            v-model="searchQuery"
+                            type="text"
+                            placeholder="Search categories..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                            @input="handleSearch" />
                     </div>
                 </div>
             </div>
 
             <!-- Loading State -->
-            <div v-if="status === 'pending'" class="flex items-center justify-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div v-if="status === 'pending' || isSearching" class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+                <div class="flex flex-col items-center justify-center space-y-4 py-8">
+                    <div class="relative">
+                        <div class="w-16 h-16 border-4 border-indigo-100 rounded-full"></div>
+                        <div class="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-medium text-gray-900">
+                            {{ isSearching ? "Searching categories..." : "Loading categories..." }}
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            {{ isSearching ? "Finding what you're looking for..." : "Please wait a moment" }}
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <!-- Error State -->
@@ -107,13 +124,24 @@
 
             <!-- Empty State -->
             <div v-if="status === 'success' && displayedCategories.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-                <Icon name="heroicons:folder-open" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">No categories found</h3>
-                <p class="text-gray-600 mb-6">Get started by creating your first category</p>
-                <NuxtLink to="/categories/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                    <Icon name="heroicons:plus" class="w-5 h-5" />
-                    <span>Create Category</span>
-                </NuxtLink>
+                <template v-if="searchQuery">
+                    <Icon name="heroicons:magnifying-glass" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No results found</h3>
+                    <p class="text-gray-600 mb-6">We couldn't find any categories matching "{{ searchQuery }}"</p>
+                    <button class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors" @click="clearSearch">
+                        <Icon name="heroicons:x-mark" class="w-5 h-5" />
+                        <span>Clear search</span>
+                    </button>
+                </template>
+                <template v-else>
+                    <Icon name="heroicons:folder-open" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No categories found</h3>
+                    <p class="text-gray-600 mb-6">Get started by creating your first category</p>
+                    <NuxtLink to="/categories/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                        <Icon name="heroicons:plus" class="w-5 h-5" />
+                        <span>Create Category</span>
+                    </NuxtLink>
+                </template>
             </div>
         </div>
     </div>
@@ -134,8 +162,47 @@
     const { capitalizeWord } = useUtils();
     const { getColorClasses } = useCategoryConstant();
     const client = useSanctumClient();
+    const route = useRoute();
+    const router = useRouter();
 
-    const { data: categoriesData, status, error, refresh } = await useAsyncData("categories", () => client("api/categories"));
+    const searchQuery = ref("");
+    const isSearching = ref(false);
+
+    if (route.query.search) {
+        searchQuery.value = route.query.search;
+    }
+
+    const {
+        data: categoriesData,
+        status,
+        error,
+        refresh,
+    } = await useAsyncData("categories", () =>
+        client("api/categories", {
+            params: {
+                search: searchQuery.value || undefined,
+            },
+        })
+    );
+
+    const handleSearch = async () => {
+        isSearching.value = true;
+        const query = { ...route.query };
+        if (searchQuery.value) {
+            query.search = searchQuery.value;
+        } else {
+            delete query.search;
+        }
+        await router.replace({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
+    const clearSearch = () => {
+        searchQuery.value = "";
+        handleSearch();
+    };
+
     const categories = computed(() => categoriesData.value?.categories || []);
 
     const expenseCategories = computed(() => {

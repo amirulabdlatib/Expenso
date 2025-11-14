@@ -24,8 +24,8 @@
 <script setup>
     defineProps({
         totalBalance: {
-            type: String,
-            default: "",
+            type: Number,
+            default: 0,
         },
     });
 </script>
