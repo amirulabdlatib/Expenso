@@ -26,7 +26,7 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->per_page ?? 10;
+        $perPage = $request->per_page ?? 50;
 
         $transactions = Transaction::where('user_id', Auth::id())
             ->select([
