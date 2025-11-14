@@ -105,17 +105,6 @@
                         </div>
                     </div>
 
-                    <!-- Badges Card -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-4">Achievements</h2>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div v-for="badge in badges" :key="badge.id" class="flex flex-col items-center p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" :class="badge.earned ? 'opacity-100' : 'opacity-40'">
-                                <span class="text-3xl mb-2">{{ badge.icon }}</span>
-                                <p class="text-xs text-center text-gray-600 font-medium">{{ badge.name }}</p>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Preferences -->
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <h2 class="text-lg font-semibold text-gray-900 mb-4">Preferences</h2>
@@ -159,16 +148,6 @@
                                 <p class="text-xs text-gray-600">Transactions</p>
                             </div>
                             <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <Icon name="heroicons:chart-bar" class="w-8 h-8 text-green-600 mx-auto mb-2" />
-                                <p class="text-2xl font-bold text-gray-900">8</p>
-                                <p class="text-xs text-gray-600">Budgets</p>
-                            </div>
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <Icon name="heroicons:flag" class="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                                <p class="text-2xl font-bold text-gray-900">5</p>
-                                <p class="text-xs text-gray-600">Goals</p>
-                            </div>
-                            <div class="text-center p-4 bg-gray-50 rounded-lg">
                                 <Icon name="heroicons:building-library" class="w-8 h-8 text-blue-600 mx-auto mb-2" />
                                 <p class="text-2xl font-bold text-gray-900">6</p>
                                 <p class="text-xs text-gray-600">Accounts</p>
@@ -195,51 +174,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Goals Progress -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold text-gray-900">Goals Progress</h2>
-                            <NuxtLink to="/goals" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">View All</NuxtLink>
-                        </div>
-                        <div class="space-y-4">
-                            <div v-for="goal in goals" :key="goal.id" class="space-y-2">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-3">
-                                        <span class="text-2xl">{{ goal.emoji }}</span>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900">{{ goal.name }}</p>
-                                            <p class="text-xs text-gray-500">{{ formatCurrency(goal.current) }} / {{ formatCurrency(goal.target) }}</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-sm font-semibold text-indigo-600">{{ goal.progress }}%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div :style="{ width: goal.progress + '%' }" class="bg-indigo-600 h-2 rounded-full transition-all" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Connected Accounts -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold text-gray-900">Connected Accounts</h2>
-                            <button class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">Manage</button>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div v-for="account in connectedAccounts" :key="account.id" class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-indigo-300 transition-colors">
-                                <div :style="{ backgroundColor: account.color }" class="w-10 h-10 rounded-lg flex items-center justify-center">
-                                    <Icon :name="account.icon" class="w-5 h-5 text-white" />
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900">{{ account.name }}</p>
-                                    <p class="text-xs text-gray-500">{{ account.type }}</p>
-                                </div>
-                                <span class="text-sm font-semibold text-gray-900">{{ formatCurrency(account.balance) }}</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -257,7 +191,6 @@
         lastName: "Syafiq",
         email: "ahmad@email.com",
         joinDate: "2024-01-15",
-        location: "Kuala Lumpur, Malaysia",
         verified: true,
         currency: "MYR",
         language: "English",
@@ -266,16 +199,6 @@
     });
 
     const activityPeriod = ref("month");
-
-    // Badges Data
-    const badges = ref([
-        { id: 1, name: "First Transaction", icon: "🎯", earned: true },
-        { id: 2, name: "Budget Master", icon: "💰", earned: true },
-        { id: 3, name: "Goal Achiever", icon: "🏆", earned: true },
-        { id: 4, name: "Savings Streak", icon: "🔥", earned: true },
-        { id: 5, name: "Big Spender", icon: "💸", earned: false },
-        { id: 6, name: "Money Expert", icon: "📊", earned: false },
-    ]);
 
     // Recent Activities
     const recentActivities = ref([
@@ -319,21 +242,6 @@
             timestamp: "2025-01-13T08:00:00",
             amount: 55.0,
         },
-    ]);
-
-    // Goals Data
-    const goals = ref([
-        { id: 1, name: "Vacation to Japan", emoji: "✈️", current: 10500, target: 15000, progress: 70 },
-        { id: 2, name: "Emergency Fund", emoji: "🆘", current: 16000, target: 20000, progress: 80 },
-        { id: 3, name: "New Laptop", emoji: "💻", current: 1500, target: 5000, progress: 30 },
-    ]);
-
-    // Connected Accounts
-    const connectedAccounts = ref([
-        { id: 1, name: "Maybank Savings", type: "Bank Account", icon: "heroicons:building-library", color: "#3B82F6", balance: 15420.5 },
-        { id: 2, name: "CIMB Credit Card", type: "Credit Card", icon: "heroicons:credit-card", color: "#EF4444", balance: 2340.0 },
-        { id: 3, name: "Cash Wallet", type: "Cash", icon: "heroicons:banknotes", color: "#10B981", balance: 850.0 },
-        { id: 4, name: "Touch 'n Go", type: "E-Wallet", icon: "heroicons:device-phone-mobile", color: "#8B5CF6", balance: 320.5 },
     ]);
 
     // Methods
