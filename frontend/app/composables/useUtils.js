@@ -8,14 +8,12 @@ export const useUtils = () => {
         const date = new Date(dateString);
         const now = new Date();
 
-        // Reset time part for date comparison
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
 
         const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-        // Format time part
         const timeString = date
             .toLocaleTimeString("en-MY", {
                 hour: "2-digit",
@@ -25,13 +23,11 @@ export const useUtils = () => {
             .toLowerCase()
             .replace(" ", "");
 
-        // Check if date is today, yesterday, or older
         if (inputDate.getTime() === today.getTime()) {
             return `Today, ${timeString}`;
         } else if (inputDate.getTime() === yesterday.getTime()) {
             return `Yesterday, ${timeString}`;
         } else {
-            // For older dates, use the full date
             const datePart = date
                 .toLocaleDateString("en-MY", {
                     month: "short",
@@ -79,6 +75,26 @@ export const useUtils = () => {
         });
     };
 
+    const formatMonthYearOnly = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-MY", {
+            month: "long",
+            year: "numeric",
+        });
+    };
+
+    const formatTimeAgo = (timestamp) => {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const seconds = Math.floor((now - date) / 1000);
+
+        if (seconds < 60) return "Just now";
+        if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+        if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`;
+        return date.toLocaleDateString("en-MY");
+    };
+
     return {
         capitalizeWord,
         formatDate,
@@ -86,5 +102,7 @@ export const useUtils = () => {
         formatDateTime,
         formatMonthYear,
         formatRelativeDate,
+        formatMonthYearOnly,
+        formatTimeAgo,
     };
 };

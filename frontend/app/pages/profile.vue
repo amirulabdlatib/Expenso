@@ -14,25 +14,20 @@
 
                     <!-- Profile Info -->
                     <div class="flex-1">
-                        <!-- Name & Email -->
                         <div class="mb-6">
-                            <h1 class="text-2xl font-semibold text-gray-900 mb-1">{{ profile.firstName }} {{ profile.lastName }}</h1>
-                            <p class="text-sm text-gray-500">{{ profile.email }}</p>
+                            <h1 class="text-2xl font-semibold text-gray-900 mb-1">{{ user.name }}</h1>
+                            <p class="text-sm text-gray-500">{{ user.email }}</p>
                         </div>
 
                         <!-- Meta Information -->
                         <div class="flex flex-wrap items-center gap-6 mb-6 text-sm text-gray-600">
                             <div class="flex items-center gap-2">
                                 <Icon name="heroicons:calendar" class="w-4 h-4 text-gray-400" />
-                                <span>Joined {{ formatDate(profile.joinDate) }}</span>
+                                <span>Joined {{ formatMonthYearOnly(user.created_at) }}</span>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <Icon name="heroicons:map-pin" class="w-4 h-4 text-gray-400" />
-                                <span>{{ profile.location }}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
+                            <div v-if="isVerified" class="flex items-center gap-2">
                                 <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span>Verified Account</span>
+                                <span>{{ isVerified }}</span>
                             </div>
                         </div>
 
@@ -185,13 +180,16 @@
         title: "Profile - Expenso",
     });
 
+    const { formatMonthYearOnly, formatTimeAgo } = useUtils();
+    const { getActivityColor, getActivityIcon } = useActivity();
+    const { formatCurrency } = useCurrency();
+    const { user } = useSanctumAuth();
+    const sanctumFetch = useSanctumFetch();
+
+    const isVerified = computed(() => (user?.isVerified ? "Verified Account" : ""));
+
     // Profile Data
     const profile = ref({
-        firstName: "Ahmad",
-        lastName: "Syafiq",
-        email: "ahmad@email.com",
-        joinDate: "2024-01-15",
-        verified: true,
         currency: "MYR",
         language: "English",
         theme: "Light",
@@ -243,52 +241,4 @@
             amount: 55.0,
         },
     ]);
-
-    // Methods
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat("en-MY", {
-            style: "currency",
-            currency: "MYR",
-        }).format(amount);
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-MY", {
-            month: "long",
-            year: "numeric",
-        });
-    };
-
-    const formatTimeAgo = (timestamp) => {
-        const date = new Date(timestamp);
-        const now = new Date();
-        const seconds = Math.floor((now - date) / 1000);
-
-        if (seconds < 60) return "Just now";
-        if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
-        if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
-        if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`;
-        return date.toLocaleDateString();
-    };
-
-    const getActivityIcon = (type) => {
-        const icons = {
-            expense: "heroicons:arrow-trending-down",
-            income: "heroicons:arrow-trending-up",
-            budget: "heroicons:chart-bar",
-            goal: "heroicons:flag",
-        };
-        return icons[type] || "heroicons:document-text";
-    };
-
-    const getActivityColor = (type) => {
-        const colors = {
-            expense: "bg-red-500",
-            income: "bg-green-500",
-            budget: "bg-indigo-500",
-            goal: "bg-purple-500",
-        };
-        return colors[type] || "bg-gray-500";
-    };
 </script>
