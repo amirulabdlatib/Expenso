@@ -21,7 +21,7 @@ class AccountController extends Controller
     public function index(Request $request)
     {
         $accounts = Account::where('user_id', Auth::id())
-            ->select(['name', 'current_balance', 'currency', 'type', 'icon', 'is_active'])
+            ->select(['id', 'name', 'current_balance', 'currency', 'type', 'icon', 'is_active'])
             ->when($request->search, function ($query, $search) {
                 return $query->where('name', 'like', '%' . $search . '%');
             })
