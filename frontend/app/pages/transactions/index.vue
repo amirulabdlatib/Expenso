@@ -89,7 +89,7 @@
                                 <Icon name="heroicons:calendar" class="w-8 h-8 text-purple-500" />
                             </div>
                             <p class="text-sm text-gray-600 mb-1">Total Transactions</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ transactionsData.transactions.length }}</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ transactionsData.pagination.total }}</p>
                         </div>
                     </div>
 
