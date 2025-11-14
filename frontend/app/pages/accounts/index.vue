@@ -59,12 +59,36 @@
                     </div>
                 </div>
 
-                <!-- TODO::Tab filter -->
-                <!-- Filter and Sort -->
+                <!-- Filter and Searching -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div class="flex items-center space-x-4">
-                            <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">All</button>
+                            <button
+                                :class="['px-4 py-2 rounded-lg transition-colors text-sm font-medium', filterQuery === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+                                @click="
+                                    filterQuery = 'all';
+                                    handleFilter('all');
+                                ">
+                                All
+                            </button>
+
+                            <button
+                                :class="['px-4 py-2 rounded-lg transition-colors text-sm font-medium', filterQuery === 'active' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+                                @click="
+                                    filterQuery = 'active';
+                                    handleFilter('active');
+                                ">
+                                Active
+                            </button>
+
+                            <button
+                                :class="['px-4 py-2 rounded-lg transition-colors text-sm font-medium', filterQuery === 'inactive' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+                                @click="
+                                    filterQuery = 'inactive';
+                                    handleFilter('inactive');
+                                ">
+                                Inactive
+                            </button>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="relative">
@@ -193,14 +217,20 @@
 
     const client = useSanctumClient();
     const searchQuery = ref("");
+    const filterQuery = ref("all");
     const isSearching = ref(false);
     const isClearing = ref(false);
+
     const hasActiveFilters = computed(() => {
-        return !!searchQuery.value;
+        return searchQuery.value || filterQuery.value !== "all";
     });
 
     if (route.query.search) {
         searchQuery.value = route.query.search;
+    }
+
+    if (route.query.filter) {
+        filterQuery.value = route.query.filter;
     }
 
     const {
@@ -212,6 +242,7 @@
         return client("/api/accounts", {
             params: {
                 search: searchQuery.value || undefined,
+                filter: filterQuery.value || "all",
             },
         });
     });
@@ -231,9 +262,25 @@
         isSearching.value = false;
     };
 
+    const handleFilter = async (filter) => {
+        isSearching.value = true;
+        const query = { ...route.query };
+
+        if (filter && filter !== "all") {
+            query.filter = filter;
+        } else {
+            delete query.filter;
+        }
+
+        await router.replace({ query });
+        await refresh();
+        isSearching.value = false;
+    };
+
     const clearSearch = async () => {
         isClearing.value = true;
         searchQuery.value = "";
+        filterQuery.value = "all";
         const query = { ...route.query };
         delete query.search;
         await router.replace({ query });

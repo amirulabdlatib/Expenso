@@ -25,6 +25,15 @@ class AccountController extends Controller
             ->when($request->search, function ($query, $search) {
                 return $query->where('name', 'like', '%' . $search . '%');
             })
+            ->when($request->filter && $request->filter !== 'all', function ($query) use ($request) {
+                if ($request->filter == 'active') {
+                    return $query->where('is_active', true);
+                } elseif ($request->filter == 'inactive') {
+                    return $query->where('is_active', false);
+                } else {
+                    return $query;
+                }
+            })
             ->get();
 
         $activeAccounts = Account::where('user_id', Auth::id())
