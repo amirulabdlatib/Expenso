@@ -25,11 +25,11 @@
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Total Balance -->
-                <DashboardStatsTotalBalance :total-balance="data?.total_balance ?? 0" />
+                <DashboardStatsTotalBalance :total-balance="Number(data?.total_balance ?? 0)" />
                 <!-- Income -->
-                <DashboardStatsIncome :monthly-income="data?.monthly_income ?? 0" />
+                <DashboardStatsIncome :monthly-income="Number(data?.monthly_income ?? 0)" />
                 <!-- Expenses -->
-                <DashboardStatsExpenses :monthly-expenses="data?.monthly_expenses ?? 0" />
+                <DashboardStatsExpenses :monthly-expenses="Number(data?.monthly_expenses ?? 0)" />
                 <!-- Savings -->
                 <DashboardStatsSavings />
             </div>

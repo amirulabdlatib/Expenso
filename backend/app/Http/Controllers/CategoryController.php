@@ -3,23 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::where('user_id', Auth::id())
             ->whereNull('parent_id')
             ->select(['id', 'name', 'type', 'icon', 'color', 'parent_id'])
             ->with('children:id,name,parent_id')
+            ->when($request->search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
             ->get();
 
         return response()->json([
@@ -96,6 +100,14 @@ class CategoryController extends Controller
                 'error' => 'This category is currently in use.'
             ], 422);
         }
+
+        if ($category->children()->exists()) {
+            return response()->json([
+                'message' => 'Cannot delete category because it has subcategory.',
+                'error' => 'This category is currently in use.'
+            ], 422);
+        }
+
         $category->delete();
         return response()->noContent();
     }

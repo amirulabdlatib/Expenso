@@ -24,14 +24,14 @@ class DashboardService
 
     public function getTotalBalance()
     {
-        return Account::where('user_id', Auth::id())
+        return Account::forCurrentUser()
             ->where('is_active', true)
             ->sum('current_balance');
     }
 
     public function getMonthlyIncome()
     {
-        return Transaction::where('user_id', Auth::id())
+        return Transaction::forCurrentUser()
             ->whereHas('category', function ($q) {
                 $q->where('type', CategoryType::Income);
             })
@@ -42,7 +42,7 @@ class DashboardService
 
     public function getMonthlyExpenses()
     {
-        return Transaction::where('user_id', Auth::id())
+        return Transaction::forCurrentUser()
             ->whereHas('category', function ($q) {
                 $q->where('type', CategoryType::Expense);
             })
