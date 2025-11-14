@@ -1,38 +1,51 @@
 <template>
     <div class="min-h-screen bg-gray-50 p-6">
         <div class="max-w-6xl mx-auto">
-            <!-- Profile Header -->
-            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 mb-6">
-                <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+            <!-- Profile Header - Minimalist Design -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-6">
+                <div class="flex flex-col md:flex-row items-start space-y-6 md:space-y-0 md:space-x-8">
                     <!-- Profile Picture -->
-                    <div class="relative">
-                        <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-indigo-600 text-5xl font-bold shadow-lg">AS</div>
-                        <button class="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors">
-                            <Icon name="heroicons:camera" class="w-5 h-5 text-gray-600" />
+                    <div class="relative group">
+                        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 text-3xl font-semibold border-2 border-gray-200">AS</div>
+                        <button class="absolute bottom-0 right-0 w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+                            <Icon name="heroicons:camera" class="w-4 h-4" />
                         </button>
                     </div>
 
                     <!-- Profile Info -->
-                    <div class="flex-1 text-center md:text-left text-white">
-                        <h1 class="text-3xl font-bold mb-2">{{ profile.firstName }} {{ profile.lastName }}</h1>
-                        <p class="text-indigo-100 mb-4">{{ profile.email }}</p>
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm">
-                            <div class="flex items-center space-x-2">
-                                <Icon name="heroicons:calendar" class="w-4 h-4" />
+                    <div class="flex-1">
+                        <!-- Name & Email -->
+                        <div class="mb-6">
+                            <h1 class="text-2xl font-semibold text-gray-900 mb-1">{{ profile.firstName }} {{ profile.lastName }}</h1>
+                            <p class="text-sm text-gray-500">{{ profile.email }}</p>
+                        </div>
+
+                        <!-- Meta Information -->
+                        <div class="flex flex-wrap items-center gap-6 mb-6 text-sm text-gray-600">
+                            <div class="flex items-center gap-2">
+                                <Icon name="heroicons:calendar" class="w-4 h-4 text-gray-400" />
                                 <span>Joined {{ formatDate(profile.joinDate) }}</span>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <Icon name="heroicons:map-pin" class="w-4 h-4" />
+                            <div class="flex items-center gap-2">
+                                <Icon name="heroicons:map-pin" class="w-4 h-4 text-gray-400" />
                                 <span>{{ profile.location }}</span>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <Icon name="heroicons:shield-check" class="w-4 h-4" />
-                                <span>{{ profile.verified ? "Verified Account" : "Unverified" }}</span>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <span>Verified Account</span>
                             </div>
                         </div>
-                        <div class="flex items-center justify-center md:justify-start space-x-3 mt-6">
-                            <NuxtLink to="/settings" class="px-6 py-2 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"> Edit Profile </NuxtLink>
-                            <NuxtLink to="/settings" class="px-6 py-2 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 transition-colors font-medium"> Share </NuxtLink>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-3">
+                            <NuxtLink to="/settings" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">
+                                <Icon name="heroicons:pencil-square" class="w-4 h-4" />
+                                Edit Profile
+                            </NuxtLink>
+                            <button class="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                                <Icon name="heroicons:share" class="w-4 h-4" />
+                                Share
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -202,7 +215,7 @@
                                     <span class="text-sm font-semibold text-indigo-600">{{ goal.progress }}%</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div :style="{ width: goal.progress + '%' }" class="bg-indigo-600 h-2 rounded-full transition-all"/>
+                                    <div :style="{ width: goal.progress + '%' }" class="bg-indigo-600 h-2 rounded-full transition-all" />
                                 </div>
                             </div>
                         </div>
