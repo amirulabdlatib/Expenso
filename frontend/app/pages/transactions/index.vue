@@ -32,8 +32,19 @@
 
             <!-- Success State -->
             <template v-else-if="transactionsData">
+                <!-- 404 Not Found - Page out of bounds -->
+                <div v-if="transactionsData.pagination && transactionsData.pagination.current_page > transactionsData.pagination.last_page" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                    <Icon name="heroicons:exclamation-triangle" class="w-20 h-20 text-yellow-500 mx-auto mb-4" />
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">404 - Page Not Found</h3>
+                    <p class="text-gray-600 mb-6">The page you're looking for doesn't exist. There are only {{ transactionsData.pagination.last_page }} pages available.</p>
+                    <button class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors" @click="changePage(1)">
+                        <Icon name="heroicons:arrow-left" class="w-5 h-5" />
+                        <span>Go to First Page</span>
+                    </button>
+                </div>
+
                 <!-- Empty State - No Transactions at All -->
-                <div v-if="(!transactionsData.transactions || transactionsData.transactions.length === 0) && !hasActiveFilters && !isClearing" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                <div v-else-if="(!transactionsData.transactions || transactionsData.transactions.length === 0) && !hasActiveFilters && !isClearing" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                     <Icon name="heroicons:banknotes" class="w-20 h-20 text-gray-300 mx-auto mb-4" />
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">No Transactions Yet</h3>
                     <p class="text-gray-600 mb-6">Get started by adding your first income or expense transaction.</p>
@@ -389,7 +400,7 @@
         } else {
             delete query.q;
         }
-        
+
         // Reset to first page when searching
         query.page = 1;
 
@@ -407,7 +418,7 @@
         } else {
             delete query.type;
         }
-        
+
         // Reset to first page when changing transaction type filter
         query.page = 1;
 
@@ -425,7 +436,7 @@
         } else {
             delete query.categoryName;
         }
-        
+
         // Reset to first page when changing category filter
         query.page = 1;
 
@@ -444,7 +455,7 @@
         } else {
             delete query.filter;
         }
-        
+
         // Reset to first page when applying quick filter
         query.page = 1;
 
