@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CategoryType;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,6 +50,17 @@ class Transaction extends Model
         return $this->hasOne(Transaction::class, 'transfer_pair_id', 'transfer_pair_id')
             ->whereNotNull('transfer_pair_id')
             ->where('id', '!=', $this->id);
+    }
+
+    /**
+     * Scope a query to only include records belonging to the currently authenticated user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForCurrentUser(Builder $query)
+    {
+        return $query->where('user_id', Auth::id());
     }
 
     public static function totalIncome()
