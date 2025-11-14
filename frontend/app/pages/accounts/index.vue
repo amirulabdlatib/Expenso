@@ -66,11 +66,15 @@
                         <div class="flex items-center space-x-4">
                             <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">All</button>
                         </div>
-                        <!-- TODO::Searching -->
                         <div class="flex items-center space-x-3">
                             <div class="relative">
                                 <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                                <input type="text" placeholder="Search accounts..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
+                                <input
+                                    v-model="searchQuery"
+                                    type="text"
+                                    placeholder="Search accounts..."
+                                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
+                                    @input="handleSearch" />
                             </div>
                         </div>
                     </div>
@@ -163,10 +167,43 @@
     const { deleteAccount } = useAccount();
     const { success, error: errorToast } = useToast();
     const accountsStore = useAccountsStore();
+    const route = useRoute();
+    const router = useRouter();
 
     const client = useSanctumClient();
+    const searchQuery = ref("");
+    const isSearching = ref(false);
 
-    const { data: accountsData, status, error, refresh } = await useAsyncData("accounts", () => client("/api/accounts"));
+    if (route.query.search) {
+        searchQuery.value = route.query.search;
+    }
+
+    const {
+        data: accountsData,
+        status,
+        error,
+        refresh,
+    } = await useAsyncData("accounts", () =>
+        client("/api/accounts", {
+            params: {
+                search: searchQuery.value || undefined,
+            },
+        })
+    );
+
+    const handleSearch = async () => {
+        isSearching.value = true;
+        const query = { ...route.query };
+        console.log(query);
+        if (searchQuery.value) {
+            query.search = searchQuery.value;
+        } else {
+            delete query.search;
+        }
+        await router.push({ query });
+        await refresh();
+        isSearching.value = false;
+    };
 
     const totalAccounts = computed(() => {
         const data = accountsData.value || {};
