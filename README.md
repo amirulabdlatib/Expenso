@@ -29,6 +29,7 @@ Expenso/
 -   [ ] Analytics page
 -   [ ] Toggle hide and unhide money number
 -   [ ] Update profile
+-   [ ] Loan repayment progress module
 -   [ ] Monthly/Yearly statement report
 -   [ ] Zakat
 -   [ ] Income tax
@@ -38,7 +39,7 @@ Expenso/
 -   [ ] Upload receipt and save to google drive api
 -   [ ] Dark mode
 -   [ ] Smart receipt reader and categorization
--   [ ] Smart expense advisor
+-   [ ] Smart financial advisor (expense and loan)
 
 ## � Getting Started
 
