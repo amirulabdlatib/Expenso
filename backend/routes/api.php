@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Lookup\AccountLookupController;
 use App\Http\Controllers\Lookup\CategoryLookupController;
+use App\Http\Controllers\ProfileController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -27,4 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/lookup/categories', CategoryLookupController::class);
 
     Route::resource('transactions', TransactionController::class);
+
+
+    Route::get('profile', [ProfileController::class, 'index']);
 });

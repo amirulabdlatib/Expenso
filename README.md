@@ -6,7 +6,6 @@ A full-stack expense tracking application built with modern web technologies.
 
 **Under Development** - This project is currently in active development.
 
-
 ## 🛠️ Tech Stack
 
 ### Backend (API)
@@ -25,7 +24,16 @@ Expenso/
 └── frontend/       # Nuxt.js 4 frontend client
 ```
 
-## 🚀 Getting Started
+## 📋 Todo
+
+-   [ ] Analytics page
+-   [ ] Update profile
+-   [ ] Zakat
+-   [ ] Income tax
+-   [ ] Refund
+-   [ ] KWSP/EPF/SOCSO
+
+## � Getting Started
 
 ### Prerequisites
 
