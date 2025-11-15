@@ -27,8 +27,9 @@ Expenso/
 ## 📋 Todo
 
 -   [ ] Analytics page
--   [ ] toggle hide and unhide money number
+-   [ ] Toggle hide and unhide money number
 -   [ ] Update profile
+-   [ ] Monthly/Yearly statement report
 -   [ ] Zakat
 -   [ ] Income tax
 -   [ ] Tax relieve
@@ -37,6 +38,7 @@ Expenso/
 -   [ ] Upload receipt and save to google drive api
 -   [ ] Dark mode
 -   [ ] Smart receipt reader and categorization
+-   [ ] Smart expense advisor
 
 ## � Getting Started
 
