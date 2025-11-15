@@ -8,7 +8,7 @@
                     <span>{{ error?.statusMessage || "An Error has occurred!" }}</span>
                 </div>
                 <button :disabled="status === 'pending'" class="text-red-700 hover:text-red-900 disabled:opacity-50 flex items-center gap-1" @click="refresh">
-                    <Icon name="heroicons:arrow-path" :class="['w-5 h-5', pending ? 'animate-spin' : '']" />
+                    <Icon name="heroicons:arrow-path" :class="['w-5 h-5', status === 'pending' ? 'animate-spin' : '']" />
                     {{ status === "pending" ? "Retrying..." : "Retry" }}
                 </button>
             </div>
@@ -23,15 +23,7 @@
                 <!-- Profile Header-->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-6">
                     <div class="flex flex-col md:flex-row items-start space-y-6 md:space-y-0 md:space-x-8">
-                        <!-- Profile Picture -->
-                        <div class="relative group">
-                            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 text-3xl font-semibold border-2 border-gray-200">AS</div>
-                            <button class="absolute bottom-0 right-0 w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                                <Icon name="heroicons:camera" class="w-4 h-4" />
-                            </button>
-                        </div>
-
-                        <!-- Profile Info -->
+                        <ProfilePictureNickName />
                         <ProfileInfo />
                     </div>
                 </div>

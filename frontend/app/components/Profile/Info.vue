@@ -9,7 +9,7 @@
         <div class="flex flex-wrap items-center gap-6 mb-6 text-sm text-gray-600">
             <div class="flex items-center gap-2">
                 <Icon name="heroicons:calendar" class="w-4 h-4 text-gray-400" />
-                <span>Joined {{ formatMonthYearOnly(user.created_at) }}</span>
+                <span>Joined {{ formatMonthYear(user.created_at) }}</span>
             </div>
             <div v-if="isVerified" class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -32,7 +32,7 @@
 </template>
 <script setup>
     const { user } = useSanctumAuth();
-    const { formatMonthYearOnly } = useUtils();
+    const { formatMonthYear } = useUtils();
 
     const isVerified = computed(() => (user?.value?.isVerified ? "Verified Account" : ""));
 

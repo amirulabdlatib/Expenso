@@ -74,15 +74,6 @@ export const useUtils = () => {
             minute: "2-digit",
         });
     };
-
-    const formatMonthYearOnly = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-MY", {
-            month: "long",
-            year: "numeric",
-        });
-    };
-
     const formatTimeAgo = (timestamp) => {
         const date = new Date(timestamp);
         const now = new Date();
@@ -102,7 +93,6 @@ export const useUtils = () => {
         formatDateTime,
         formatMonthYear,
         formatRelativeDate,
-        formatMonthYearOnly,
         formatTimeAgo,
     };
 };
