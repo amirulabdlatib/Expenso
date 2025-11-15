@@ -31,7 +31,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Left Column -->
                     <div class="lg:col-span-1 space-y-6">
-                        <ProfileStatsCard :total-income="Number(data?.total_income ?? 0)" :total-expenses="Number(data?.total_expenses ?? 0)" :total-net-balance="Number(data?.total_net_balance ?? 0)" />
+                        <ProfileStatsCard :total-income="Number(data?.total_income ?? 0)" :total-expenses="Number(data?.total_expenses ?? 0)" :total-net-balance="Number(data?.net_balance ?? 0)" />
                         <ProfilePreferences />
                     </div>
 
