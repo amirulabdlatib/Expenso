@@ -27,11 +27,16 @@ Expenso/
 ## 📋 Todo
 
 -   [ ] Analytics page
+-   [ ] toggle hide and unhide money number
 -   [ ] Update profile
 -   [ ] Zakat
 -   [ ] Income tax
--   [ ] Refund
+-   [ ] Tax relieve
+-   [ ] Refund flow
 -   [ ] KWSP/EPF/SOCSO
+-   [ ] Upload receipt and save to google drive api
+-   [ ] Dark mode
+-   [ ] Smart receipt reader and categorization
 
 ## � Getting Started
 
