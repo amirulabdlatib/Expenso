@@ -24,22 +24,37 @@ Expenso/
 └── frontend/       # Nuxt.js 4 frontend client
 ```
 
-## 📋 Todo
+## ✅ Completed Features
 
--   [ ] Analytics page
--   [ ] Toggle hide and unhide money number
--   [ ] Update profile
+-   **Core Functionality**
+    -   [x] Category management
+    -   [x] Transaction management
+    -   [x] Account management
+
+## 🚀 Upcoming Features
+
+### High Priority
+
+-   [ ] Analytics dashboard
+-   [ ] Toggle money number visibility
+-   [ ] Profile update functionality
+-   [ ] Receipt upload to Google Drive API
+
+### Medium Priority
+
 -   [ ] Loan repayment progress module
--   [ ] Monthly/Yearly statement report
--   [ ] Zakat
--   [ ] Income tax
--   [ ] Tax relieve
+-   [ ] Monthly/Yearly statement reports
+-   [ ] Income tax calculation
+-   [ ] Tax relief management
+-   [ ] KWSP/EPF/SOCSO calculation
+
+### Future Enhancements
+
+-   [ ] Zakat calculation
 -   [ ] Refund flow
--   [ ] KWSP/EPF/SOCSO
--   [ ] Upload receipt and save to google drive api
 -   [ ] Dark mode
--   [ ] Smart receipt reader and categorization
--   [ ] Smart financial advisor (expense and loan)
+-   [ ] Smart receipt reader (OCR) and categorization
+-   [ ] AI-powered financial advisor
 
 ## � Getting Started
 
