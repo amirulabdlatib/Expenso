@@ -52,6 +52,7 @@ Expenso/
 
 -   [ ] Zakat calculation
 -   [ ] Refund flow
+-   [ ] Calendar ui that represent total expense/income
 -   [ ] Dark mode
 -   [ ] Smart receipt reader (OCR) and categorization
 -   [ ] AI-powered financial advisor
