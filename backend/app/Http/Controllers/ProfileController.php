@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Account;
 use App\Models\Transaction;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UpdateProfileRequest;
 
 class ProfileController extends Controller
 {
@@ -22,5 +26,35 @@ class ProfileController extends Controller
             'total_expenses' => Transaction::totalExpenses(),
             'net_balance' => Transaction::totalIncome() - Transaction::totalExpenses(),
         ]);
+    }
+
+    public function update(UpdateProfileRequest $request)
+    {
+        $user = User::find(Auth::id());
+        $validated = $request->validated();
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return response()->json([
+            'message' => 'Profile updated.'
+        ], Response::HTTP_OK);
+    }
+
+    public function destroy()
+    {
+        $user = User::find(Auth::id());
+
+        Auth::guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        $user->delete();
+        return response()->noContent();
     }
 }

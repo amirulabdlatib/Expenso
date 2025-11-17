@@ -34,7 +34,7 @@
     const { user } = useSanctumAuth();
     const { formatMonthYear } = useUtils();
 
-    const isVerified = computed(() => (user?.value?.isVerified ? "Verified Account" : ""));
+    const isVerified = computed(() => (user?.value?.email_verified_at ? "Verified Account" : ""));
 
     const shareProfile = async () => {
         console.log("Profile shared");
