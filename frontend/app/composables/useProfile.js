@@ -2,9 +2,9 @@ export const useProfile = () => {
     const sanctumClient = useSanctumClient();
     const errors = ref({});
 
-    const updateProfile = (form) => {
+    const updateProfile = async (form) => {
         try {
-            const response = sanctumClient("/api/profile", {
+            const response = await sanctumClient("/api/profile", {
                 method: "PUT",
                 body: form,
             });
@@ -16,16 +16,15 @@ export const useProfile = () => {
             throw err;
         }
     };
-    const deleteData = () => {};
-    const deleteProfile = () => {
-        try{
-            const response = sanctumClient('/api/profile',{
-                method:"DELETE",
-            })
-            return response
-        }catch(err){
+    const deleteProfile = async () => {
+        try {
+            const response = await sanctumClient("/api/profile", {
+                method: "DELETE",
+            });
+            return response;
+        } catch (err) {
             errors.value = err.data.errors;
-            throw err
+            throw err;
         }
     };
 
@@ -33,6 +32,5 @@ export const useProfile = () => {
         errors,
         updateProfile,
         deleteProfile,
-        deleteData,
     };
 };

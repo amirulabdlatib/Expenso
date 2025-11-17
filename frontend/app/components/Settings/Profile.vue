@@ -10,7 +10,7 @@
         <div class="p-6 space-y-6">
             <!-- Profile Picture -->
             <div class="flex items-center space-x-6">
-                <div class="w-24 h-24 bg-indigo-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">AS</div>
+                <div class="w-24 h-24 bg-indigo-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">{{ nickName }}</div>
                 <div class="flex-1">
                     <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">Change Photo</button>
                     <button class="ml-3 px-4 py-2 text-red-600 text-sm font-medium hover:bg-red-50 rounded-lg transition-colors">Remove</button>
@@ -68,6 +68,7 @@
     const { user, refreshIdentity } = useSanctumAuth();
     const { updateProfile, errors } = useProfile();
     const { success, error: toastError } = useToast();
+    const { nickName } = useNameDisplay();
 
     const isUpdating = ref(false);
     const form = reactive({

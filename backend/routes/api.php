@@ -9,7 +9,6 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Lookup\AccountLookupController;
 use App\Http\Controllers\Lookup\CategoryLookupController;
 use App\Http\Controllers\ProfileController;
-use Symfony\Component\HttpKernel\Profiler\Profile;
 
 Route::middleware(['auth:sanctum'])->group(function () {
 

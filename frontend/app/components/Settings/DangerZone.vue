@@ -39,7 +39,7 @@
         try {
             await deleteProfile();
             success("Your account has been deleted successfully.");
-            window.location.replace("/");
+            await navigateTo("/", { replace: true, external: true });
         } catch (err) {
             errors.value = err.data?.errors || {};
             toastError("Failed to delete account. Please try again.");
