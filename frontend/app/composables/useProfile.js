@@ -17,7 +17,17 @@ export const useProfile = () => {
         }
     };
     const deleteData = () => {};
-    const deleteProfile = () => {};
+    const deleteProfile = () => {
+        try{
+            const response = sanctumClient('/api/profile',{
+                method:"DELETE",
+            })
+            return response
+        }catch(err){
+            errors.value = err.data.errors;
+            throw err
+        }
+    };
 
     return {
         errors,

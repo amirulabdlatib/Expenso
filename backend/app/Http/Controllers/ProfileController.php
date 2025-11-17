@@ -47,7 +47,15 @@ class ProfileController extends Controller
         ], Response::HTTP_OK);
     }
 
-    public function deleteData() {}
+    public function destroy()
+    {
+        $user = User::find(Auth::id());
 
-    public function destroy() {}
+        Auth::guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        $user->delete();
+        return response()->noContent();
+    }
 }
