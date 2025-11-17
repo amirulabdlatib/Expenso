@@ -8,14 +8,6 @@
             </div>
         </div>
         <div class="p-6 space-y-4">
-            <div class="flex items-center justify-between py-3">
-                <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">Change Password</p>
-                    <p class="text-xs text-gray-500 mt-1">Update your password regularly for security</p>
-                </div>
-                <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">Change</button>
-            </div>
-
             <div class="flex items-center justify-between py-3 border-t border-gray-100">
                 <div class="flex-1">
                     <p class="text-sm font-medium text-gray-900">Two-Factor Authentication</p>
