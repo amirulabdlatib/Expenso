@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateProfileRequest;
 
