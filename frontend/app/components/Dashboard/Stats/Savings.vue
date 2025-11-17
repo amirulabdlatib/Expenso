@@ -1,12 +1,3 @@
-<script setup>
-    defineProps({
-        isVisible: {
-            type: Boolean,
-            default: true,
-        },
-    });
-</script>
-
 <template>
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
         <div class="flex items-center mb-4">
@@ -30,3 +21,12 @@
         </div>
     </div>
 </template>
+
+<script setup>
+    defineProps({
+        isVisible: {
+            type: Boolean,
+            default: false,
+        },
+    });
+</script>
