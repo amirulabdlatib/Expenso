@@ -23,4 +23,10 @@ class ProfileController extends Controller
             'net_balance' => Transaction::totalIncome() - Transaction::totalExpenses(),
         ]);
     }
+
+    public function update() {}
+
+    public function deleteData() {}
+
+    public function destroy() {}
 }

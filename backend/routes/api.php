@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Lookup\AccountLookupController;
 use App\Http\Controllers\Lookup\CategoryLookupController;
 use App\Http\Controllers\ProfileController;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -31,4 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::get('profile', [ProfileController::class, 'index']);
+    Route::put('profile', [ProfileController::class, 'update']);
+    Route::delete('profile/data', [ProfileController::class, 'deleteData']);
+    Route::delete('delete', [ProfileController::class, 'destroy']);
 });
