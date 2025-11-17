@@ -8,9 +8,29 @@
                         <h1 class="text-3xl font-bold text-gray-900">Accounts</h1>
                         <p class="text-gray-600 mt-2">Manage your financial accounts and balances</p>
                     </div>
-                    <NuxtLink to="/accounts/create" class="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                        <Icon name="heroicons:plus" class="w-5 h-5" />
-                    </NuxtLink>
+                    <div class="flex flex-col items-end space-y-2">
+                        <NuxtLink to="/accounts/create" class="flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                            <Icon name="heroicons:plus" class="w-5 h-5" />
+                        </NuxtLink>
+                        +
+                        <button
+                            class="flex items-center justify-center w-12 h-12 text-gray-500 hover:text-gray-700 transition-colors"
+                            :title="isAmountVisible ? 'Hide amounts' : 'Show amounts'"
+                            :aria-label="isAmountVisible ? 'Hide amounts' : 'Show amounts'"
+                            @click="toggleAmountVisibility">
+                            <svg v-if="isAmountVisible" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                                    clip-rule="evenodd" />
+                                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -36,7 +56,7 @@
                             <Icon name="heroicons:wallet" class="w-8 h-8 text-indigo-600" />
                             <span class="text-sm text-gray-500">Total Balance</span>
                         </div>
-                        <p class="text-3xl font-bold text-gray-900">{{ formatCurrency(accountsData?.totalBalance || 0) }}</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ isAmountVisible ? formatCurrency(accountsData?.totalBalance || 0) : "RM ••••••" }}</p>
                         <p class="text-sm text-gray-500 mt-2">Across {{ totalAccounts }} accounts</p>
                     </div>
 
@@ -54,7 +74,7 @@
                             <Icon name="heroicons:credit-card" class="w-8 h-8 text-purple-600" />
                             <span class="text-sm text-gray-500">Active Balance</span>
                         </div>
-                        <p class="text-3xl font-bold text-gray-900">{{ formatCurrency(accountsData?.activeAccountsBalance || 0) }}</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ isAmountVisible ? formatCurrency(accountsData?.activeAccountsBalance || 0) : "RM ••••••" }}</p>
                         <p class="text-sm text-gray-500 mt-2">From active accounts</p>
                     </div>
                 </div>
@@ -134,7 +154,8 @@
                                 </div>
                                 <div>
                                     <p class="text-xs text-white/80 mb-2 font-medium uppercase tracking-wide">Current Balance</p>
-                                    <p class="text-3xl font-bold text-white">{{ formatCurrency(account.current_balance) }}</p>
+
+                                    <p class="text-3xl font-bold text-white">{{ isAmountVisible ? formatCurrency(account.current_balance) || 0 : "RM ••••••" }}</p>
                                 </div>
                             </div>
 
@@ -322,5 +343,11 @@
             isDeleting.value = false;
             closeDeleteModal();
         }
+    };
+
+    const isAmountVisible = ref(false);
+
+    const toggleAmountVisibility = () => {
+        isAmountVisible.value = !isAmountVisible.value;
     };
 </script>

@@ -36,7 +36,7 @@ Expenso/
 ### High Priority
 
 -   [ ] Analytics dashboard
--   [ ] Toggle money number visibility
+-   [x] Toggle money number visibility
 -   [x] Profile update functionality
 -   [ ] Receipt upload to Google Drive API
 
