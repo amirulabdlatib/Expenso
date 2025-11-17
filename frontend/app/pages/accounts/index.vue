@@ -188,7 +188,7 @@
                     </div>
 
                     <!-- Empty State - No Accounts at All -->
-                    <div v-else-if="!searchQuery" class="p-12 text-center">
+                    <div v-else-if="!hasActiveFilters" class="p-12 text-center">
                         <Icon name="heroicons:building-library" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">No Accounts Yet</h3>
                         <p class="text-gray-600 mb-6">Add your first account to start tracking your finances</p>
@@ -198,17 +198,14 @@
                         </NuxtLink>
                     </div>
 
-                    <!-- No Search Results -->
+                    <!-- No Search/Filter Results -->
                     <div v-else class="p-12 text-center">
                         <Icon name="heroicons:magnifying-glass-circle" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">No Results Found</h3>
-                        <p class="text-gray-600 mb-4">
-                            No accounts match your current search
-                            <span v-if="searchQuery"> for "{{ searchQuery }}"</span>
-                        </p>
+                        <p class="text-gray-600 mb-4">No accounts found matching your criteria</p>
                         <button class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm" @click="clearSearch">
                             <Icon name="heroicons:x-mark" class="w-4 h-4" />
-                            <span>Clear Search</span>
+                            <span>Clear All</span>
                         </button>
                     </div>
                 </div>
