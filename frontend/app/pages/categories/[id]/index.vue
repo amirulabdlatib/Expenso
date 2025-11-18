@@ -8,7 +8,7 @@
         <!-- Error State -->
         <div v-else-if="error" class="bg-red-50 border-l-4 border-red-500 p-4">
             <div class="flex">
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                         <path
                             fill-rule="evenodd"

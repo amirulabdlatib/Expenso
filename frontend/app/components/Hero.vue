@@ -1,5 +1,5 @@
 <template>
-    <section class="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-gray-50 pt-20 pb-32">
+    <section class="relative overflow-hidden bg-linear-to-br from-indigo-50 via-white to-gray-50 pt-20 pb-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-8" data-aos="fade-right">

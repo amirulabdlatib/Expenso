@@ -16,7 +16,7 @@
 
             <!-- Summary Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:flag" class="w-8 h-8 opacity-80" />
                     </div>
@@ -25,7 +25,7 @@
                     <p class="text-xs opacity-80 mt-2">{{ completedGoals.length }} completed</p>
                 </div>
 
-                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:currency-dollar" class="w-8 h-8 opacity-80" />
                     </div>
@@ -34,7 +34,7 @@
                     <p class="text-xs opacity-80 mt-2">Combined goals</p>
                 </div>
 
-                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:wallet" class="w-8 h-8 opacity-80" />
                     </div>
@@ -43,7 +43,7 @@
                     <p class="text-xs opacity-80 mt-2">{{ overallProgress }}% of target</p>
                 </div>
 
-                <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-yellow-500 to-yellow-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:clock" class="w-8 h-8 opacity-80" />
                     </div>
@@ -90,7 +90,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div v-for="goal in filteredGoals" :key="goal.id" class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden">
                     <!-- Goal Header -->
-                    <div :style="{ background: `linear-gradient(135deg, ${goal.color} 0%, ${goal.color}dd 100%)` }" class="p-6 text-white relative">
+                    <div :style="{ background: `linear-linear(135deg, ${goal.color} 0%, ${goal.color}dd 100%)` }" class="p-6 text-white relative">
                         <div class="flex items-start justify-between mb-4">
                             <div class="flex items-center space-x-3">
                                 <div class="text-4xl">{{ goal.emoji }}</div>
@@ -214,9 +214,9 @@
             </div>
 
             <!-- Goal Ideas Section -->
-            <div class="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border border-indigo-100">
+            <div class="mt-8 bg-linear-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border border-indigo-100">
                 <div class="flex items-start space-x-4">
-                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
                         <Icon name="heroicons:sparkles" class="w-6 h-6 text-white" />
                     </div>
                     <div class="flex-1">

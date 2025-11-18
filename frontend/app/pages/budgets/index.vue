@@ -192,28 +192,28 @@
             </div>
 
             <!-- Budget Tips -->
-            <div class="mt-8 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-6 border border-indigo-100">
+            <div class="mt-8 bg-linear-to-br from-indigo-50 to-purple-50 rounded-lg p-6 border border-indigo-100">
                 <div class="flex items-start space-x-4">
-                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
                         <Icon name="heroicons:light-bulb" class="w-6 h-6 text-white" />
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">Budget Tips</h3>
                         <ul class="space-y-2 text-sm text-gray-700">
                             <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                                 <span>Follow the 50/30/20 rule: 50% needs, 30% wants, 20% savings</span>
                             </li>
                             <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                                 <span>Review and adjust your budgets monthly based on spending patterns</span>
                             </li>
                             <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                                 <span>Set alerts when you reach 80% of your budget to avoid overspending</span>
                             </li>
                             <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                                 <span>Start with realistic budgets and gradually reduce them as you build discipline</span>
                             </li>
                         </ul>

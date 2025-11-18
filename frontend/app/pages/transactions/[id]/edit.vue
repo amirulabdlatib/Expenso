@@ -10,7 +10,7 @@
 
             <div v-else-if="isError" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <div class="flex items-start">
-                    <Icon name="heroicons:exclamation-circle" class="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
+                    <Icon name="heroicons:exclamation-circle" class="w-5 h-5 text-red-600 mt-0.5 mr-3 shrink-0" />
                     <div class="flex-1">
                         <h3 class="text-sm font-medium text-red-800 mb-1">Error Loading Transaction</h3>
                         <p v-if="errors.statusCode == 403" class="text-sm text-red-700">You are not allowed to edit this transaction details</p>

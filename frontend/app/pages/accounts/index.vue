@@ -12,7 +12,6 @@
                         <NuxtLink to="/accounts/create" class="flex items-center justify-center w-12 h-12 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                             <Icon name="heroicons:plus" class="w-5 h-5" />
                         </NuxtLink>
-                        +
                         <button
                             class="flex items-center justify-center w-12 h-12 text-gray-500 hover:text-gray-700 transition-colors"
                             :title="isAmountVisible ? 'Hide amounts' : 'Show amounts'"
@@ -135,7 +134,7 @@
                     </div>
                     <div v-if="accountsData?.accounts?.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div v-for="account in accountsData.accounts" :key="account.id" class="bg-white rounded-xl border border-gray-200 hover:border-indigo-300 hover:shadow-lg transition-all duration-200 overflow-hidden group">
-                            <div class="p-6 bg-gradient-to-br" :class="getAccountColors(account.type).gradient">
+                            <div class="p-6 bg-linear-to-br" :class="getAccountColors(account.type).gradient">
                                 <div class="flex items-start justify-between mb-6">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">

@@ -4,7 +4,7 @@
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
         <div class="space-y-4">
             <div v-for="activity in recentActivities" :key="activity.id" class="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                <div :class="[getActivityColor(activity.type), 'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0']">
+                <div :class="[getActivityColor(activity.type), 'w-10 h-10 rounded-lg flex items-center justify-center shrink-0']">
                     <Icon :name="getActivityIcon(activity.type)" class="w-5 h-5 text-white" />
                 </div>
                 <div class="flex-1 min-w-0">

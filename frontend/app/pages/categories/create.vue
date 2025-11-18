@@ -34,7 +34,7 @@
                             <button
                                 type="button"
                                 :disabled="isLoading"
-                                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 :class="isSubcategory ? 'bg-indigo-600' : 'bg-gray-200'"
                                 @click="isSubcategory = !isSubcategory"
                             >
@@ -63,7 +63,7 @@
                                     @click="selectParentCategory(category)"
                                 >
                                     <div class="flex items-start space-x-3">
-                                        <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="getColorClasses(category.color).bgClass">
+                                        <div class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="getColorClasses(category.color).bgClass">
                                             <Icon :name="category.icon" class="w-5 h-5" :class="getColorClasses(category.color).textClass" />
                                         </div>
                                         <div class="flex-1 min-w-0">
@@ -95,7 +95,7 @@
 
                             <!-- Info message when parent is selected -->
                             <div v-if="isSubcategory && form.parent_id" class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start space-x-2">
-                                <Icon name="heroicons:information-circle" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <Icon name="heroicons:information-circle" class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
                                 <p class="text-sm text-blue-700">
                                     Type automatically set to match parent category: <span class="font-semibold">{{ capitalizeWord(form.type) }}</span>
                                 </p>
@@ -115,7 +115,7 @@
                                     @click="!isSubcategory && (form.type = type.value)"
                                 >
                                     <div class="flex items-start space-x-3">
-                                        <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
+                                        <div class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
                                             <Icon :name="type.icon" class="w-5 h-5" :class="type.iconColor" />
                                         </div>
                                         <div class="flex-1 min-w-0">

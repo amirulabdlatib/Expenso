@@ -137,7 +137,7 @@
                     <div v-for="faq in filteredFAQs" :key="faq.id" class="p-6">
                         <button class="w-full flex items-center justify-between text-left" @click="toggleFAQ(faq.id)">
                             <h3 class="text-lg font-semibold text-gray-900">{{ faq.question }}</h3>
-                            <Icon :name="openFAQ === faq.id ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" class="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
+                            <Icon :name="openFAQ === faq.id ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" class="w-5 h-5 text-gray-400 shrink-0 ml-4" />
                         </button>
                         <div v-if="openFAQ === faq.id" class="mt-4 text-gray-600 leading-relaxed">
                             <p>{{ faq.answer }}</p>
@@ -147,7 +147,7 @@
             </div>
 
             <!-- Contact Support -->
-            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 text-white mb-12">
+            <div class="bg-linear-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 text-white mb-12">
                 <div class="max-w-3xl mx-auto text-center">
                     <Icon name="heroicons:chat-bubble-left-right" class="w-16 h-16 mx-auto mb-4 opacity-90" />
                     <h2 class="text-3xl font-bold mb-4">Still need help?</h2>
@@ -181,7 +181,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <a href="#" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all group">
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
                                 <Icon name="heroicons:document-text" class="w-6 h-6 text-blue-600" />
                             </div>
                             <div class="flex-1">
@@ -194,7 +194,7 @@
 
                     <a href="#" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all group">
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
                                 <Icon name="heroicons:academic-cap" class="w-6 h-6 text-green-600" />
                             </div>
                             <div class="flex-1">
@@ -207,7 +207,7 @@
 
                     <a href="#" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all group">
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
                                 <Icon name="heroicons:newspaper" class="w-6 h-6 text-purple-600" />
                             </div>
                             <div class="flex-1">
@@ -220,7 +220,7 @@
 
                     <a href="#" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all group">
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center shrink-0">
                                 <Icon name="heroicons:code-bracket" class="w-6 h-6 text-yellow-600" />
                             </div>
                             <div class="flex-1">
@@ -233,7 +233,7 @@
 
                     <a href="#" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all group">
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
                                 <Icon name="heroicons:megaphone" class="w-6 h-6 text-red-600" />
                             </div>
                             <div class="flex-1">
@@ -246,7 +246,7 @@
 
                     <a href="#" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all group">
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center shrink-0">
                                 <Icon name="heroicons:bug-ant" class="w-6 h-6 text-indigo-600" />
                             </div>
                             <div class="flex-1">

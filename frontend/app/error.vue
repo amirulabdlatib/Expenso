@@ -44,7 +44,7 @@
 </script>
 
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
+    <div class="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
         <div class="max-w-2xl w-full">
             <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 text-center">
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-2xl mb-6">

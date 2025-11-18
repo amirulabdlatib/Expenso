@@ -54,7 +54,7 @@
 
                                 <div v-if="isSubCategory" class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded-r">
                                     <div class="flex">
-                                        <div class="flex-shrink-0">
+                                        <div class="shrink-0">
                                             <Icon name="heroicons:information-circle" class="h-5 w-5 text-blue-400" />
                                         </div>
                                         <div class="ml-3">
@@ -79,7 +79,7 @@
                                         ]"
                                         @click="form.type = type.value">
                                         <div class="flex items-start space-x-3">
-                                            <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
+                                            <div class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" :class="type.bgColor">
                                                 <Icon :name="type.icon" class="w-5 h-5" :class="type.iconColor" />
                                             </div>
                                             <div class="flex-1 min-w-0">

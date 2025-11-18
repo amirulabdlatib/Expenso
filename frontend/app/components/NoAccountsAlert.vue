@@ -1,7 +1,7 @@
 <template>
     <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-6">
         <div class="flex items-start space-x-4">
-            <Icon name="heroicons:exclamation-triangle" class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" />
+            <Icon name="heroicons:exclamation-triangle" class="w-6 h-6 text-yellow-600 shrink-0 mt-0.5" />
             <div class="flex-1">
                 <h3 class="text-lg font-semibold text-yellow-900 mb-2">No Accounts Found</h3>
                 <p class="text-yellow-800 mb-4">You need to create at least one account before you can add transactions.</p>

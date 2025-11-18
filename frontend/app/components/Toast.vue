@@ -3,7 +3,7 @@
         <TransitionGroup name="toast">
             <div v-for="toast in toasts" :key="toast.id" class="flex items-start gap-3 p-4 rounded-xl shadow-lg border border-gray-200 bg-white transform transition-all duration-300 ease-in-out">
                 <!-- Icon with colored background -->
-                <div :class="['flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center', iconStyles[toast.type].bg]">
+                <div :class="['shrink-0 w-8 h-8 rounded-full flex items-center justify-center', iconStyles[toast.type].bg]">
                     <svg v-if="toast.type === 'success'" :class="['w-5 h-5', iconStyles[toast.type].color]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M20 6 9 17l-5-5" />
                     </svg>
@@ -27,7 +27,7 @@
                 </p>
 
                 <!-- Close Button -->
-                <button class="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close" @click="removeToast(toast.id)">
+                <button class="shrink-0 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close" @click="removeToast(toast.id)">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6 6 18M6 6l12 12" />
                     </svg>
