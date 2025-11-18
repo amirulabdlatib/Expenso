@@ -21,7 +21,7 @@
 
             <!-- Key Metrics -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 opacity-80" />
                         <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">+12.5%</span>
@@ -31,7 +31,7 @@
                     <p class="text-xs opacity-80 mt-2">vs last period</p>
                 </div>
 
-                <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-red-500 to-red-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:arrow-trending-down" class="w-8 h-8 opacity-80" />
                         <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">-8.3%</span>
@@ -41,7 +41,7 @@
                     <p class="text-xs opacity-80 mt-2">vs last period</p>
                 </div>
 
-                <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:banknotes" class="w-8 h-8 opacity-80" />
                         <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">+32.1%</span>
@@ -51,7 +51,7 @@
                     <p class="text-xs opacity-80 mt-2">vs last period</p>
                 </div>
 
-                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+                <div class="bg-linear-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between mb-4">
                         <Icon name="heroicons:chart-pie" class="w-8 h-8 opacity-80" />
                         <span class="text-xs bg-opacity-20 px-2 py-1 rounded-full">68%</span>
