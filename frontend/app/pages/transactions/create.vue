@@ -178,6 +178,12 @@
                             <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
 
+                        <!-- Receipt Upload -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2"> Receipt / Attachment (Optional) </label>
+                            <FileUpload v-model="form.receipt_file" />
+                        </div>
+
                         <!-- Date and Time -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
@@ -262,6 +268,7 @@
         category_id: null,
         related_account_id: null,
         description: null,
+        receipt_file: null,
     });
 
     const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
@@ -357,19 +364,40 @@
     const handleSubmit = async () => {
         isLoading.value = true;
         const transaction_date = `${form.date} ${form.time}:00`;
-        const { date, time, ...formData } = form;
-        const data = { ...formData, transaction_date };
+
+        const formPayload = new FormData();
+
+        formPayload.append("type", form.type);
+        formPayload.append("name", form.name);
+        formPayload.append("amount", form.amount);
+        formPayload.append("transaction_date", transaction_date);
+        formPayload.append("account_id", form.account_id);
+
+        if (form.description) {
+            formPayload.append("description", form.description);
+        }
+
+        if (form.type === "transfer" && form.related_account_id) {
+            formPayload.append("related_account_id", form.related_account_id);
+        }
+
+        if ((form.type === "expense" || form.type === "income") && form.category_id) {
+            formPayload.append("category_id", form.category_id);
+        }
+
+        if (form.receipt_file?.file) {
+            formPayload.append("receipt_file", form.receipt_file.file);
+        }
 
         try {
-            await createTransaction(data);
+            await createTransaction(formPayload);
             success("Transaction created successfully.");
             navigateTo("/transactions");
         } catch (err) {
-            console.log(err);
-            error("Transaction fail to create.");
+            console.error(err);
+            error("Transaction failed to create.");
         } finally {
             isLoading.value = false;
         }
     };
 </script>
-

@@ -30,6 +30,11 @@ Expenso/
     -   [x] Category management
     -   [x] Transaction management
     -   [x] Account management
+-   **Receipt Management**
+    -   [x] Private receipt storage for transactions
+    -   [x] Support for image and PDF uploads
+    -   [x] Secure file access with authentication
+    -   [x] Preview functionality for uploaded receipts
 
 ## 🚀 Upcoming Features
 
@@ -38,7 +43,8 @@ Expenso/
 -   [ ] Analytics dashboard
 -   [x] Toggle money number visibility
 -   [x] Profile update functionality
--   [ ] Receipt upload to Google Drive API
+-   [x] Receipt upload
+-   [ ] Receipt upload to Google Drive API (Optional)
 
 ### Medium Priority
 
@@ -119,12 +125,22 @@ npm run dev
 -   Prevention of nested child categories (max 2 levels)
 -   View categorized transactions
 
+### Receipt Management
+
+-   **Secure Storage** - Private receipt storage with user-specific access control
+-   **Multiple Formats** - Support for both image (JPG, PNG) and PDF uploads
+-   **Preview** - Built-in preview for uploaded receipts
+-   **Transaction Association** - Directly attach receipts to transactions
+-   **Download** - Download original receipt files
+-   **Automatic Cleanup** - Receipts are automatically removed when transactions are deleted
+
 ### Security & Data Protection
 
 -   User authentication and authorization
 -   Policy-based access control for accounts and transactions
 -   User-specific data isolation
 -   Secure API endpoints with Laravel Sanctum
+-   Protected file storage with authentication checks
 
 ## 🤝 Contributing
 

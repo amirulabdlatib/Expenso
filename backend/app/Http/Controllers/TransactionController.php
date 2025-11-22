@@ -11,10 +11,11 @@ use Illuminate\Http\Response;
 use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
 class TransactionController extends Controller
@@ -124,8 +125,12 @@ class TransactionController extends Controller
         unset($data['amount']);
         unset($data['type']);
 
-        return DB::transaction(function () use ($type, $amount, $account_id, $data) {
+        return DB::transaction(function () use ($request, $type, $amount, $account_id, $data) {
             $account = Account::findOrFail($account_id);
+
+            if ($request->hasFile('receipt_file')) {
+                $data['receipt'] = $this->handleReceiptUpload($request->file('receipt_file'));
+            }
 
             if ($type == TransactionType::Income->value) {
                 $data['credit'] = $amount;
@@ -145,27 +150,29 @@ class TransactionController extends Controller
                 $sentTransaction = Transaction::create([
                     'user_id' => Auth::id(),
                     'account_id' => $account_id,
-                    'category_id' => $data['category_id'],
+                    'category_id' => null,
                     'related_account_id' => $data['related_account_id'],
                     'name' => $data['name'],
-                    'description' => "Transfer out: {$transferPairId} " . $data['description'],
+                    'description' => "Transfer out: {$transferPairId} " . ($data['description'] ?? ''),
                     'debit' => $amount,
                     'credit' => null,
                     'transaction_date' => $data['transaction_date'],
                     'transfer_pair_id' => $transferPairId,
+                    'receipt' => $data['receipt'] ?? null,
                 ]);
 
                 $receivedTransaction = Transaction::create([
                     'user_id' => Auth::id(),
                     'account_id' => $data['related_account_id'],
-                    'category_id' => $data['category_id'],
+                    'category_id' => null,
                     'related_account_id' => $account_id,
                     'name' => $data['name'],
-                    'description' => "Transfer in: {$transferPairId} " . $data['description'],
+                    'description' => "Transfer in: {$transferPairId} " . ($data['description'] ?? ''),
                     'debit' => null,
                     'credit' => $amount,
                     'transaction_date' => $data['transaction_date'],
                     'transfer_pair_id' => $transferPairId,
+                    'receipt' => $data['receipt'] ?? null,
                 ]);
 
                 $sentAccount = Account::findOrFail($sentTransaction->account_id);
@@ -213,6 +220,7 @@ class TransactionController extends Controller
             'account' => $transaction->account,
             'category' => $transaction->category,
             'related_account' => $transaction->relatedAccount,
+            'receipt' =>  $transaction->receipt,
         ], Response::HTTP_OK);
     }
 
@@ -270,18 +278,39 @@ class TransactionController extends Controller
             if ($type == TransactionType::Income->value) {
                 $data['credit'] = $amount;
                 $data['debit'] = null;
-                $account->current_balance = $account->current_balance + $amount;
+                $account->current_balance += $amount;
             } elseif ($type == TransactionType::Expense->value) {
                 $data['debit'] = $amount;
                 $data['credit'] = null;
-                $account->current_balance = $account->current_balance - $amount;
+                $account->current_balance -= $amount;
             }
 
             $account->save();
 
+            $oldReceiptPath = $transaction->receipt;
+            $shouldRemoveReceipt = $request->has('remove_receipt') && $request->remove_receipt == '1';
+            $newReceiptFile = $request->file('receipt_file');
+
+            // If user wants to remove receipt
+            if ($shouldRemoveReceipt) {
+                $data['receipt'] = null;
+            }
+            // If user uploads a new receipt
+            elseif ($newReceiptFile) {
+                $data['receipt'] = $this->handleReceiptUpload($newReceiptFile);
+            }
+
             unset($data['amount']);
             unset($data['type']);
-            $transaction->update($data);
+            unset($data['remove_receipt']);
+
+            $updated = $transaction->update($data);
+
+            if ($updated) {
+                if (($shouldRemoveReceipt || $newReceiptFile) && $oldReceiptPath) {
+                    Storage::disk('private')->delete($oldReceiptPath);
+                }
+            }
 
             return response()->json([
                 'message' => 'Transaction updated successfully.'
@@ -299,6 +328,10 @@ class TransactionController extends Controller
         DB::transaction(function () use ($transaction) {
             $this->revertTransaction($transaction);
 
+            if ($transaction->receipt) {
+                Storage::disk('private')->delete($transaction->receipt);
+            }
+
             if ($transaction->transfer_pair_id != null) {
                 $relatedTransaction = $transaction->relatedTransaction;
                 if ($relatedTransaction) {
@@ -312,6 +345,37 @@ class TransactionController extends Controller
 
 
         return response()->noContent();
+    }
+
+    public function getReceipt(Transaction $transaction)
+    {
+        $this->authorize('view', $transaction);
+
+        if (!$transaction->receipt) {
+            abort(404, 'Receipt not found');
+        }
+
+        $path = Storage::disk('private')->path($transaction->receipt);
+
+        if (!file_exists($path)) {
+            abort(404, 'Receipt file not found');
+        }
+
+        return response()->file($path);
+    }
+
+    public function getReceiptInfo(Transaction $transaction)
+    {
+        $this->authorize('view', $transaction);
+
+        if (!$transaction->receipt) {
+            abort(404, 'Receipt not found');
+        }
+
+        return response()->json([
+            'filename' => basename($transaction->receipt),
+            'path' => $transaction->receipt,
+        ]);
     }
 
     private function revertTransaction(Transaction $transaction)
@@ -337,5 +401,22 @@ class TransactionController extends Controller
         }
 
         return 'income';
+    }
+
+    private function handleReceiptUpload($file): string
+    {
+        $user = Auth::user();
+        $folderName = $user->id . '-' . Str::slug($user->name);
+
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $timestamp = now()->format('YmdHis');
+        $customFileName = Str::slug($originalName) . '-' . $timestamp . '.' . $extension;
+
+        return $file->storeAs(
+            'receipts/' . $folderName,
+            $customFileName,
+            'private'
+        );
     }
 }

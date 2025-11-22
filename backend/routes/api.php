@@ -24,10 +24,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/lookup/accounts', AccountLookupController::class);
 
 
-    Route::resource('categories', CategoryController::class);
+    Route::resource('categories', CategoryController::class)->except(['create']);
     Route::get('/lookup/categories', CategoryLookupController::class);
 
-    Route::resource('transactions', TransactionController::class);
+    Route::resource('transactions', TransactionController::class)->except(['create']);
+    Route::get('/transactions/{transaction}/receipt', [TransactionController::class, 'getReceipt']);
+    Route::get('/transactions/{transaction}/receipt-info', [TransactionController::class, 'getReceiptInfo']);
 
 
     Route::get('profile', [ProfileController::class, 'index']);

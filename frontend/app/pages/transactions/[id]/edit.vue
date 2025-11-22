@@ -88,26 +88,28 @@
                     <!-- Categories dropdown -->
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
-                        
+
                         <!-- Loading Categories -->
                         <div v-if="isFetchingCategories" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">Loading categories...</div>
 
                         <!-- Category and Subcategory Selects -->
                         <div v-else class="space-y-4">
                             <!-- Parent Category Select -->
-                            <VSelect
-                                v-model="selectedParentCategory"
-                                :options="parentCategories"
-                                :reduce="(category) => category"
-                                label="name"
-                                placeholder="Select a category"
-                                class="vue-select-custom"
-                                :clearable="true"
-                                :disabled="isLoading"
-                                @update:model-value="onParentCategoryChange"
-                            >
-                                <template #no-options>No categories found</template>
-                            </VSelect>
+                            <ClientOnly>
+                                <VSelect
+                                    v-model="selectedParentCategory"
+                                    :options="parentCategories"
+                                    :reduce="(category) => category"
+                                    label="name"
+                                    placeholder="Select a category"
+                                    class="vue-select-custom"
+                                    :clearable="true"
+                                    :disabled="isLoading"
+                                    @update:model-value="onParentCategoryChange"
+                                >
+                                    <template #no-options>No categories found</template>
+                                </VSelect>
+                            </ClientOnly>
 
                             <!-- Subcategory Select (only shown if parent has children) -->
                             <div v-if="selectedParentCategory && hasSubcategories">
@@ -181,6 +183,13 @@
                         </div>
                     </div>
 
+                    <!-- Receipt Upload/Display -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Receipt (Optional)</label>
+                        <FileUpload v-model="receiptData" />
+                        <p v-if="errors.receipt_file" class="text-red-400 mt-2">{{ errors.receipt_file[0] }}</p>
+                    </div>
+
                     <!-- Form Actions -->
                     <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end gap-3 pt-6 border-t border-gray-200">
                         <NuxtLink to="/transactions" class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"> Cancel </NuxtLink>
@@ -224,10 +233,11 @@
     const accounts = ref([]);
     const categories = ref([]);
     const route = useRoute();
-    const { getTransactionForEdit, updateTransaction, errors } = useTransactions();
+    const { getTransactionForEdit, updateTransaction, loadReceipt, errors } = useTransactions();
     const { success, error: toastError } = useToast();
     const selectedParentCategory = ref(null);
     const isFetchingCategories = ref(false);
+    const receiptData = ref(null);
 
     const form = reactive({
         type: null,
@@ -246,7 +256,7 @@
             const data = await getTransactionForEdit(route.params.id);
             categories.value = data.categories;
             accounts.value = data.accounts;
-            populateForm(data);
+            await populateForm(data);
             isError.value = false;
         } catch (err) {
             console.error("Error fetching transaction:", err);
@@ -259,7 +269,7 @@
         }
     });
 
-    const populateForm = (data) => {
+    const populateForm = async (data) => {
         const transactionDate = new Date(data.transaction.transaction_date);
         const category = data.transaction.category;
 
@@ -271,16 +281,29 @@
         form.account_id = data.transaction.account.id;
         form.description = data.transaction.description;
 
-        const categoryInList = categories.value.find(c => c.id === category.id);
+        const categoryInList = categories.value.find((c) => c.id === category.id);
 
         if (categoryInList.parent_id) {
-            const parentCategory = categories.value.find(c => c.id === categoryInList.parent_id);
+            const parentCategory = categories.value.find((c) => c.id === categoryInList.parent_id);
             selectedParentCategory.value = parentCategory;
         } else {
             selectedParentCategory.value = categoryInList;
         }
         form.category_id = categoryInList.id;
+        if (data.transaction.receipt) {
+            await loadTransactionReceipt(data.transaction.id);
+        }
     };
+
+    async function loadTransactionReceipt(transactionId) {
+        try {
+            const receipt = await loadReceipt(transactionId);
+            receipt.isExisting = true;
+            receiptData.value = receipt;
+        } catch (error) {
+            console.error("Failed to load receipt:", error);
+        }
+    }
 
     const onParentCategoryChange = (parentCategory) => {
         form.category_id = null;
@@ -300,19 +323,15 @@
     );
 
     const parentCategories = computed(() => {
-        return categories.value.filter(category => category.type === form.type && !category.parent_id);
+        return categories.value.filter((category) => category.type === form.type && !category.parent_id);
     });
 
     const hasSubcategories = computed(() => {
-        return selectedParentCategory.value 
-            ? categories.value.some(cat => cat.parent_id === selectedParentCategory.value.id)
-            : false;
+        return selectedParentCategory.value ? categories.value.some((cat) => cat.parent_id === selectedParentCategory.value.id) : false;
     });
 
     const availableSubcategories = computed(() => {
-        return selectedParentCategory.value
-            ? categories.value.filter(category => category.parent_id === selectedParentCategory.value.id)
-            : [];
+        return selectedParentCategory.value ? categories.value.filter((category) => category.parent_id === selectedParentCategory.value.id) : [];
     });
 
     const getCurrentAccount = computed(() => {
@@ -338,14 +357,38 @@
             alert("Please select a subcategory");
             return;
         }
-        
+
         isLoading.value = true;
         const transaction_date = `${form.date} ${form.time}:00`;
-        const { date, time, ...formData } = form;
-        const updateDataForm = { ...formData, transaction_date };
+
+        const updateFormData = new FormData();
+
+        updateFormData.append("type", form.type);
+        updateFormData.append("name", form.name);
+        updateFormData.append("amount", form.amount);
+        updateFormData.append("transaction_date", transaction_date);
+        updateFormData.append("account_id", form.account_id);
+
+        if (form.description) {
+            updateFormData.append("description", form.description);
+        }
+
+        if (form.category_id) {
+            updateFormData.append("category_id", form.category_id);
+        }
+
+        // Handle receipt logic
+        if (!receiptData.value) {
+            // Receipt was removed
+            updateFormData.append("remove_receipt", "1");
+        } else if (receiptData.value?.file && !receiptData.value.isExisting) {
+            // New receipt file uploaded
+            updateFormData.append("receipt_file", receiptData.value.file);
+        }
+        // If receiptData.value exists with isExisting=true, do nothing (keep existing)
 
         try {
-            await updateTransaction(updateDataForm, id);
+            await updateTransaction(updateFormData, id);
             isError.value = false;
             success("Transaction updated.");
             navigateTo("/transactions");

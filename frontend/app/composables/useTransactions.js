@@ -49,6 +49,16 @@ export const useTransactions = () => {
 
     async function updateTransaction(form, id) {
         try {
+            if (form instanceof FormData) {
+                form.append("_method", "PUT");
+                const response = await sanctumClient(`/api/transactions/${id}`, {
+                    method: "POST",
+                    body: form,
+                });
+                return response;
+            }
+
+            // Otherwise use regular PUT
             const response = await sanctumClient(`/api/transactions/${id}`, {
                 method: "PUT",
                 body: form,
@@ -75,6 +85,37 @@ export const useTransactions = () => {
         }
     }
 
+    async function loadReceipt(transactionId) {
+        try {
+            const receiptInfo = await sanctumClient(`/api/transactions/${transactionId}/receipt-info`);
+            const fileName = receiptInfo.filename;
+
+            const response = await sanctumClient(`/api/transactions/${transactionId}/receipt`, {
+                responseType: "blob",
+            });
+
+            // Get the blob from response
+            const blob = response;
+
+            // Determine file type from blob
+            const mimeType = blob.type;
+
+            // Create a File object with the original filename
+            const file = new File([blob], fileName, { type: mimeType });
+
+            // Create object URL for both images and PDFs
+            const objectURL = URL.createObjectURL(blob);
+
+            // Create preview URL for images only
+            const preview = mimeType.startsWith("image/") ? objectURL : null;
+
+            return { file, preview, objectURL };
+        } catch (err) {
+            console.error("Error loading receipt:", err);
+            throw err;
+        }
+    }
+
     return {
         errors,
         getTransactionAccounts,
@@ -83,5 +124,6 @@ export const useTransactions = () => {
         deleteTransaction,
         getTransactionForEdit,
         updateTransaction,
+        loadReceipt,
     };
 };
