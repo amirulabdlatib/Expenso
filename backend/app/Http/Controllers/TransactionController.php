@@ -301,8 +301,42 @@ class TransactionController extends Controller
 
             $account->save();
 
+            // Handle receipt removal
+            if ($request->has('remove_receipt') && $request->remove_receipt == '1') {
+                if ($transaction->receipt) {
+                    Storage::disk('private')->delete($transaction->receipt);
+                    $data['receipt'] = null;
+                }
+            }
+            // Handle receipt file upload
+            elseif ($request->hasFile('receipt_file')) {
+                // Delete old receipt if exists
+                if ($transaction->receipt) {
+                    Storage::disk('private')->delete($transaction->receipt);
+                }
+
+                $file = $request->file('receipt_file');
+                $user = Auth::user();
+
+                $folderName = $user->id . '-' . Str::slug($user->name);
+
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->getClientOriginalExtension();
+                $timestamp = now()->format('YmdHis');
+                $customFileName = Str::slug($originalName) . '-' . $timestamp . '.' . $extension;
+
+                $path = $file->storeAs(
+                    'receipts/' . $folderName,
+                    $customFileName,
+                    'private'
+                );
+
+                $data['receipt'] = $path;
+            }
+
             unset($data['amount']);
             unset($data['type']);
+            unset($data['remove_receipt']);
             $transaction->update($data);
 
             return response()->json([

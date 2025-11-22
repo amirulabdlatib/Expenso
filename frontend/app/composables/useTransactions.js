@@ -49,6 +49,16 @@ export const useTransactions = () => {
 
     async function updateTransaction(form, id) {
         try {
+            if (form instanceof FormData) {
+                form.append("_method", "PUT");
+                const response = await sanctumClient(`/api/transactions/${id}`, {
+                    method: "POST",
+                    body: form,
+                });
+                return response;
+            }
+
+            // Otherwise use regular PUT
             const response = await sanctumClient(`/api/transactions/${id}`, {
                 method: "PUT",
                 body: form,

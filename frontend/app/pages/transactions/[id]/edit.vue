@@ -183,10 +183,11 @@
                         </div>
                     </div>
 
-                    <!-- Receipt Display -->
-                    <div v-if="receiptData">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Receipt</label>
+                    <!-- Receipt Upload/Display -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Receipt (Optional)</label>
                         <FileUpload v-model="receiptData" />
+                        <p v-if="errors.receipt_file" class="text-red-400 mt-2">{{ errors.receipt_file[0] }}</p>
                     </div>
 
                     <!-- Form Actions -->
@@ -320,7 +321,8 @@
             // Create preview URL for images
             const preview = mimeType.startsWith("image/") ? URL.createObjectURL(blob) : null;
 
-            receiptData.value = { file, preview };
+            // Mark as existing receipt so we don't re-upload it
+            receiptData.value = { file, preview, isExisting: true };
         } catch (err) {
             console.error("Error loading receipt:", err);
         }
@@ -339,6 +341,18 @@
             if (oldType !== null) {
                 selectedParentCategory.value = null;
                 form.category_id = null;
+            }
+        }
+    );
+
+    // Watch for receipt changes (when user uploads new file)
+    watch(
+        () => receiptData.value,
+        (newReceipt, oldReceipt) => {
+            // If receipt changes and it's not marked as existing, it's a new upload
+            if (newReceipt && !newReceipt.isExisting && oldReceipt?.isExisting) {
+                // User uploaded a new file, remove the isExisting flag
+                receiptData.value.isExisting = false;
             }
         }
     );
@@ -381,11 +395,35 @@
 
         isLoading.value = true;
         const transaction_date = `${form.date} ${form.time}:00`;
-        const { date, time, ...formData } = form;
-        const updateDataForm = { ...formData, transaction_date };
+
+        const updateFormData = new FormData();
+
+        updateFormData.append("type", form.type);
+        updateFormData.append("name", form.name);
+        updateFormData.append("amount", form.amount);
+        updateFormData.append("transaction_date", transaction_date);
+        updateFormData.append("account_id", form.account_id);
+
+        if (form.description) {
+            updateFormData.append("description", form.description);
+        }
+
+        if (form.category_id) {
+            updateFormData.append("category_id", form.category_id);
+        }
+
+        // Handle receipt logic
+        if (!receiptData.value) {
+            // Receipt was removed
+            updateFormData.append("remove_receipt", "1");
+        } else if (receiptData.value?.file && !receiptData.value.isExisting) {
+            // New receipt file uploaded
+            updateFormData.append("receipt_file", receiptData.value.file);
+        }
+        // If receiptData.value exists with isExisting=true, do nothing (keep existing)
 
         try {
-            await updateTransaction(updateDataForm, id);
+            await updateTransaction(updateFormData, id);
             isError.value = false;
             success("Transaction updated.");
             navigateTo("/transactions");
