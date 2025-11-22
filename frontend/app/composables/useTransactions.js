@@ -94,7 +94,10 @@ export const useTransactions = () => {
                 responseType: "blob",
             });
 
+            // Get the blob from response
             const blob = response;
+
+            // Determine file type from blob
             const mimeType = blob.type;
 
             // Create a File object with the original filename
