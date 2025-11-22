@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreTransactionRequest;
@@ -117,7 +116,6 @@ class TransactionController extends Controller
      */
     public function store(StoreTransactionRequest $request)
     {
-        Log::info($request);
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $amount = $data['amount'];
