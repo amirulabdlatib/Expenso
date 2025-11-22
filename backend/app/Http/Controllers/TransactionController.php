@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -319,6 +320,10 @@ class TransactionController extends Controller
 
         DB::transaction(function () use ($transaction) {
             $this->revertTransaction($transaction);
+
+            if ($transaction->receipt) {
+                Storage::disk('private')->delete($transaction->receipt);
+            }
 
             if ($transaction->transfer_pair_id != null) {
                 $relatedTransaction = $transaction->relatedTransaction;
