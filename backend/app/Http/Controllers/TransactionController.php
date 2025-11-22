@@ -175,6 +175,7 @@ class TransactionController extends Controller
                     'credit' => null,
                     'transaction_date' => $data['transaction_date'],
                     'transfer_pair_id' => $transferPairId,
+                    'receipt' => $data['receipt'] ?? null,
                 ]);
 
                 $receivedTransaction = Transaction::create([
@@ -188,6 +189,7 @@ class TransactionController extends Controller
                     'credit' => $amount,
                     'transaction_date' => $data['transaction_date'],
                     'transfer_pair_id' => $transferPairId,
+                    'receipt' => $data['receipt'] ?? null,
                 ]);
 
                 $sentAccount = Account::findOrFail($sentTransaction->account_id);
