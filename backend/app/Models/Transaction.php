@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Transaction extends Model
 {
-    // TODO:: Add receipt file
     protected $fillable = [
         'user_id',
         'account_id',

@@ -35,6 +35,7 @@ class StoreTransactionRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'amount' => ['required', 'numeric', 'min:0.00',],
+            'receipt' => ['nullable', 'files', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
             'transaction_date' => ['required', 'date_format:Y-m-d H:i:s'],
             'account_id' => [
                 'required',
@@ -79,6 +80,9 @@ class StoreTransactionRequest extends FormRequest
             'related_account_id.required_if' => 'Destination account is required for transfers.',
             'related_account_id.different' => 'Destination account must be different from the source account.',
             'related_account_id.exists' => 'The selected destination account does not exist or does not belong to you.',
+            'receipt.file' => 'The receipt must be a valid file.',
+            'receipt.mimes' => 'The receipt must be a JPG, JPEG, PNG, or PDF file.',
+            'receipt.max' => 'The receipt file size cannot exceed 5MB.',
         ];
     }
 }
