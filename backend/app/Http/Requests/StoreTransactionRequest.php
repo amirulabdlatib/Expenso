@@ -35,7 +35,7 @@ class StoreTransactionRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'amount' => ['required', 'numeric', 'min:0.00',],
-            'receipt' => ['nullable', 'files', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'receipt' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
             'transaction_date' => ['required', 'date_format:Y-m-d H:i:s'],
             'account_id' => [
                 'required',

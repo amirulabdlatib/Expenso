@@ -124,23 +124,7 @@ class TransactionController extends Controller
 
 
         if ($request->hasFile('receipt_file')) {
-            $file = $request->file('receipt_file');
-            $user = Auth::user();
-
-            $folderName = $user->id . '-' . Str::slug($user->name);
-
-            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $file->getClientOriginalExtension();
-            $timestamp = now()->format('YmdHis');
-            $customFileName = Str::slug($originalName) . '-' . $timestamp . '.' . $extension;
-
-            $path = $file->storeAs(
-                'receipts/' . $folderName,
-                $customFileName,
-                'private'
-            );
-
-            $data['receipt'] = $path;
+            $data['receipt'] = $this->handleReceiptUpload($request->file('receipt_file'));
         }
 
         unset($data['amount']);
@@ -319,22 +303,7 @@ class TransactionController extends Controller
                 }
 
                 $file = $request->file('receipt_file');
-                $user = Auth::user();
-
-                $folderName = $user->id . '-' . Str::slug($user->name);
-
-                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $timestamp = now()->format('YmdHis');
-                $customFileName = Str::slug($originalName) . '-' . $timestamp . '.' . $extension;
-
-                $path = $file->storeAs(
-                    'receipts/' . $folderName,
-                    $customFileName,
-                    'private'
-                );
-
-                $data['receipt'] = $path;
+                $data['receipt'] = $this->handleReceiptUpload($file);
             }
 
             unset($data['amount']);
@@ -417,5 +386,22 @@ class TransactionController extends Controller
         }
 
         return 'income';
+    }
+
+    private function handleReceiptUpload($file): string
+    {
+        $user = Auth::user();
+        $folderName = $user->id . '-' . Str::slug($user->name);
+
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $timestamp = now()->format('YmdHis');
+        $customFileName = Str::slug($originalName) . '-' . $timestamp . '.' . $extension;
+
+        return $file->storeAs(
+            'receipts/' . $folderName,
+            $customFileName,
+            'private'
+        );
     }
 }

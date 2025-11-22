@@ -323,11 +323,10 @@
     // Watch for receipt changes (when user uploads new file)
     watch(
         () => receiptData.value,
-        (newReceipt, oldReceipt) => {
+        (newReceipt) => {
             // If receipt changes and it's not marked as existing, it's a new upload
-            if (newReceipt && !newReceipt.isExisting && oldReceipt?.isExisting) {
-                // User uploaded a new file, remove the isExisting flag
-                receiptData.value.isExisting = false;
+            if (newReceipt && !("isExisting" in newReceipt)) {
+                newReceipt.isExisting = false;
             }
         }
     );

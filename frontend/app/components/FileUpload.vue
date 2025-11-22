@@ -62,7 +62,7 @@
                             </svg>
                             <p class="text-gray-700 text-lg font-medium mb-2">{{ model?.file?.name }}</p>
                             <p class="text-gray-500 mb-4">{{ formatFileSize(model?.file?.size) }}</p>
-                            <a :href="model?.preview || '#'" download class="inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"> Download File </a>
+                            <a :href="model?.objectURL" :download="model?.file?.name" class="inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"> Download File </a>
                         </div>
                     </div>
 
@@ -97,16 +97,17 @@
 
     function setFile(file) {
         if (props.readonly) return;
-        const preview = file.type?.startsWith("image/") ? URL.createObjectURL(file) : null;
-        model.value = { file, preview };
+        const objectURL = URL.createObjectURL(file);
+        const preview = file.type?.startsWith("image/") ? objectURL : null;
+        model.value = { file, preview, objectURL };
     }
 
     function removeFile() {
         if (props.readonly) return;
 
         // Revoke the object URL to free memory
-        if (model.value?.preview) {
-            URL.revokeObjectURL(model.value.preview);
+        if (model.value?.objectURL) {
+            URL.revokeObjectURL(model.value.objectURL);
         }
 
         // Clear the file input
