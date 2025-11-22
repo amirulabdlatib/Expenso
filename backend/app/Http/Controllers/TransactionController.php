@@ -237,6 +237,7 @@ class TransactionController extends Controller
             'account' => $transaction->account,
             'category' => $transaction->category,
             'related_account' => $transaction->relatedAccount,
+            'receipt' =>  $transaction->receipt,
         ], Response::HTTP_OK);
     }
 

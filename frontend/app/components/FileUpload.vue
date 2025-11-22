@@ -1,15 +1,15 @@
 <template>
     <div>
-        <!-- Drop Zone -->
-        <div v-show="!model" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-indigo-400 transition" @drop.prevent="onDrop" @dragover.prevent @click="triggerFileSelect">
+        <!-- Drop Zone (only show if not readonly and no file) -->
+        <div v-show="!model && !readonly" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-indigo-400 transition" @drop.prevent="onDrop" @dragover.prevent @click="triggerFileSelect">
             <p class="text-gray-500">Drag & drop a file here, or click to upload</p>
             <input ref="fileInput" type="file" class="hidden" @change="onSelect" />
         </div>
 
         <!-- Preview with Remove Button -->
-        <div v-if="model" class="mt-4 relative">
-            <!-- Remove Button -->
-            <button type="button" class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors z-10" title="Remove file" @click.stop="removeFile">
+        <div v-if="model" class="relative" :class="{ 'mt-4': !readonly }">
+            <!-- Remove Button (only show if not readonly) -->
+            <button v-if="!readonly" type="button" class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors z-10" title="Remove file" @click.stop="removeFile">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path
                         fill-rule="evenodd"
@@ -75,6 +75,13 @@
 </template>
 
 <script setup>
+    const props = defineProps({
+        readonly: {
+            type: Boolean,
+            default: false,
+        },
+    });
+
     const model = defineModel({
         type: [Object, null],
         default: null,
@@ -84,15 +91,19 @@
     const showLightbox = ref(false);
 
     function triggerFileSelect() {
+        if (props.readonly) return;
         fileInput.value.click();
     }
 
     function setFile(file) {
+        if (props.readonly) return;
         const preview = file.type?.startsWith("image/") ? URL.createObjectURL(file) : null;
         model.value = { file, preview };
     }
 
     function removeFile() {
+        if (props.readonly) return;
+
         // Revoke the object URL to free memory
         if (model.value?.preview) {
             URL.revokeObjectURL(model.value.preview);
@@ -123,12 +134,14 @@
     }
 
     function onDrop(e) {
+        if (props.readonly) return;
         const dropped = e.dataTransfer.files[0];
         if (!dropped) return;
         setFile(dropped);
     }
 
     function onSelect(e) {
+        if (props.readonly) return;
         const selected = e.target.files[0];
         if (!selected) return;
         setFile(selected);

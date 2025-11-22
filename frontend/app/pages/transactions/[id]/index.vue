@@ -56,7 +56,8 @@
                                 'bg-red-100 text-red-700': transaction.type === 'expense',
                                 'bg-green-100 text-green-700': transaction.type === 'income',
                                 'bg-blue-100 text-blue-700': transaction.type === 'transfer',
-                            }">
+                            }"
+                        >
                             <Icon :name="transaction.type === 'expense' ? 'heroicons:arrow-trending-down' : transaction.type === 'income' ? 'heroicons:arrow-trending-up' : 'heroicons:arrow-path'" class="w-4 h-4 mr-1" />
                             {{ transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) }}
                         </span>
@@ -69,7 +70,8 @@
                                 'text-red-600': transaction.type === 'expense',
                                 'text-green-600': transaction.type === 'income',
                                 'text-blue-600': transaction.type === 'transfer',
-                            }">
+                            }"
+                        >
                             {{ transaction.account.currency }} {{ Number(transaction.amount).toFixed(2) }}
                         </div>
                     </div>
@@ -132,6 +134,12 @@
                             <p class="text-gray-900 font-medium">{{ formatTime(transaction.transaction_date) }}</p>
                         </div>
                     </div>
+
+                    <!-- Receipt Display -->
+                    <div v-if="transaction.receipt">
+                        <label class="block text-sm font-medium text-gray-500 mb-2">Receipt</label>
+                        <FileUpload v-model="receiptData" :readonly="true" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -152,6 +160,7 @@
     const { formatDate, formatTime } = useUtils();
     const { success, error: toastError } = useToast();
     const { deleteTransaction: deleteAction } = useTransactions();
+    const receiptData = ref(null);
 
     const router = useRouter();
 
@@ -160,6 +169,49 @@
     };
 
     const { data: transaction, pending, error, refresh } = await useAsyncData(`transaction-${route.params.id}`, () => client(`/api/transactions/${route.params.id}`));
+
+    const loadReceipt = async (transactionId) => {
+        try {
+            const sanctumClient = useSanctumClient();
+            const response = await sanctumClient(`/api/transactions/${transactionId}/receipt`, {
+                responseType: "blob",
+            });
+
+            console.log("here");
+            // Get the blob from response
+            const blob = response;
+
+            // Determine file type from blob
+            const mimeType = blob.type;
+            let fileName = "receipt";
+
+            if (mimeType.includes("image")) {
+                fileName += mimeType.includes("png") ? ".png" : ".jpg";
+            } else if (mimeType.includes("pdf")) {
+                fileName += ".pdf";
+            }
+
+            // Create a File object
+            const file = new File([blob], fileName, { type: mimeType });
+
+            // Create preview URL for images
+            const preview = mimeType.startsWith("image/") ? URL.createObjectURL(blob) : null;
+
+            receiptData.value = { file, preview };
+        } catch (err) {
+            console.error("Error loading receipt:", err);
+        }
+    };
+    // Load receipt if available
+    watch(
+        transaction,
+        async (newTransaction) => {
+            if (newTransaction && newTransaction.receipt) {
+                await loadReceipt(route.params.id);
+            }
+        },
+        { immediate: true }
+    );
 
     const deleteTransaction = async (id) => {
         if (confirm("Are you sure you want to delete this transaction?")) {
