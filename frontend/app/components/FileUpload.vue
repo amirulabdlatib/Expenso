@@ -171,8 +171,8 @@
         window.removeEventListener("keydown", handleKeydown);
 
         // Cleanup object URL
-        if (model.value?.preview) {
-            URL.revokeObjectURL(model.value.preview);
+        if (model.value?.objectURL) {
+            URL.revokeObjectURL(model.value.objectURL);
         }
 
         // Restore body scroll just in case

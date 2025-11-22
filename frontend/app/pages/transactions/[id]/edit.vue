@@ -297,7 +297,9 @@
 
     async function loadTransactionReceipt(transactionId) {
         try {
-            receiptData.value = await loadReceipt(transactionId);
+            const receipt = await loadReceipt(transactionId);
+            receipt.isExisting = true;
+            receiptData.value = receipt;
         } catch (error) {
             console.error("Failed to load receipt:", error);
         }
@@ -316,17 +318,6 @@
             if (oldType !== null) {
                 selectedParentCategory.value = null;
                 form.category_id = null;
-            }
-        }
-    );
-
-    // Watch for receipt changes (when user uploads new file)
-    watch(
-        () => receiptData.value,
-        (newReceipt) => {
-            // If receipt changes and it's not marked as existing, it's a new upload
-            if (newReceipt && !("isExisting" in newReceipt)) {
-                newReceipt.isExisting = false;
             }
         }
     );

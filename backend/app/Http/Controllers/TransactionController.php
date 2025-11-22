@@ -122,16 +122,15 @@ class TransactionController extends Controller
         $type = $data['type'];
         $account_id = $data['account_id'];
 
-
-        if ($request->hasFile('receipt_file')) {
-            $data['receipt'] = $this->handleReceiptUpload($request->file('receipt_file'));
-        }
-
         unset($data['amount']);
         unset($data['type']);
 
-        return DB::transaction(function () use ($type, $amount, $account_id, $data) {
+        return DB::transaction(function () use ($request, $type, $amount, $account_id, $data) {
             $account = Account::findOrFail($account_id);
+
+            if ($request->hasFile('receipt_file')) {
+                $data['receipt'] = $this->handleReceiptUpload($request->file('receipt_file'));
+            }
 
             if ($type == TransactionType::Income->value) {
                 $data['credit'] = $amount;
@@ -279,37 +278,39 @@ class TransactionController extends Controller
             if ($type == TransactionType::Income->value) {
                 $data['credit'] = $amount;
                 $data['debit'] = null;
-                $account->current_balance = $account->current_balance + $amount;
+                $account->current_balance += $amount;
             } elseif ($type == TransactionType::Expense->value) {
                 $data['debit'] = $amount;
                 $data['credit'] = null;
-                $account->current_balance = $account->current_balance - $amount;
+                $account->current_balance -= $amount;
             }
 
             $account->save();
 
-            // Handle receipt removal
-            if ($request->has('remove_receipt') && $request->remove_receipt == '1') {
-                if ($transaction->receipt) {
-                    Storage::disk('private')->delete($transaction->receipt);
-                    $data['receipt'] = null;
-                }
-            }
-            // Handle receipt file upload
-            elseif ($request->hasFile('receipt_file')) {
-                // Delete old receipt if exists
-                if ($transaction->receipt) {
-                    Storage::disk('private')->delete($transaction->receipt);
-                }
+            $oldReceiptPath = $transaction->receipt;
+            $shouldRemoveReceipt = $request->has('remove_receipt') && $request->remove_receipt == '1';
+            $newReceiptFile = $request->file('receipt_file');
 
-                $file = $request->file('receipt_file');
-                $data['receipt'] = $this->handleReceiptUpload($file);
+            // If user wants to remove receipt
+            if ($shouldRemoveReceipt) {
+                $data['receipt'] = null;
+            }
+            // If user uploads a new receipt
+            elseif ($newReceiptFile) {
+                $data['receipt'] = $this->handleReceiptUpload($newReceiptFile);
             }
 
             unset($data['amount']);
             unset($data['type']);
             unset($data['remove_receipt']);
-            $transaction->update($data);
+
+            $updated = $transaction->update($data);
+
+            if ($updated) {
+                if (($shouldRemoveReceipt || $newReceiptFile) && $oldReceiptPath) {
+                    Storage::disk('private')->delete($oldReceiptPath);
+                }
+            }
 
             return response()->json([
                 'message' => 'Transaction updated successfully.'
