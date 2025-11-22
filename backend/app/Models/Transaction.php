@@ -23,6 +23,7 @@ class Transaction extends Model
         'debit',
         'credit',
         'transaction_date',
+        'receipt',
     ];
 
     public function user(): BelongsTo
