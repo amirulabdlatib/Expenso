@@ -38,7 +38,8 @@ Expenso/
 -   [ ] Analytics dashboard
 -   [x] Toggle money number visibility
 -   [x] Profile update functionality
--   [ ] Receipt upload to Google Drive API
+-   [ ] Receipt upload 
+-   [ ] Receipt upload to Google Drive API (Optional)
 
 ### Medium Priority
 
