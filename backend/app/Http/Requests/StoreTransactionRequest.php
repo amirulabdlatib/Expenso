@@ -67,6 +67,7 @@ class StoreTransactionRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'account_id.integer' => 'Please select an account.',
             'type.required' => 'Transaction type is required.',
             'type.in' => 'Transaction type must be income, expense, or transfer.',
             'name.required' => 'Transaction name is required.',
