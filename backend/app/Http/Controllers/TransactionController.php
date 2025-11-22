@@ -180,7 +180,7 @@ class TransactionController extends Controller
                 $receivedTransaction = Transaction::create([
                     'user_id' => Auth::id(),
                     'account_id' => $data['related_account_id'],
-                    'category_id' => $data['category_id'],
+                    'category_id' => null,
                     'related_account_id' => $account_id,
                     'name' => $data['name'],
                     'description' => "Transfer in: {$transferPairId} " . $data['description'],
