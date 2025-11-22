@@ -29,6 +29,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::resource('transactions', TransactionController::class)->except(['create']);
     Route::get('/transactions/{transaction}/receipt', [TransactionController::class, 'getReceipt']);
+    Route::get('/transactions/{transaction}/receipt-info', [TransactionController::class, 'getReceiptInfo']);
 
 
     Route::get('profile', [ProfileController::class, 'index']);

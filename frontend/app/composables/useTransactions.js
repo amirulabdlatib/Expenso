@@ -87,33 +87,29 @@ export const useTransactions = () => {
 
     async function loadReceipt(transactionId) {
         try {
+            const receiptInfo = await sanctumClient(`/api/transactions/${transactionId}/receipt-info`);
+            const fileName = receiptInfo.filename;
+
             const response = await sanctumClient(`/api/transactions/${transactionId}/receipt`, {
                 responseType: "blob",
             });
 
-            // Get the blob from response
             const blob = response;
-
-            // Determine file type from blob
             const mimeType = blob.type;
-            let fileName = "receipt";
 
-            if (mimeType.includes("image")) {
-                fileName += mimeType.includes("png") ? ".png" : ".jpg";
-            } else if (mimeType.includes("pdf")) {
-                fileName += ".pdf";
-            }
-
-            // Create a File object
+            // Create a File object with the original filename
             const file = new File([blob], fileName, { type: mimeType });
 
-            // Create preview URL for images
-            const preview = mimeType.startsWith("image/") ? URL.createObjectURL(blob) : null;
+            // Create object URL for both images and PDFs
+            const objectURL = URL.createObjectURL(blob);
 
-            return { file, preview };
+            // Create preview URL for images only
+            const preview = mimeType.startsWith("image/") ? objectURL : null;
+
+            return { file, preview, objectURL };
         } catch (err) {
             console.error("Error loading receipt:", err);
-            throw err; // Re-throw to allow components to handle the error
+            throw err;
         }
     }
 

@@ -364,6 +364,20 @@ class TransactionController extends Controller
         return response()->file($path);
     }
 
+    public function getReceiptInfo(Transaction $transaction)
+    {
+        $this->authorize('view', $transaction);
+
+        if (!$transaction->receipt) {
+            abort(404, 'Receipt not found');
+        }
+
+        return response()->json([
+            'filename' => basename($transaction->receipt),
+            'path' => $transaction->receipt,
+        ]);
+    }
+
     private function revertTransaction(Transaction $transaction)
     {
         if ($transaction->debit != null) {
