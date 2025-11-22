@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreTransactionRequest;
@@ -116,6 +117,7 @@ class TransactionController extends Controller
      */
     public function store(StoreTransactionRequest $request)
     {
+        Log::info($request);
         $data = $request->validated();
         $data['user_id'] = Auth::id();
         $amount = $data['amount'];
@@ -167,10 +169,10 @@ class TransactionController extends Controller
                 $sentTransaction = Transaction::create([
                     'user_id' => Auth::id(),
                     'account_id' => $account_id,
-                    'category_id' => $data['category_id'],
+                    'category_id' => null,
                     'related_account_id' => $data['related_account_id'],
                     'name' => $data['name'],
-                    'description' => "Transfer out: {$transferPairId} " . $data['description'],
+                    'description' => "Transfer out: {$transferPairId} " . ($data['description'] ?? ''),
                     'debit' => $amount,
                     'credit' => null,
                     'transaction_date' => $data['transaction_date'],
@@ -183,7 +185,7 @@ class TransactionController extends Controller
                     'category_id' => null,
                     'related_account_id' => $account_id,
                     'name' => $data['name'],
-                    'description' => "Transfer in: {$transferPairId} " . $data['description'],
+                    'description' => "Transfer in: {$transferPairId} " . ($data['description'] ?? ''),
                     'debit' => null,
                     'credit' => $amount,
                     'transaction_date' => $data['transaction_date'],
