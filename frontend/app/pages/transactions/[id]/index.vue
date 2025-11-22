@@ -159,7 +159,7 @@
     const client = useSanctumClient();
     const { formatDate, formatTime } = useUtils();
     const { success, error: toastError } = useToast();
-    const { deleteTransaction: deleteAction } = useTransactions();
+    const { deleteTransaction: deleteAction, loadReceipt } = useTransactions();
     const receiptData = ref(null);
 
     const router = useRouter();
@@ -170,44 +170,16 @@
 
     const { data: transaction, pending, error, refresh } = await useAsyncData(`transaction-${route.params.id}`, () => client(`/api/transactions/${route.params.id}`));
 
-    const loadReceipt = async (transactionId) => {
-        try {
-            const sanctumClient = useSanctumClient();
-            const response = await sanctumClient(`/api/transactions/${transactionId}/receipt`, {
-                responseType: "blob",
-            });
-
-            console.log("here");
-            // Get the blob from response
-            const blob = response;
-
-            // Determine file type from blob
-            const mimeType = blob.type;
-            let fileName = "receipt";
-
-            if (mimeType.includes("image")) {
-                fileName += mimeType.includes("png") ? ".png" : ".jpg";
-            } else if (mimeType.includes("pdf")) {
-                fileName += ".pdf";
-            }
-
-            // Create a File object
-            const file = new File([blob], fileName, { type: mimeType });
-
-            // Create preview URL for images
-            const preview = mimeType.startsWith("image/") ? URL.createObjectURL(blob) : null;
-
-            receiptData.value = { file, preview };
-        } catch (err) {
-            console.error("Error loading receipt:", err);
-        }
-    };
     // Load receipt if available
     watch(
         transaction,
         async (newTransaction) => {
             if (newTransaction && newTransaction.receipt) {
-                await loadReceipt(route.params.id);
+                try {
+                    receiptData.value = await loadReceipt(route.params.id);
+                } catch (error) {
+                    console.error("Failed to load receipt:", error);
+                }
             }
         },
         { immediate: true }

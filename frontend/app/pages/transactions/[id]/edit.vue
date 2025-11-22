@@ -233,7 +233,7 @@
     const accounts = ref([]);
     const categories = ref([]);
     const route = useRoute();
-    const { getTransactionForEdit, updateTransaction, errors } = useTransactions();
+    const { getTransactionForEdit, updateTransaction, loadReceipt, errors } = useTransactions();
     const { success, error: toastError } = useToast();
     const selectedParentCategory = ref(null);
     const isFetchingCategories = ref(false);
@@ -291,42 +291,17 @@
         }
         form.category_id = categoryInList.id;
         if (data.transaction.receipt) {
-            await loadReceipt(data.transaction.id);
+            await loadTransactionReceipt(data.transaction.id);
         }
     };
 
-    const loadReceipt = async (transactionId) => {
+    async function loadTransactionReceipt(transactionId) {
         try {
-            const sanctumClient = useSanctumClient();
-            const response = await sanctumClient(`/api/transactions/${transactionId}/receipt`, {
-                responseType: "blob",
-            });
-
-            // Get the blob from response
-            const blob = response;
-
-            // Determine file type from blob
-            const mimeType = blob.type;
-            let fileName = "receipt";
-
-            if (mimeType.includes("image")) {
-                fileName += mimeType.includes("png") ? ".png" : ".jpg";
-            } else if (mimeType.includes("pdf")) {
-                fileName += ".pdf";
-            }
-
-            // Create a File object
-            const file = new File([blob], fileName, { type: mimeType });
-
-            // Create preview URL for images
-            const preview = mimeType.startsWith("image/") ? URL.createObjectURL(blob) : null;
-
-            // Mark as existing receipt so we don't re-upload it
-            receiptData.value = { file, preview, isExisting: true };
-        } catch (err) {
-            console.error("Error loading receipt:", err);
+            receiptData.value = await loadReceipt(transactionId);
+        } catch (error) {
+            console.error("Failed to load receipt:", error);
         }
-    };
+    }
 
     const onParentCategoryChange = (parentCategory) => {
         form.category_id = null;

@@ -85,6 +85,38 @@ export const useTransactions = () => {
         }
     }
 
+    async function loadReceipt(transactionId) {
+        try {
+            const response = await sanctumClient(`/api/transactions/${transactionId}/receipt`, {
+                responseType: "blob",
+            });
+
+            // Get the blob from response
+            const blob = response;
+
+            // Determine file type from blob
+            const mimeType = blob.type;
+            let fileName = "receipt";
+
+            if (mimeType.includes("image")) {
+                fileName += mimeType.includes("png") ? ".png" : ".jpg";
+            } else if (mimeType.includes("pdf")) {
+                fileName += ".pdf";
+            }
+
+            // Create a File object
+            const file = new File([blob], fileName, { type: mimeType });
+
+            // Create preview URL for images
+            const preview = mimeType.startsWith("image/") ? URL.createObjectURL(blob) : null;
+
+            return { file, preview };
+        } catch (err) {
+            console.error("Error loading receipt:", err);
+            throw err; // Re-throw to allow components to handle the error
+        }
+    }
+
     return {
         errors,
         getTransactionAccounts,
@@ -93,5 +125,6 @@ export const useTransactions = () => {
         deleteTransaction,
         getTransactionForEdit,
         updateTransaction,
+        loadReceipt,
     };
 };
