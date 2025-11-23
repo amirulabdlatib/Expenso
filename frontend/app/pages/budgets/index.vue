@@ -69,23 +69,26 @@
                         </button>
                         <button
                             :class="[filterStatus === 'on-track' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'on-track'">
+                            @click="filterStatus = 'on-track'"
+                        >
                             On Track
                         </button>
                         <button
                             :class="[filterStatus === 'warning' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'warning'">
+                            @click="filterStatus = 'warning'"
+                        >
                             Warning
                         </button>
                         <button
                             :class="[filterStatus === 'exceeded' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'exceeded'">
+                            @click="filterStatus = 'exceeded'"
+                        >
                             Exceeded
                         </button>
                     </div>
                     <div class="relative">
                         <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                        <input v-model="searchQuery" type="text" placeholder="Search budgets..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" >
+                        <input v-model="searchQuery" type="text" placeholder="Search budgets..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
                     </div>
                 </div>
             </div>
@@ -142,7 +145,7 @@
                         <!-- Progress Bar -->
                         <div class="space-y-2">
                             <div class="w-full bg-gray-200 rounded-full h-3">
-                                <div :class="[getProgressColor(budget.percentage), 'h-3 rounded-full transition-all']" :style="{ width: Math.min(budget.percentage, 100) + '%' }"/>
+                                <div :class="[getProgressColor(budget.percentage), 'h-3 rounded-full transition-all']" :style="{ width: Math.min(budget.percentage, 100) + '%' }" />
                             </div>
                             <div class="flex items-center justify-between text-xs">
                                 <span class="text-gray-600">{{ budget.percentage }}% used</span>
@@ -189,36 +192,6 @@
                 <NuxtLink to="/budgets/create" class="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                     <Icon name="heroicons:plus" class="w-5 h-5" />
                 </NuxtLink>
-            </div>
-
-            <!-- Budget Tips -->
-            <div class="mt-8 bg-linear-to-br from-indigo-50 to-purple-50 rounded-lg p-6 border border-indigo-100">
-                <div class="flex items-start space-x-4">
-                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
-                        <Icon name="heroicons:light-bulb" class="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Budget Tips</h3>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                                <span>Follow the 50/30/20 rule: 50% needs, 30% wants, 20% savings</span>
-                            </li>
-                            <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                                <span>Review and adjust your budgets monthly based on spending patterns</span>
-                            </li>
-                            <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                                <span>Set alerts when you reach 80% of your budget to avoid overspending</span>
-                            </li>
-                            <li class="flex items-start space-x-2">
-                                <Icon name="heroicons:check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                                <span>Start with realistic budgets and gradually reduce them as you build discipline</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

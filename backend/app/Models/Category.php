@@ -39,6 +39,11 @@ class Category extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function budgets(): HasMany
+    {
+        return $this->hasMany(Budget::class);
+    }
+
     /**
      * Scope a query to only include records belonging to the currently authenticated user.
      *

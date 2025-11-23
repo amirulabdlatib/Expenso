@@ -30,6 +30,7 @@ Expenso/
     -   [x] Category management
     -   [x] Transaction management
     -   [x] Account management
+    -   [ ] Budget management
 -   **Receipt Management**
     -   [x] Private receipt storage for transactions
     -   [x] Support for image and PDF uploads
