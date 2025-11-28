@@ -9,6 +9,11 @@
                         <p class="text-gray-600 mt-2">Set and track your monthly spending limits</p>
                     </div>
                     <div class="flex items-center space-x-3">
+                        <select v-model="selectedPeriod" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="current">Current Month</option>
+                            <option value="last">Last Month</option>
+                            <option value="year">This Year</option>
+                        </select>
                         <NuxtLink to="/budgets/create" class="flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                             <span class="text-xl font-light">+</span>
                         </NuxtLink>
@@ -156,25 +161,12 @@
                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span class="text-3xl text-gray-400">📊</span>
                 </div>
-
-                <!-- When no budgets exist at all -->
-                <template v-if="budgets.length === 0">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets found</h3>
-                    <p class="text-gray-600 mb-6">Create your first budget to start tracking current month</p>
-                    <NuxtLink to="/budgets/create" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                        <span class="text-lg font-light">+</span>
-                        <span>Create Budget</span>
-                    </NuxtLink>
-                </template>
-
-                <!-- When filter/search returns no results -->
-                <template v-else>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets match your criteria</h3>
-                    <p class="text-gray-600 mb-6">Try adjusting your filters or search query</p>
-                    <button @click="clearFilters" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                        <span>Clear Filters</span>
-                    </button>
-                </template>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets found</h3>
+                <p class="text-gray-600 mb-6">Create your first budget to start tracking your spending</p>
+                <NuxtLink to="/budgets/create" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                    <span class="text-lg font-light">+</span>
+                    <span>Create Budget</span>
+                </NuxtLink>
             </div>
         </div>
     </div>
@@ -186,6 +178,7 @@
     });
 
     // State
+    const selectedPeriod = ref("current");
     const searchQuery = ref("");
     const filterStatus = ref("all");
 
@@ -369,11 +362,6 @@
         if (status === "over-budget") return "bg-red-500";
         if (status === "warning") return "bg-yellow-500";
         return "bg-green-500";
-    };
-
-    const clearFilters = () => {
-        filterStatus.value = "all";
-        searchQuery.value = "";
     };
 
     const deleteBudget = (id) => {
