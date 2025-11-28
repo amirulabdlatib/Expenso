@@ -4,7 +4,7 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
                 <h1 class="text-2xl font-bold text-gray-900 mb-6">Create Budget</h1>
 
-                <form @submit.prevent="submitForm" class="space-y-6">
+                <form class="space-y-6" @submit.prevent="submitForm">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Month <span class="text-red-500">*</span> </label>

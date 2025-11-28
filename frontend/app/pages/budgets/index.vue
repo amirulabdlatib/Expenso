@@ -57,17 +57,20 @@
                         </button>
                         <button
                             :class="[filterStatus === 'on-track' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'on-track'">
+                            @click="filterStatus = 'on-track'"
+                        >
                             On Track
                         </button>
                         <button
                             :class="[filterStatus === 'warning' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'warning'">
+                            @click="filterStatus = 'warning'"
+                        >
                             Warning
                         </button>
                         <button
                             :class="[filterStatus === 'over-budget' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'over-budget'">
+                            @click="filterStatus = 'over-budget'"
+                        >
                             Over Budget
                         </button>
                     </div>
@@ -161,12 +164,25 @@
                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span class="text-3xl text-gray-400">📊</span>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets found</h3>
-                <p class="text-gray-600 mb-6">Create your first budget to start tracking your spending</p>
-                <NuxtLink to="/budgets/create" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
-                    <span class="text-lg font-light">+</span>
-                    <span>Create Budget</span>
-                </NuxtLink>
+
+                <!-- When no budgets exist at all -->
+                <template v-if="budgets.length === 0">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets found</h3>
+                    <p class="text-gray-600 mb-6">Create your first budget to start tracking your spending</p>
+                    <NuxtLink to="/budgets/create" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                        <span class="text-lg font-light">+</span>
+                        <span>Create Budget</span>
+                    </NuxtLink>
+                </template>
+
+                <!-- When filter/search returns no results -->
+                <template v-else>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets match your criteria</h3>
+                    <p class="text-gray-600 mb-6">Try adjusting your filters or search query</p>
+                    <button class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors" @click="clearFilters">
+                        <span>Clear Filters</span>
+                    </button>
+                </template>
             </div>
         </div>
     </div>
@@ -306,6 +322,11 @@
 
         return filtered;
     });
+
+    const clearFilters = () => {
+        filterStatus.value = "all";
+        searchQuery.value = "";
+    };
 
     // Methods
     const formatCurrency = (amount) => {
