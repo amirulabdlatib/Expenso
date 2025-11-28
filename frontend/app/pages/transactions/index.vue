@@ -63,7 +63,7 @@
                                 <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 text-green-500" />
                             </div>
                             <p class="text-sm text-gray-600 mb-1">Total Income</p>
-                            <p class="text-2xl font-bold text-green-600">{{ formatCurrency(transactionsData.total_income) }}</p>
+                            <p class="text-lg font-bold text-green-600">{{ formatCurrency(transactionsData.total_income) }}</p>
                         </div>
 
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -71,7 +71,7 @@
                                 <Icon name="heroicons:arrow-trending-down" class="w-8 h-8 text-red-500" />
                             </div>
                             <p class="text-sm text-gray-600 mb-1">Total Expenses</p>
-                            <p class="text-2xl font-bold text-red-600">{{ formatCurrency(transactionsData.total_expenses) }}</p>
+                            <p class="text-lg font-bold text-red-600">{{ formatCurrency(transactionsData.total_expenses) }}</p>
                         </div>
 
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -79,7 +79,7 @@
                                 <Icon name="heroicons:banknotes" class="w-8 h-8 text-indigo-500" />
                             </div>
                             <p class="text-sm text-gray-600 mb-1">Net Balance</p>
-                            <p :class="['text-2xl font-bold', transactionsData.total_income - transactionsData.total_expenses >= 0 ? 'text-green-600' : 'text-red-600']">
+                            <p :class="['text-lg font-bold', transactionsData.total_income - transactionsData.total_expenses >= 0 ? 'text-green-600' : 'text-red-600']">
                                 {{ formatCurrency(transactionsData.total_income - transactionsData.total_expenses) }}
                             </p>
                         </div>
@@ -89,7 +89,7 @@
                                 <Icon name="heroicons:calendar" class="w-8 h-8 text-purple-500" />
                             </div>
                             <p class="text-sm text-gray-600 mb-1">Total Transactions</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ transactionsData.pagination.total }}</p>
+                            <p class="text-lgfont-bold text-gray-900">{{ transactionsData.pagination.total }}</p>
                         </div>
                     </div>
 

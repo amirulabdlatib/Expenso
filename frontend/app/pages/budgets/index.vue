@@ -25,25 +25,25 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <p class="text-sm font-medium text-gray-500 mb-2">Total Budget</p>
-                    <p class="text-3xl font-bold text-gray-900 mb-1">{{ formatCurrency(totalBudget) }}</p>
+                    <p class="text-lg font-bold text-gray-900 mb-1">{{ formatCurrency(totalBudget) }}</p>
                     <p class="text-xs text-gray-500">{{ budgets.length }} categories</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <p class="text-sm font-medium text-gray-500 mb-2">Total Spent</p>
-                    <p class="text-3xl font-bold text-red-600 mb-1">{{ formatCurrency(totalSpent) }}</p>
+                    <p class="text-lg font-bold text-red-600 mb-1">{{ formatCurrency(totalSpent) }}</p>
                     <p class="text-xs text-gray-500">{{ ((totalSpent / totalBudget) * 100).toFixed(1) }}% of budget</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <p class="text-sm font-medium text-gray-500 mb-2">Remaining</p>
-                    <p class="text-3xl font-bold text-green-600 mb-1">{{ formatCurrency(totalRemaining) }}</p>
+                    <p class="text-lg font-bold text-green-600 mb-1">{{ formatCurrency(totalRemaining) }}</p>
                     <p class="text-xs text-gray-500">{{ ((totalRemaining / totalBudget) * 100).toFixed(1) }}% available</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <p class="text-sm font-medium text-gray-500 mb-2">Alerts</p>
-                    <p class="text-3xl font-bold text-yellow-600 mb-1">{{ alertsCount }}</p>
+                    <p class="text-lg font-bold text-yellow-600 mb-1">{{ alertsCount }}</p>
                     <p class="text-xs text-gray-500">Budgets need attention</p>
                 </div>
             </div>

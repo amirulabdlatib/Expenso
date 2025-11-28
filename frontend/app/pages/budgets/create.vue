@@ -74,11 +74,11 @@
 
     const { months, formatDateRange } = useUtils();
     const today = new Date();
+    const categories = ref([]);
 
-    // State
     const form = ref({
-        category_id: "",
-        amount: "",
+        category_id: null,
+        amount: null,
         month: today.getMonth() + 1,
         year: today.getFullYear(),
     });
@@ -92,55 +92,6 @@
         return Array.from({ length: 4 }, (_, i) => currentYear - 1 + i);
     });
 
-    // Dummy categories (replace with API call)
-    const categories = ref([
-        { id: 1, name: "Food & Groceries" },
-        { id: 2, name: "Transportation" },
-        { id: 3, name: "Entertainment" },
-        { id: 4, name: "Shopping" },
-        { id: 5, name: "Healthcare" },
-        { id: 6, name: "Utilities" },
-        { id: 7, name: "Education" },
-        { id: 8, name: "Dining Out" },
-    ]);
-
     // Submit form
-    const submitForm = async () => {
-        try {
-            loading.value = true;
-            errors.value = {};
-
-            // Calculate start_date and end_date
-            const startDate = new Date(form.value.year, form.value.month - 1, 1);
-            const endDate = new Date(form.value.year, form.value.month, 0);
-
-            const payload = {
-                category_id: form.value.category_id,
-                amount: form.value.amount,
-                start_date: startDate.toISOString().split("T")[0], // Format: YYYY-MM-DD
-                end_date: endDate.toISOString().split("T")[0],
-            };
-
-            // TODO: Replace with actual API call
-            console.log("Submitting budget:", payload);
-
-            // const response = await $fetch('/api/budgets', {
-            //     method: 'POST',
-            //     body: payload,
-            // });
-
-            // Simulate success
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            // Redirect to budgets page
-            navigateTo("/budgets");
-        } catch (error) {
-            if (error.response?.data?.errors) {
-                errors.value = error.response.data.errors;
-            }
-            console.error("Error creating budget:", error);
-        } finally {
-            loading.value = false;
-        }
-    };
+    const submitForm = async () => {};
 </script>
