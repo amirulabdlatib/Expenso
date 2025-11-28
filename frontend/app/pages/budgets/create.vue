@@ -4,7 +4,21 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
                 <h1 class="text-2xl font-bold text-gray-900 mb-6">Create Budget</h1>
 
-                <form class="space-y-6" @submit.prevent="submitForm">
+                <!-- Loading State -->
+                <div v-if="loadingCategories" class="flex justify-center items-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                    <span class="ml-3 text-gray-600">Loading categories...</span>
+                </div>
+
+                <!-- Error State -->
+                <div v-else-if="categoryError" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <p class="text-sm font-medium text-red-800">Failed to load categories</p>
+                    <p class="text-sm text-red-600 mt-1">{{ categoryError }}</p>
+                    <button class="mt-3 px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors" @click="retryLoadCategories">Retry</button>
+                </div>
+
+                <!-- Form -->
+                <form v-else class="space-y-6" @submit.prevent="submitForm">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Month <span class="text-red-500">*</span> </label>
@@ -73,18 +87,40 @@
     });
 
     const { months, formatDateRange } = useUtils();
+    const { getBudgetCategories, errors } = useBudgets();
     const today = new Date();
     const categories = ref([]);
+    const loading = ref(false);
+    const loadingCategories = ref(false);
+    const categoryError = ref(null);
+
+    const loadCategories = async () => {
+        loadingCategories.value = true;
+        categoryError.value = null;
+        try {
+            const response = await getBudgetCategories();
+            categories.value = response;
+        } catch (err) {
+            categoryError.value = err.statusMessage;
+        } finally {
+            loadingCategories.value = false;
+        }
+    };
+
+    const retryLoadCategories = () => {
+        loadCategories();
+    };
+
+    onMounted(() => {
+        loadCategories();
+    });
 
     const form = ref({
-        category_id: null,
+        category_id: "",
         amount: null,
         month: today.getMonth() + 1,
         year: today.getFullYear(),
     });
-
-    const errors = ref({});
-    const loading = ref(false);
 
     // Generate years (current year - 1 to current year + 2)
     const years = computed(() => {
@@ -92,6 +128,5 @@
         return Array.from({ length: 4 }, (_, i) => currentYear - 1 + i);
     });
 
-    // Submit form
     const submitForm = async () => {};
 </script>
