@@ -193,6 +193,10 @@
         title: "Budgets - Expenso",
     });
 
+    definePageMeta({
+        middleware: ["sanctum:auth"],
+    });
+
     // State
     const selectedPeriod = ref("current");
     const searchQuery = ref("");

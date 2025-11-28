@@ -12,6 +12,8 @@ class Budget extends Model
         'category_id',
         'amount',
         'period',
+        'month',
+        'year',
         'start_date',
         'end_date',
     ];
