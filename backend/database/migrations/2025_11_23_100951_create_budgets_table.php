@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
-            $table->string('name');
             $table->decimal('amount');
-            $table->string('period');
+            $table->string('period')->default('monthly');
             $table->date('start_date');
             $table->date('end_date');
-            $table->boolean('is_active');
             $table->timestamps();
         });
     }

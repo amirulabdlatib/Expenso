@@ -6,14 +6,9 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-3xl font-bold text-gray-900">Budgets</h1>
-                        <p class="text-gray-600 mt-2">Set and track your spending limits</p>
+                        <p class="text-gray-600 mt-2">Set and track your monthly spending limits</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <select v-model="selectedPeriod" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="current">Current Month</option>
-                            <option value="last">Last Month</option>
-                            <option value="year">This Year</option>
-                        </select>
                         <NuxtLink to="/budgets/create" class="flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                             <span class="text-xl font-light">+</span>
                         </NuxtLink>
@@ -165,7 +160,7 @@
                 <!-- When no budgets exist at all -->
                 <template v-if="budgets.length === 0">
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets found</h3>
-                    <p class="text-gray-600 mb-6">Create your first budget to start tracking your spending</p>
+                    <p class="text-gray-600 mb-6">Create your first budget to start tracking current month</p>
                     <NuxtLink to="/budgets/create" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
                         <span class="text-lg font-light">+</span>
                         <span>Create Budget</span>
@@ -191,7 +186,6 @@
     });
 
     // State
-    const selectedPeriod = ref("current");
     const searchQuery = ref("");
     const filterStatus = ref("all");
 
