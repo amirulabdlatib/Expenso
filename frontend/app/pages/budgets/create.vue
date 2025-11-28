@@ -22,24 +22,24 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Month <span class="text-red-500">*</span> </label>
-                            <select v-model="form.month" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="onPeriodChange">
+                            <select v-model="form.month" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="onPeriodChange">
                                 <option value="">Select month</option>
                                 <option v-for="(month, index) in months" :key="index" :value="index + 1">
                                     {{ month }}
                                 </option>
                             </select>
-                            <p v-if="errors.month" class="text-red-500 text-sm mt-1">{{ errors.month }}</p>
+                            <p v-if="errors.month" class="text-red-500 text-sm mt-1">{{ errors.month[0] }}</p>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Year <span class="text-red-500">*</span> </label>
-                            <select v-model="form.year" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="onPeriodChange">
+                            <select v-model="form.year" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="onPeriodChange">
                                 <option value="">Select year</option>
                                 <option v-for="year in years" :key="year" :value="year">
                                     {{ year }}
                                 </option>
                             </select>
-                            <p v-if="errors.year" class="text-red-500 text-sm mt-1">{{ errors.year }}</p>
+                            <p v-if="errors.year" class="text-red-500 text-sm mt-1">{{ errors.year[0] }}</p>
                         </div>
                     </div>
 
@@ -53,20 +53,27 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
-                        <select v-model="form.category_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" :disabled="!categories.length">
+                        <select v-model="form.category_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" :disabled="!categories.length">
                             <option value="">Select a category</option>
                             <option v-for="category in categories" :key="category.id" :value="category.id">
                                 {{ category.name }}
                             </option>
                         </select>
                         <p v-if="!categories.length && form.month && form.year" class="text-amber-600 text-sm mt-1">No available categories. All categories already have budgets for this period.</p>
-                        <p v-if="errors.category_id" class="text-red-500 text-sm mt-1">{{ errors.category_id }}</p>
+                        <p v-if="errors.category_id" class="text-red-500 text-sm mt-1">{{ errors.category_id[0] }}</p>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2"> Budget Amount (MYR) <span class="text-red-500">*</span> </label>
-                        <input v-model="form.amount" type="number" step="0.01" required placeholder="1500.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                        <p v-if="errors.amount" class="text-red-500 text-sm mt-1">{{ errors.amount }}</p>
+                        <input
+                            v-model="form.amount"
+                            type="number"
+                            step="0.01"
+                            placeholder="1500.00"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
+                        />
+                        <p v-if="errors.amount" class="text-red-500 text-sm mt-1">{{ errors.amount[0] }}</p>
                     </div>
 
                     <!-- Action Buttons -->
@@ -92,12 +99,14 @@
     });
 
     const { months, formatDateRange } = useUtils();
-    const { getBudgetCategories, errors } = useBudget();
-    const today = new Date();
+    const { getBudgetCategories, createBudget, errors } = useBudget();
+    const { success, error: toastError } = useToast();
     const categories = ref([]);
     const loading = ref(false);
     const loadingCategories = ref(false);
     const categoryError = ref(null);
+
+    const today = new Date();
 
     const form = reactive({
         category_id: "",
@@ -106,10 +115,9 @@
         year: today.getFullYear(),
     });
 
-    // Generate years (current year - 1 to current year + 2)
     const years = computed(() => {
         const currentYear = new Date().getFullYear();
-        return Array.from({ length: 4 }, (_, i) => currentYear - 1 + i);
+        return Array.from({ length: 2 }, (_, i) => currentYear + i);
     });
 
     const loadCategories = async () => {
@@ -152,5 +160,18 @@
         loadCategories();
     });
 
-    const submitForm = async () => {};
+    const submitForm = async () => {
+        loading.value = true;
+
+        try {
+            await createBudget(form);
+            success("Budget Created.");
+            navigateTo("/budgets");
+        } catch (err) {
+            console.log(err);
+            toastError("Budget fail to create.");
+        } finally {
+            loading.value = false;
+        }
+    };
 </script>
