@@ -11,11 +11,8 @@ class Budget extends Model
         'user_id',
         'category_id',
         'amount',
-        'period',
         'month',
         'year',
-        'start_date',
-        'end_date',
     ];
 
     public function user(): BelongsTo

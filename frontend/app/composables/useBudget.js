@@ -1,4 +1,4 @@
-export const useBudgets = () => {
+export const useBudget = () => {
     const sanctumClient = useSanctumClient();
     const errors = ref({});
 
@@ -14,8 +14,24 @@ export const useBudgets = () => {
         }
     };
 
+    const createBudget = async (form) => {
+        try {
+            const response = await sanctumClient("/api/budgets", {
+                method: "POST",
+                body: form,
+            });
+            return response;
+        } catch (err) {
+            if (err.statusCode == 422) {
+                errors.value = err.data.errors;
+            }
+            throw err;
+        }
+    };
+
     return {
         getBudgetCategories,
+        createBudget,
         errors,
     };
 };

@@ -92,7 +92,7 @@
     });
 
     const { months, formatDateRange } = useUtils();
-    const { getBudgetCategories, errors } = useBudgets();
+    const { getBudgetCategories, errors } = useBudget();
     const today = new Date();
     const categories = ref([]);
     const loading = ref(false);

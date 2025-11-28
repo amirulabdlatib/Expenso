@@ -16,11 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->decimal('amount');
-            $table->string('period')->default('monthly');
             $table->unsignedTinyInteger('month');
             $table->year('year');
-            $table->date('start_date');
-            $table->date('end_date');
             $table->timestamps();
 
             $table->unique(['user_id', 'category_id', 'month', 'year']);
