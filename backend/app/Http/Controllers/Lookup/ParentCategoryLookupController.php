@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Lookup;
 
+use App\Enums\CategoryType;
 use App\Models\Category;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -16,7 +17,8 @@ class ParentCategoryLookupController extends Controller
         $categories = Category::query()
             ->forCurrentUser()
             ->whereNull('parent_id')
-            ->select(['id', 'name', 'type'])
+            ->where('type', CategoryType::Expense->value)
+            ->select(['id', 'name'])
             ->orderBy('name')
             ->get();
 

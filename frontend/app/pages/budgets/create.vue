@@ -5,26 +5,6 @@
                 <h1 class="text-2xl font-bold text-gray-900 mb-6">Create Budget</h1>
 
                 <form @submit.prevent="submitForm" class="space-y-6">
-                    <!-- Category Selection -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
-                        <select v-model="form.category_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="">Select a category</option>
-                            <option v-for="category in categories" :key="category.id" :value="category.id">
-                                {{ category.name }}
-                            </option>
-                        </select>
-                        <p v-if="errors.category_id" class="text-red-500 text-sm mt-1">{{ errors.category_id }}</p>
-                    </div>
-
-                    <!-- Budget Amount -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2"> Budget Amount (MYR) <span class="text-red-500">*</span> </label>
-                        <input v-model="form.amount" type="number" step="0.01" required placeholder="1500.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                        <p v-if="errors.amount" class="text-red-500 text-sm mt-1">{{ errors.amount }}</p>
-                    </div>
-
-                    <!-- Month & Year Selection -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Month <span class="text-red-500">*</span> </label>
@@ -53,8 +33,25 @@
                     <div v-if="form.month && form.year" class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
                         <p class="text-sm font-medium text-indigo-900 mb-1">Budget Period</p>
                         <p class="text-sm text-indigo-700">
-                            {{ formatDateRange() }}
+                            {{ formatDateRange(form.month, form.year) }}
                         </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2"> Category <span class="text-red-500">*</span> </label>
+                        <select v-model="form.category_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Select a category</option>
+                            <option v-for="category in categories" :key="category.id" :value="category.id">
+                                {{ category.name }}
+                            </option>
+                        </select>
+                        <p v-if="errors.category_id" class="text-red-500 text-sm mt-1">{{ errors.category_id }}</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2"> Budget Amount (MYR) <span class="text-red-500">*</span> </label>
+                        <input v-model="form.amount" type="number" step="0.01" required placeholder="1500.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        <p v-if="errors.amount" class="text-red-500 text-sm mt-1">{{ errors.amount }}</p>
                     </div>
 
                     <!-- Action Buttons -->
@@ -75,19 +72,19 @@
         title: "Create Budget - Expenso",
     });
 
+    const { months, formatDateRange } = useUtils();
+    const today = new Date();
+
     // State
     const form = ref({
         category_id: "",
         amount: "",
-        month: "",
-        year: new Date().getFullYear(), // Default to current year
+        month: today.getMonth() + 1,
+        year: today.getFullYear(),
     });
 
     const errors = ref({});
     const loading = ref(false);
-
-    // Months array
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     // Generate years (current year - 1 to current year + 2)
     const years = computed(() => {
@@ -107,17 +104,6 @@
         { id: 8, name: "Dining Out" },
     ]);
 
-    // Format date range display
-    const formatDateRange = () => {
-        if (!form.value.month || !form.value.year) return "";
-
-        const startDate = new Date(form.value.year, form.value.month - 1, 1);
-        const endDate = new Date(form.value.year, form.value.month, 0);
-
-        const options = { year: "numeric", month: "long", day: "numeric" };
-        return `${startDate.toLocaleDateString("en-US", options)} - ${endDate.toLocaleDateString("en-US", options)}`;
-    };
-
     // Submit form
     const submitForm = async () => {
         try {
@@ -131,7 +117,6 @@
             const payload = {
                 category_id: form.value.category_id,
                 amount: form.value.amount,
-                period: form.value.period,
                 start_date: startDate.toISOString().split("T")[0], // Format: YYYY-MM-DD
                 end_date: endDate.toISOString().split("T")[0],
             };
