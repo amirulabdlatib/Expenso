@@ -195,7 +195,6 @@
         {
             id: 1,
             category: "Food & Groceries",
-            color: "#10B981",
             limit: 1500.0,
             spent: 1245.5,
             percentage: 83,
@@ -205,7 +204,6 @@
         {
             id: 2,
             category: "Transportation",
-            color: "#3B82F6",
             limit: 800.0,
             spent: 890.0,
             percentage: 111,
@@ -215,7 +213,6 @@
         {
             id: 3,
             category: "Entertainment",
-            color: "#F59E0B",
             limit: 1000.0,
             spent: 700.0,
             percentage: 70,
@@ -225,7 +222,6 @@
         {
             id: 4,
             category: "Shopping",
-            color: "#EC4899",
             limit: 600.0,
             spent: 580.0,
             percentage: 97,
@@ -235,7 +231,6 @@
         {
             id: 5,
             category: "Healthcare",
-            color: "#EF4444",
             limit: 500.0,
             spent: 235.0,
             percentage: 47,
