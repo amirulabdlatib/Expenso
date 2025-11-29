@@ -130,7 +130,7 @@ class BudgetController extends Controller
 
         return response()->json([
             'budget' => $budget,
-            'message' => 'Update successfully'
+            'message' => 'Budget updated'
         ], Response::HTTP_OK);
     }
 

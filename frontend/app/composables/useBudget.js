@@ -50,7 +50,7 @@ export const useBudget = () => {
 
     const deleteBudget = async (id) => {
         try {
-            const response = sanctumClient(`/api/budgets/${id}`, {
+            const response = await sanctumClient(`/api/budgets/${id}`, {
                 method: "DELETE",
             });
 

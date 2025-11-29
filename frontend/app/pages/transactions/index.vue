@@ -89,7 +89,7 @@
                                 <Icon name="heroicons:calendar" class="w-8 h-8 text-purple-500" />
                             </div>
                             <p class="text-sm text-gray-600 mb-1">Total Transactions</p>
-                            <p class="text-lgfont-bold text-gray-900">{{ transactionsData.pagination.total }}</p>
+                            <p class="text-lg font-bold text-gray-900">{{ transactionsData.pagination.total }}</p>
                         </div>
                     </div>
 
@@ -108,7 +108,8 @@
                                     type="text"
                                     placeholder="Search transactions..."
                                     class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    @input="handleSearch" />
+                                    @input="handleSearch"
+                                />
                             </div>
 
                             <!-- Type Filter -->
@@ -275,7 +276,8 @@
                                 <button
                                     class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50"
                                     :disabled="transactionsData.pagination.current_page === 1"
-                                    @click="changePage(transactionsData.pagination.current_page - 1)">
+                                    @click="changePage(transactionsData.pagination.current_page - 1)"
+                                >
                                     Previous
                                 </button>
 
@@ -291,7 +293,8 @@
                                             'border-indigo-500 bg-indigo-50 text-indigo-600': pageNumber === transactionsData.pagination.current_page,
                                             'border-gray-300 text-gray-600 hover:bg-gray-50': pageNumber !== transactionsData.pagination.current_page,
                                         }"
-                                        @click="changePage(pageNumber)">
+                                        @click="changePage(pageNumber)"
+                                    >
                                         {{ pageNumber }}
                                     </button>
                                 </template>
@@ -299,7 +302,8 @@
                                 <button
                                     class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50"
                                     :disabled="transactionsData.pagination.current_page === transactionsData.pagination.last_page"
-                                    @click="changePage(transactionsData.pagination.current_page + 1)">
+                                    @click="changePage(transactionsData.pagination.current_page + 1)"
+                                >
                                     Next
                                 </button>
                             </div>

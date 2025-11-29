@@ -2,7 +2,7 @@
 
 A full-stack expense tracking application built with modern web technologies.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend (API)
 
@@ -16,7 +16,7 @@ A full-stack expense tracking application built with modern web technologies.
 -   **Tailwind CSS** - Utility-first CSS framework for styling
 -   **Pinia** - State management
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Expenso/
@@ -24,7 +24,7 @@ Expenso/
 └── frontend/       # Nuxt.js 4 frontend client
 ```
 
-## ✅ Completed Features
+## Completed Features
 
 ### Core Functionality
 
@@ -96,7 +96,7 @@ npm install
 npm run dev
 ```
 
-## 📝 Features (Available)
+## Features (Available)
 
 ### Account Management
 
@@ -142,10 +142,10 @@ npm run dev
 -   Secure API endpoints with Laravel Sanctum
 -   Protected file storage with authentication checks
 
-## 🤝 Contributing
+## Contributing
 
 This project is currently under development. Contribution guidelines will be added soon.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

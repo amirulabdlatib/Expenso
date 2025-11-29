@@ -56,13 +56,13 @@
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <p class="text-sm font-medium text-gray-500 mb-2">Total Spent</p>
                         <p class="text-lg font-bold text-red-600 mb-1">{{ formatCurrency(totalSpent) }}</p>
-                        <p class="text-xs text-gray-500">{{ ((totalSpent / totalBudget) * 100).toFixed(1) }}% of budget</p>
+                        <p class="text-xs text-gray-500">{{ totalBudget > 0 ? ((totalSpent / totalBudget) * 100).toFixed(1) : "0.0" }}% of budget</p>
                     </div>
 
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <p class="text-sm font-medium text-gray-500 mb-2">Remaining</p>
                         <p class="text-lg font-bold text-green-600 mb-1">{{ formatCurrency(totalRemaining) }}</p>
-                        <p class="text-xs text-gray-500">{{ ((totalRemaining / totalBudget) * 100).toFixed(1) }}% available</p>
+                        <p class="text-xs text-gray-500">{{ totalBudget > 0 ? ((totalRemaining / totalBudget) * 100).toFixed(1) : "0.0" }}% available</p>
                     </div>
 
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -74,24 +74,17 @@
 
                 <!-- Filter and Sort -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <button :class="[filterStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']" @click="filterStatus = 'all'">
-                                All
-                            </button>
-                        </div>
-                        <div class="flex items-center space-x-2 mr-3">
-                            <select v-model="selectedMonth" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                <option v-for="(month, index) in months" :key="index" :value="index + 1">
-                                    {{ month }}
-                                </option>
-                            </select>
-                            <select v-model="selectedYear" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                <option v-for="year in years" :key="year" :value="year">
-                                    {{ year }}
-                                </option>
-                            </select>
-                        </div>
+                    <div class="flex items-center justify-end space-x-2 mr-3">
+                        <select v-model="selectedMonth" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option v-for="(month, index) in months" :key="index" :value="index + 1">
+                                {{ month }}
+                            </option>
+                        </select>
+                        <select v-model="selectedYear" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option v-for="year in years" :key="year" :value="year">
+                                {{ year }}
+                            </option>
+                        </select>
                     </div>
                 </div>
 
@@ -217,7 +210,6 @@
     const selectedYear = ref(new Date().getFullYear());
     const isDeleting = ref(false);
 
-    const filterStatus = ref("all");
     const { formatCurrency } = useCurrency();
     const { deleteBudget: deleteAction } = useBudget();
     const { success, error: errorToast } = useToast();
@@ -248,18 +240,11 @@
     });
 
     const filteredBudgets = computed(() => {
-        let filtered = budgets.value;
-
-        // Status filter
-        if (filterStatus.value !== "all") {
-            filtered = filtered.filter((b) => getSmartStatus(b) === filterStatus.value);
-        }
-
-        return filtered;
+        return budgets.value;
     });
 
     const clearFilters = () => {
-        filterStatus.value = "all";
+        console.log("Filter cleared");
     };
 
     const deleteBudget = async (id) => {
@@ -272,9 +257,9 @@
             success("Budget deleted.");
             await refresh();
         } catch (err) {
-            errorToast("Budget fail to delete: " + err.statusMessage);
+            errorToast("Budget fail to delete: " + (err.statusMessage || "An unexpected error occurred"));
         } finally {
-            isDeleting.value = true;
+            isDeleting.value = false;
         }
     };
 </script>

@@ -23,12 +23,17 @@ class ParentCategoryLookupController extends Controller
             ->whereNull('parent_id')
             ->where('type', CategoryType::Expense->value)
             ->when($month && $year, function ($query) use ($month, $year, $budgetId) {
-                return $query->whereDoesntHave('budgets', function ($q) use ($month, $year, $budgetId) {
-                    $q->where('month', $month)
-                        ->where('year', $year)
-                        ->when($budgetId, function ($query) use ($budgetId) {
-                            $query->where('id', '!=', $budgetId);
+                return $query->where(function ($q) use ($month, $year, $budgetId) {
+                    $q->whereDoesntHave('budgets', function ($sub) use ($month, $year) {
+                        $sub->where('month', $month)
+                            ->where('year', $year);
+                    });
+
+                    if ($budgetId) {
+                        $q->orWhereHas('budgets', function ($sub) use ($budgetId) {
+                            $sub->where('id', $budgetId);
                         });
+                    }
                 });
             })
             ->select(['id', 'name'])
