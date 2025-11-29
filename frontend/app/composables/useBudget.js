@@ -2,10 +2,14 @@ export const useBudget = () => {
     const sanctumClient = useSanctumClient();
     const errors = ref({});
 
-    const getBudgetCategories = async (month = null, year = null) => {
+    const getBudgetCategories = async (month = null, year = null, budgetId = null) => {
         try {
+            const params = { month, year };
+            if (budgetId) {
+                params.budget_id = budgetId;
+            }
             const response = await sanctumClient("/api/lookup/parent/categories", {
-                params: { month, year },
+                params: params,
             });
             return response.categories;
         } catch (err) {

@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/transactions/{transaction}/receipt-info', [TransactionController::class, 'getReceiptInfo']);
 
     Route::apiResource('budgets', BudgetController::class);
+    Route::get('/budgets/{budget}/edit', [BudgetController::class, 'edit']);
 
     Route::get('profile', [ProfileController::class, 'index']);
     Route::put('profile', [ProfileController::class, 'update']);

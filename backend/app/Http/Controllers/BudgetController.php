@@ -6,6 +6,7 @@ use App\Models\Budget;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreBudgetRequest;
+use App\Http\Requests\UpdateBudgetRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BudgetController extends Controller
@@ -104,7 +105,23 @@ class BudgetController extends Controller
         ]);
     }
 
-    public function update() {}
+    public function edit(Budget $budget)
+    {
+        $this->authorize('update', $budget);
+
+        return response()->json([
+            'budget' => [
+                'id' => $budget->id,
+                'category_id' => $budget->category_id,
+                'category_name' => $budget->category->name,
+                'amount' => $budget->amount,
+                'month' => $budget->month,
+                'year' => $budget->year,
+            ]
+        ]);
+    }
+
+    public function update(UpdateBudgetRequest $request) {}
 
     public function destroy(Budget $budget)
     {

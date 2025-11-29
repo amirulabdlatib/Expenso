@@ -15,7 +15,7 @@
                     <span class="text-3xl text-red-600">⚠</span>
                 </div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to load transactions</h3>
-                <p class="text-gray-600 mb-6">{{ error.message || "An error occurred while fetching transactions" }}</p>
+                <p class="text-gray-600 mb-6">{{ error.statusMessage || "An error occurred while fetching transactions" }}</p>
                 <button class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors" @click="refresh()">
                     <span>Try Again</span>
                 </button>
