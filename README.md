@@ -2,19 +2,19 @@
 
 A full-stack expense tracking application built with modern web technologies.
 
-## 🚧 Status
-
-**Under Development** - This project is currently in active development.
-
 ## 🛠️ Tech Stack
 
 ### Backend (API)
 
 -   **Laravel 12** - PHP framework for building the RESTful API
+-   **MySQL/PostgreSQL** - Relational database for data persistence
+-   **Sanctum** - API token authentication
 
 ### Frontend (Client)
 
 -   **Nuxt.js 4** - Vue.js framework for building the user interface
+-   **Tailwind CSS** - Utility-first CSS framework for styling
+-   **Pinia** - State management
 
 ## 📁 Project Structure
 
@@ -26,41 +26,45 @@ Expenso/
 
 ## ✅ Completed Features
 
--   **Core Functionality**
-    -   [x] Category management
-    -   [x] Transaction management
-    -   [x] Account management
-    -   [ ] Budget management
--   **Receipt Management**
-    -   [x] Private receipt storage for transactions
-    -   [x] Support for image and PDF uploads
-    -   [x] Secure file access with authentication
-    -   [x] Preview functionality for uploaded receipts
+### Core Functionality
 
-## 🚀 Upcoming Features
+-   [x] **User Authentication** - Secure login and registration
+-   [x] **Category Management** - Create, read, update, and delete expense/income categories
+-   [x] **Transaction Management** - Record and track income and expenses
+-   [x] **Account Management** - Manage multiple financial accounts
+-   [x] **Budget Management** - Set and track monthly budgets by category
 
-### High Priority
+### Budget Management Features
 
+-   [x] **Monthly Budgets** - Set spending limits by category per month
+-   [x] **Budget Tracking** - Real-time spending vs budget tracking
+-   [x] **Smart Alerts** - Get notified when approaching budget limits
+-   [x] **Budget Projections** - Forecast month-end spending
+-   [x] **Spending Analytics** - Visualize budget vs actual spending
+-   [x] **Transaction History** - View all transactions within a budget
+
+### Receipt Management
+
+-   [x] Private receipt storage for transactions
+-   [x] Support for image and PDF uploads
+-   [x] Secure file access with authentication
+-   [x] Preview functionality for uploaded receipts
+
+### Future Enhancements
+
+-   [ ] Dark mode
 -   [ ] Analytics dashboard
 -   [x] Toggle money number visibility
 -   [x] Profile update functionality
 -   [x] Receipt upload
--   [ ] Receipt upload to Google Drive API (Optional)
-
-### Medium Priority
-
 -   [ ] Loan repayment progress module
 -   [ ] Monthly/Yearly statement reports
 -   [ ] Income tax calculation
 -   [ ] Tax relief management
 -   [ ] KWSP/EPF/SOCSO calculation
-
-### Future Enhancements
-
 -   [ ] Zakat calculation
 -   [ ] Refund flow
 -   [ ] Calendar ui that represent total expense/income
--   [ ] Dark mode
 -   [ ] Smart receipt reader (OCR) and categorization
 -   [ ] AI-powered financial advisor
 
@@ -96,35 +100,30 @@ npm run dev
 
 ### Account Management
 
--   Create and manage multiple financial accounts (bank accounts, e-wallets, cash, etc.)
--   Track real-time account balances
--   Set initial balance for each account
--   Active/inactive account status toggle
--   View total balance across all accounts
--   Separate balance tracking for active and inactive accounts
--   Authorization-protected account operations
+-   **Multiple Accounts** - Manage various financial accounts (bank, e-wallets, cash)
+-   **Real-time Balance** - Automatic balance updates with transactions
+-   **Account Status** - Toggle accounts between active and inactive
+-   **Total Balance** - Consolidated view of all account balances
+-   **Transaction History** - Complete record of all account activities
+-   **Secure Access** - Role-based access control for all operations
 
 ### Transaction Management
 
--   **Income Tracking** - Record income with automatic balance increase
--   **Expense Tracking** - Record expenses with automatic balance deduction
--   **Account Transfers** - Transfer money between accounts with paired transactions
--   View complete transaction history sorted by date
--   Detailed transaction information including date, amount, and description
--   Monthly income and expense summaries
--   Total transaction count tracking
--   Edit transactions (income and expenses only)
--   Delete transactions with automatic balance reversion
--   Authorization-protected transaction operations
+-   **Income & Expenses** - Track all financial transactions
+-   **Automatic Categorization** - Smart transaction categorization
+-   **Transfer Between Accounts** - Seamless money movement
+-   **Search & Filter** - Find transactions quickly with advanced filters
+-   **Receipt Attachment** - Store digital receipts with transactions
+-   **Transaction Notes** - Add context to your transactions
 
-### Category Management
+### Budget Management
 
--   Create custom categories for income and expenses
--   Organize categories with parent-child hierarchy (2-level depth)
--   Visual customization with icons and colors
--   Type-based categorization (income/expense)
--   Prevention of nested child categories (max 2 levels)
--   View categorized transactions
+-   **Monthly Budgets** - Set spending limits by category
+-   **Visual Progress** - Track spending with intuitive progress bars
+-   **Smart Alerts** - Get notified about budget status
+-   **Spending Analysis** - Compare budgeted vs actual spending
+-   **Forecasting** - Predict month-end spending patterns
+-   **Historical Data** - View past budget performance
 
 ### Receipt Management
 
