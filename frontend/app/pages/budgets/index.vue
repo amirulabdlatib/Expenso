@@ -188,56 +188,14 @@
 
     const filterStatus = ref("all");
     const { formatCurrency } = useCurrency();
+    const client = useSanctumClient();
     const { getDailyAverage, getProjectedEnd, getSmartStatus, getStatusClass, getStatusText, getProgressColor, months, years } = useBudgetUtils();
 
-    // Dummy Data
-    const budgets = ref([
-        {
-            id: 1,
-            category: "Food & Groceries",
-            limit: 1500.0,
-            spent: 1245.5,
-            percentage: 83,
-            remaining: 254.5,
-            transactionCount: 45,
-        },
-        {
-            id: 2,
-            category: "Transportation",
-            limit: 800.0,
-            spent: 890.0,
-            percentage: 111,
-            remaining: -90.0,
-            transactionCount: 32,
-        },
-        {
-            id: 3,
-            category: "Entertainment",
-            limit: 1000.0,
-            spent: 700.0,
-            percentage: 70,
-            remaining: 300.0,
-            transactionCount: 28,
-        },
-        {
-            id: 4,
-            category: "Shopping",
-            limit: 600.0,
-            spent: 580.0,
-            percentage: 97,
-            remaining: 20.0,
-            transactionCount: 24,
-        },
-        {
-            id: 5,
-            category: "Healthcare",
-            limit: 500.0,
-            spent: 235.0,
-            percentage: 47,
-            remaining: 265.0,
-            transactionCount: 8,
-        },
-    ]);
+    const { data, status, error, refresh } = await useAsyncData("budgets", () => client("/api/budgets"));
+
+    const budgets = computed(() => {
+        return data.value?.budgets || [];
+    });
 
     // Computed
     const totalBudget = computed(() => {
