@@ -9,11 +9,6 @@
                         <p class="text-gray-600 mt-2">Set and track your monthly spending limits</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <select v-model="selectedPeriod" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="current">Current Month</option>
-                            <option value="last">Last Month</option>
-                            <option value="year">This Year</option>
-                        </select>
                         <NuxtLink to="/budgets/create" class="flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
                             <span class="text-xl font-light">+</span>
                         </NuxtLink>
@@ -55,27 +50,18 @@
                         <button :class="[filterStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']" @click="filterStatus = 'all'">
                             All
                         </button>
-                        <button
-                            :class="[filterStatus === 'on-track' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'on-track'"
-                        >
-                            On Track
-                        </button>
-                        <button
-                            :class="[filterStatus === 'warning' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'warning'"
-                        >
-                            Warning
-                        </button>
-                        <button
-                            :class="[filterStatus === 'over-budget' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200', 'px-4 py-2 rounded-lg transition-colors text-sm font-medium']"
-                            @click="filterStatus = 'over-budget'"
-                        >
-                            Over Budget
-                        </button>
                     </div>
-                    <div class="relative">
-                        <input v-model="searchQuery" type="text" placeholder="Search budgets..." class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64" />
+                    <div class="flex items-center space-x-2">
+                        <select v-model="selectedMonth" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option v-for="(month, index) in months" :key="index" :value="index + 1">
+                                {{ month }}
+                            </option>
+                        </select>
+                        <select v-model="selectedYear" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option v-for="year in years" :key="year" :value="year">
+                                {{ year }}
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -88,10 +74,9 @@
                         <div class="flex items-start justify-between mb-4">
                             <div>
                                 <h3 class="font-semibold text-gray-900 text-lg">{{ budget.category }}</h3>
-                                <p class="text-sm text-gray-500 mt-1">{{ budget.period }}</p>
                             </div>
                             <div class="flex items-center space-x-1">
-                                <NuxtLink :to="`/budgets/edit/${budget.id}`" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors">
+                                <NuxtLink :to="`/budgets/${budget.id}/edit`" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors">
                                     <span class="text-sm">✎</span>
                                 </NuxtLink>
                                 <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteBudget(budget.id)">
@@ -143,7 +128,7 @@
                         </div>
 
                         <!-- Daily Average & Projection (for monthly budgets) -->
-                        <div v-if="budget.period === 'Monthly'" class="pt-4 border-t border-gray-100 space-y-2">
+                        <div class="pt-4 border-t border-gray-100 space-y-2">
                             <div class="flex items-center justify-between text-sm">
                                 <span class="text-gray-600">Daily average</span>
                                 <span class="font-semibold text-gray-900">{{ formatCurrency(getDailyAverage(budget)) }}</span>
@@ -175,10 +160,10 @@
                     </NuxtLink>
                 </template>
 
-                <!-- When filter/search returns no results -->
+                <!-- When filter returns no results -->
                 <template v-else>
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets match your criteria</h3>
-                    <p class="text-gray-600 mb-6">Try adjusting your filters or search query</p>
+                    <p class="text-gray-600 mb-6">Try adjusting your filters</p>
                     <button class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors" @click="clearFilters">
                         <span>Clear Filters</span>
                     </button>
@@ -198,8 +183,12 @@
     });
 
     // State
-    const selectedPeriod = ref("current");
-    const searchQuery = ref("");
+    const selectedMonth = ref(new Date().getMonth() + 1);
+    const selectedYear = ref(new Date().getFullYear());
+
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i);
     const filterStatus = ref("all");
 
     // Dummy Data
@@ -212,7 +201,6 @@
             spent: 1245.5,
             percentage: 83,
             remaining: 254.5,
-            period: "Monthly",
             transactionCount: 45,
         },
         {
@@ -223,7 +211,6 @@
             spent: 890.0,
             percentage: 111,
             remaining: -90.0,
-            period: "Monthly",
             transactionCount: 32,
         },
         {
@@ -231,10 +218,9 @@
             category: "Entertainment",
             color: "#F59E0B",
             limit: 1000.0,
-            spent: 650.0,
-            percentage: 65,
-            remaining: 350.0,
-            period: "Monthly",
+            spent: 700.0,
+            percentage: 70,
+            remaining: 300.0,
             transactionCount: 28,
         },
         {
@@ -245,7 +231,6 @@
             spent: 580.0,
             percentage: 97,
             remaining: 20.0,
-            period: "Monthly",
             transactionCount: 24,
         },
         {
@@ -256,41 +241,7 @@
             spent: 235.0,
             percentage: 47,
             remaining: 265.0,
-            period: "Monthly",
             transactionCount: 8,
-        },
-        {
-            id: 6,
-            category: "Utilities",
-            color: "#8B5CF6",
-            limit: 450.0,
-            spent: 420.0,
-            percentage: 93,
-            remaining: 30.0,
-            period: "Monthly",
-            transactionCount: 12,
-        },
-        {
-            id: 7,
-            category: "Education",
-            color: "#06B6D4",
-            limit: 300.0,
-            spent: 150.0,
-            percentage: 50,
-            remaining: 150.0,
-            period: "Monthly",
-            transactionCount: 5,
-        },
-        {
-            id: 8,
-            category: "Dining Out",
-            color: "#F97316",
-            limit: 400.0,
-            spent: 385.0,
-            percentage: 96,
-            remaining: 15.0,
-            period: "Monthly",
-            transactionCount: 18,
         },
     ]);
 
@@ -314,11 +265,6 @@
     const filteredBudgets = computed(() => {
         let filtered = budgets.value;
 
-        // Search filter
-        if (searchQuery.value) {
-            filtered = filtered.filter((b) => b.category.toLowerCase().includes(searchQuery.value.toLowerCase()));
-        }
-
         // Status filter
         if (filterStatus.value !== "all") {
             filtered = filtered.filter((b) => getSmartStatus(b) === filterStatus.value);
@@ -329,7 +275,6 @@
 
     const clearFilters = () => {
         filterStatus.value = "all";
-        searchQuery.value = "";
     };
 
     // Methods
