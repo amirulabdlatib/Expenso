@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Budget;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreBudgetRequest;
@@ -14,9 +15,15 @@ class BudgetController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
+
+        $month = $request->input('month', now()->month);
+        $year = $request->input('year', now()->year);
+
         $budgets = Budget::forCurrentUser()
+            ->where('month', $month)
+            ->where('year', $year)
             ->with(['category.children'])
             ->get()
             ->map(function ($budget) {
@@ -33,6 +40,8 @@ class BudgetController extends Controller
                     'percentage' => $percentage,
                     'remaining' => (float) $remaining,
                     'transactionCount' => $transactionCount,
+                    'month' => $budget->month,
+                    'year' => $budget->year,
                 ];
             });
 

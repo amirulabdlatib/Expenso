@@ -109,8 +109,8 @@
 
                             <!-- Status Badge -->
                             <div class="flex items-center space-x-2">
-                                <span :class="[getStatusClass(budget), 'px-3 py-1 text-xs font-medium rounded-full']">{{ getStatusText(budget) }}</span>
-                                <span v-if="getSmartStatus(budget) === 'warning'" class="px-3 py-1 text-xs font-medium bg-yellow-50 text-yellow-600 rounded-full"> Alert </span>
+                                <span :class="[getStatusClass(budget, selectedMonth, selectedYear), 'px-3 py-1 text-xs font-medium rounded-full']">{{ getStatusText(budget, selectedMonth, selectedYear) }}</span>
+                                <span v-if="getSmartStatus(budget, selectedMonth, selectedYear) === 'warning'" class="px-3 py-1 text-xs font-medium bg-yellow-50 text-yellow-600 rounded-full"> Alert </span>
                             </div>
                         </div>
 
@@ -131,7 +131,7 @@
                             <!-- Progress Bar -->
                             <div class="space-y-2">
                                 <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                    <div :class="[getProgressColor(budget), 'h-2 rounded-full transition-all']" :style="{ width: Math.min(budget.percentage, 100) + '%' }" />
+                                    <div :class="[getProgressColor(budget, selectedMonth, selectedYear), 'h-2 rounded-full transition-all']" :style="{ width: Math.min(budget.percentage, 100) + '%' }" />
                                 </div>
                                 <div class="flex items-center justify-between text-xs">
                                     <span class="text-gray-600">{{ Math.min(budget.percentage, 100) }}% used</span>
@@ -153,12 +153,14 @@
                             <div class="pt-4 border-t border-gray-100 space-y-2">
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-gray-600">Daily average</span>
-                                    <span class="font-semibold text-gray-900">{{ formatCurrency(getDailyAverage(budget)) }}</span>
+                                    <span class="font-semibold text-gray-900">
+                                        {{ formatCurrency(getDailyAverage(budget, selectedMonth, selectedYear)) }}
+                                    </span>
                                 </div>
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-gray-600">Projected month-end</span>
-                                    <span :class="[getProjectedEnd(budget) > budget.limit ? 'text-red-600' : 'text-gray-900', 'font-semibold']">
-                                        {{ formatCurrency(getProjectedEnd(budget)) }}
+                                    <span :class="[getProjectedEnd(budget, selectedMonth, selectedYear) > budget.limit ? 'text-red-600' : 'text-gray-900', 'font-semibold']">
+                                        {{ formatCurrency(getProjectedEnd(budget, selectedMonth, selectedYear)) }}
                                     </span>
                                 </div>
                             </div>
@@ -172,8 +174,8 @@
                         <span class="text-3xl text-gray-400">📊</span>
                     </div>
 
-                    <!-- When no budgets exist at all -->
-                    <template v-if="budgets.length === 0">
+                    <!-- When viewing default period with no budgets (truly empty) -->
+                    <template v-if="isDefaultView">
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets found</h3>
                         <p class="text-gray-600 mb-6">Create your first budget to start tracking your spending</p>
                         <NuxtLink to="/budgets/create" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
@@ -182,13 +184,19 @@
                         </NuxtLink>
                     </template>
 
-                    <!-- When filter returns no results -->
+                    <!-- When filter returns no results (filtered view) -->
                     <template v-else>
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">No budgets match your criteria</h3>
-                        <p class="text-gray-600 mb-6">Try adjusting your filters</p>
-                        <button class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors" @click="clearFilters">
-                            <span>Clear Filters</span>
-                        </button>
+                        <p class="text-gray-600 mb-6">Try adjusting your filters or create a budget for this period</p>
+                        <div class="flex items-center justify-center space-x-3">
+                            <button class="inline-flex items-center justify-center space-x-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors" @click="clearFilters">
+                                <span>Clear Filters</span>
+                            </button>
+                            <NuxtLink to="/budgets/create" class="inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                                <span class="text-lg font-light">+</span>
+                                <span>Create Budget</span>
+                            </NuxtLink>
+                        </div>
                     </template>
                 </div>
             </template>
@@ -216,10 +224,27 @@
     const client = useSanctumClient();
     const { getDailyAverage, getProjectedEnd, getSmartStatus, getStatusClass, getStatusText, getProgressColor, months, years } = useBudgetUtils();
 
-    const { data, status, error, refresh } = await useAsyncData("budgets", () => client("/api/budgets"));
+    const { data, status, error, refresh } = await useAsyncData(
+        "budgets",
+        () =>
+            client("/api/budgets", {
+                params: {
+                    month: selectedMonth.value,
+                    year: selectedYear.value,
+                },
+            }),
+        {
+            watch: [selectedMonth, selectedYear],
+        }
+    );
 
     const budgets = computed(() => {
         return data.value?.budgets || [];
+    });
+
+    const isDefaultView = computed(() => {
+        const now = new Date();
+        return selectedMonth.value === now.getMonth() + 1 && selectedYear.value === now.getFullYear();
     });
 
     // Computed
@@ -236,7 +261,10 @@
     });
 
     const alertsCount = computed(() => {
-        return budgets.value.filter((b) => getSmartStatus(b) === "warning" || getSmartStatus(b) === "over-budget").length;
+        return budgets.value.filter((b) => {
+            const status = getSmartStatus(b, selectedMonth.value, selectedYear.value);
+            return status === "warning" || status === "over-budget";
+        }).length;
     });
 
     const filteredBudgets = computed(() => {
@@ -244,7 +272,8 @@
     });
 
     const clearFilters = () => {
-        console.log("Filter cleared");
+        selectedMonth.value = new Date().getMonth() + 1;
+        selectedYear.value = new Date().getFullYear();
     };
 
     const deleteBudget = async (id) => {
