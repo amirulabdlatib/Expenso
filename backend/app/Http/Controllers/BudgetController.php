@@ -53,7 +53,12 @@ class BudgetController extends Controller
 
     public function update() {}
 
-    public function destroy() {}
+    public function destroy(Budget $budget)
+    {
+        $budget->delete();
+
+        return response()->noContent();
+    }
 
 
     private function calculateSpent($budget)

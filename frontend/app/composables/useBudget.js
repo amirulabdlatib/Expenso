@@ -29,9 +29,23 @@ export const useBudget = () => {
         }
     };
 
+    const deleteBudget = async (id) => {
+        try {
+            const response = sanctumClient(`/api/budgets/${id}`, {
+                method: "DELETE",
+            });
+
+            return response;
+        } catch (err) {
+            errors.value = err.data.errors;
+            throw err;
+        }
+    };
+
     return {
         getBudgetCategories,
         createBudget,
+        deleteBudget,
         errors,
     };
 };

@@ -108,7 +108,7 @@
                                     <NuxtLink :to="`/budgets/${budget.id}/edit`" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors">
                                         <span class="text-sm">✎</span>
                                     </NuxtLink>
-                                    <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" @click="deleteBudget(budget.id)">
+                                    <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors" :disabled="isDeleting" @click="deleteBudget(budget.id)">
                                         <span class="text-sm">✕</span>
                                     </button>
                                 </div>
@@ -215,9 +215,12 @@
     // State
     const selectedMonth = ref(new Date().getMonth() + 1);
     const selectedYear = ref(new Date().getFullYear());
+    const isDeleting = ref(false);
 
     const filterStatus = ref("all");
     const { formatCurrency } = useCurrency();
+    const { deleteBudget: deleteAction } = useBudget();
+    const { success, error: errorToast } = useToast();
     const client = useSanctumClient();
     const { getDailyAverage, getProjectedEnd, getSmartStatus, getStatusClass, getStatusText, getProgressColor, months, years } = useBudgetUtils();
 
@@ -259,12 +262,19 @@
         filterStatus.value = "all";
     };
 
-    const deleteBudget = (id) => {
-        if (confirm("Are you sure you want to delete this budget?")) {
-            const index = budgets.value.findIndex((b) => b.id === id);
-            if (index !== -1) {
-                budgets.value.splice(index, 1);
-            }
+    const deleteBudget = async (id) => {
+        if (!confirm("Are you sure you want to delete this budget?")) {
+            return;
+        }
+        isDeleting.value = true;
+        try {
+            await deleteAction(id);
+            success("Budget deleted.");
+            await refresh();
+        } catch (err) {
+            errorToast("Budget fail to delete: " + err.statusMessage);
+        } finally {
+            isDeleting.value = true;
         }
     };
 </script>
