@@ -90,7 +90,7 @@
 
                 <!-- Budgets Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div v-for="budget in filteredBudgets" :key="budget.id" class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden">
+                    <div v-for="budget in budgets" :key="budget.id" class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all overflow-hidden">
                         <!-- Budget Header -->
                         <div class="p-6 border-b border-gray-100">
                             <div class="flex items-start justify-between mb-4">
@@ -169,7 +169,7 @@
                 </div>
 
                 <!-- Empty State -->
-                <div v-if="filteredBudgets.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+                <div v-if="budgets.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <span class="text-3xl text-gray-400">📊</span>
                     </div>
@@ -265,10 +265,6 @@
             const status = getSmartStatus(b, selectedMonth.value, selectedYear.value);
             return status === "warning" || status === "over-budget";
         }).length;
-    });
-
-    const filteredBudgets = computed(() => {
-        return budgets.value;
     });
 
     const clearFilters = () => {
