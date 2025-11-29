@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Budget;
 use App\Models\Transaction;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreBudgetRequest;
 use App\Http\Requests\UpdateBudgetRequest;
@@ -37,7 +38,7 @@ class BudgetController extends Controller
 
         return response()->json([
             'budgets' => $budgets,
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function show(Budget $budget)
@@ -102,7 +103,7 @@ class BudgetController extends Controller
 
         return response()->json([
             'message' => 'Budget created.'
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     public function edit(Budget $budget)
@@ -121,7 +122,17 @@ class BudgetController extends Controller
         ]);
     }
 
-    public function update(UpdateBudgetRequest $request) {}
+    public function update(UpdateBudgetRequest $request, Budget $budget)
+    {
+        $this->authorize('update', $budget);
+
+        $budget->update($request->validated());
+
+        return response()->json([
+            'budget' => $budget,
+            'message' => 'Update successfully'
+        ], Response::HTTP_OK);
+    }
 
     public function destroy(Budget $budget)
     {

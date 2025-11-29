@@ -18,7 +18,7 @@
                 </div>
 
                 <!-- Form -->
-                <form v-else class="space-y-6" @submit.prevent="submitForm">
+                <form v-else class="space-y-6" @submit.prevent="updateForm">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Month <span class="text-red-500">*</span> </label>
@@ -101,7 +101,8 @@
 
     const route = useRoute();
     const { months, formatDateRange } = useUtils();
-    const { getBudgetCategories, errors } = useBudget();
+    const { getBudgetCategories, updateBudget, errors } = useBudget();
+    const { success, error: errorToast } = useToast();
 
     const categories = ref([]);
     const loading = ref(false);
@@ -161,14 +162,16 @@
         loadCategories();
     };
 
-    const submitForm = async () => {
+    const updateForm = async () => {
         loading.value = true;
 
         try {
-            // TODO: Implement update logic
-            console.log("Form data:", form);
+            await updateBudget(form, route.params.id);
+            success("Budget updated.");
+            navigateTo("/budgets");
         } catch (err) {
             console.error(err);
+            errorToast("Budget fail to update.");
         } finally {
             loading.value = false;
         }

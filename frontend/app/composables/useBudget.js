@@ -33,6 +33,21 @@ export const useBudget = () => {
         }
     };
 
+    const updateBudget = async (form, id) => {
+        try {
+            const response = await sanctumClient(`/api/budgets/${id}`, {
+                method: "PUT",
+                body: form,
+            });
+            return response;
+        } catch (err) {
+            if (err.statusCode === 422) {
+                errors.value = err.data.errors;
+            }
+            throw err;
+        }
+    };
+
     const deleteBudget = async (id) => {
         try {
             const response = sanctumClient(`/api/budgets/${id}`, {
@@ -49,6 +64,7 @@ export const useBudget = () => {
     return {
         getBudgetCategories,
         createBudget,
+        updateBudget,
         deleteBudget,
         errors,
     };
