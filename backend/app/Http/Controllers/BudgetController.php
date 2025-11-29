@@ -39,7 +39,58 @@ class BudgetController extends Controller
         ]);
     }
 
-    public function show() {}
+    public function show(Budget $budget)
+    {
+        $this->authorize('view', $budget);
+
+        $budget->load(['category.children']);
+
+        if ($budget->category->children->isNotEmpty()) {
+            $transactions = Transaction::query()
+                ->where('user_id', $budget->user_id)
+                ->whereIn('category_id', $budget->category->children->pluck('id'))
+                ->whereYear('transaction_date', $budget->year)
+                ->whereMonth('transaction_date', $budget->month)
+                ->with(['category', 'account'])
+                ->orderBy('transaction_date', 'desc')
+                ->get()
+                ->map(function ($transaction) {
+                    return [
+                        'id' => $transaction->id,
+                        'name' => $transaction->name,
+                        'debit' => (float) $transaction->debit,
+                        'credit' => (float) $transaction->credit,
+                        'transaction_date' => $transaction->transaction_date,
+                        'category' => $transaction->category->name,
+                        'account' => $transaction->account->name,
+                    ];
+                });
+        } else {
+            $transactions = Transaction::query()
+                ->where('user_id', $budget->user_id)
+                ->where('category_id', $budget->category_id)
+                ->whereYear('transaction_date', $budget->year)
+                ->whereMonth('transaction_date', $budget->month)
+                ->with(['category', 'account'])
+                ->orderBy('transaction_date', 'desc')
+                ->get()
+                ->map(function ($transaction) {
+                    return [
+                        'id' => $transaction->id,
+                        'name' => $transaction->name,
+                        'debit' => (float) $transaction->debit,
+                        'credit' => (float) $transaction->credit,
+                        'transaction_date' => $transaction->transaction_date,
+                        'category' => $transaction->category->name,
+                        'account' => $transaction->account->name,
+                    ];
+                });
+        }
+
+        return response()->json([
+            'transactions' => $transactions
+        ]);
+    }
 
     public function store(StoreBudgetRequest $request)
     {
