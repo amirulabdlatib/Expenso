@@ -10,7 +10,7 @@
             </div>
         </div>
         <p class="text-sm text-gray-600 mb-1">Savings Goals</p>
-        <p class="text-2xl font-bold text-gray-900">
+        <p class="text-lg font-bold text-gray-900">
             {{ isVisible ? "RM 15,000" : "RM ••••••" }}
         </p>
         <div class="flex items-center space-x-2 mt-2">

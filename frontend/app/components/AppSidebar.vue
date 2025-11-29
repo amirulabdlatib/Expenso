@@ -79,20 +79,20 @@
                 </NuxtLink> -->
 
                 <!-- Budgets -->
-                <!-- <NuxtLink
+                <NuxtLink
                     to="/budgets"
                     class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
                     active-class="bg-indigo-50 text-indigo-600"
                     :title="isCollapsed && !isMobile ? 'Budgets' : ''"
-                    @click="handleLinkClick">
+                    @click="handleLinkClick"
+                >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z" />
                         <path d="M2 9v1c0 1.1.9 2 2 2h1" />
                         <path d="M16 11h0" />
                     </svg>
                     <span v-if="!isCollapsed || isMobile" class="font-medium">Budgets</span>
-                    <span v-if="!isCollapsed || isMobile" class="ml-auto text-xs bg-yellow-100 text-yellow-600 px-2 py-0.5 rounded-full">⚠️ 2</span>
-                </NuxtLink> -->
+                </NuxtLink>
 
                 <!-- Savings Goals -->
                 <!-- <NuxtLink

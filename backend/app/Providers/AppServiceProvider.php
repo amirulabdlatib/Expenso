@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\User;
-use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 use App\Providers\TelescopeServiceProvider;
 
@@ -23,8 +21,5 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-        User::observe(UserObserver::class);
-    }
+    public function boot(): void {}
 }

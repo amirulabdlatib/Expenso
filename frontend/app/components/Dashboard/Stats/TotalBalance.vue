@@ -10,7 +10,7 @@
             </div>
         </div>
         <p class="text-sm text-gray-600 mb-1">Total Balance</p>
-        <p class="text-2xl font-bold text-gray-900">
+        <p class="text-lg font-bold text-gray-900">
             {{ isVisible ? `RM ${parseFloat(totalBalance).toFixed(2)}` : "RM ••••••" }}
         </p>
         <p class="text-sm text-green-600 mt-2 flex items-center">

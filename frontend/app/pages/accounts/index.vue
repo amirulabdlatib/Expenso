@@ -55,7 +55,7 @@
                             <Icon name="heroicons:wallet" class="w-8 h-8 text-indigo-600" />
                             <span class="text-sm text-gray-500">Total Balance</span>
                         </div>
-                        <p class="text-3xl font-bold text-gray-900">{{ isAmountVisible ? formatCurrency(accountsData?.totalBalance || 0) : "RM ••••••" }}</p>
+                        <p class="text-lg font-bold text-gray-900">{{ isAmountVisible ? formatCurrency(accountsData?.totalBalance || 0) : "RM ••••••" }}</p>
                         <p class="text-sm text-gray-500 mt-2">Across {{ totalAccounts }} accounts</p>
                     </div>
 
@@ -64,7 +64,7 @@
                             <Icon name="heroicons:arrow-trending-up" class="w-8 h-8 text-green-600" />
                             <span class="text-sm text-gray-500">Active Accounts</span>
                         </div>
-                        <p class="text-3xl font-bold text-gray-900">{{ accountsData?.active_accounts || 0 }}</p>
+                        <p class="text-lg font-bold text-gray-900">{{ accountsData?.active_accounts || 0 }}</p>
                         <p class="text-sm text-gray-500 mt-2">{{ accountsData?.inactiveAccounts || 0 }} inactive</p>
                     </div>
 
@@ -73,7 +73,7 @@
                             <Icon name="heroicons:credit-card" class="w-8 h-8 text-purple-600" />
                             <span class="text-sm text-gray-500">Active Balance</span>
                         </div>
-                        <p class="text-3xl font-bold text-gray-900">{{ isAmountVisible ? formatCurrency(accountsData?.activeAccountsBalance || 0) : "RM ••••••" }}</p>
+                        <p class="text-lg font-bold text-gray-900">{{ isAmountVisible ? formatCurrency(accountsData?.activeAccountsBalance || 0) : "RM ••••••" }}</p>
                         <p class="text-sm text-gray-500 mt-2">From active accounts</p>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                                 <div>
                                     <p class="text-xs text-white/80 mb-2 font-medium uppercase tracking-wide">Current Balance</p>
 
-                                    <p class="text-3xl font-bold text-white">{{ isAmountVisible ? formatCurrency(account.current_balance) || 0 : "RM ••••••" }}</p>
+                                    <p class="text-lg font-bold text-white">{{ isAmountVisible ? formatCurrency(account.current_balance) || 0 : "RM ••••••" }}</p>
                                 </div>
                             </div>
 

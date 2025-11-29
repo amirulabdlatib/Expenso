@@ -1,4 +1,7 @@
 export const useUtils = () => {
+    // Static data - months array
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
     function capitalizeWord(text) {
         if (!text) return "";
         return text.charAt(0).toUpperCase() + text.slice(1);
@@ -74,6 +77,7 @@ export const useUtils = () => {
             minute: "2-digit",
         });
     };
+
     const formatTimeAgo = (timestamp) => {
         const date = new Date(timestamp);
         const now = new Date();
@@ -86,6 +90,24 @@ export const useUtils = () => {
         return date.toLocaleDateString("en-MY");
     };
 
+    function formatDateRangeLong(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    }
+
+    const formatDateRange = (month, year) => {
+        if (!month || !year) return "";
+
+        const startDate = new Date(year, month - 1, 1);
+        const endDate = new Date(year, month, 0);
+
+        return `${formatDateRangeLong(startDate.toISOString())} - ${formatDateRangeLong(endDate.toISOString())}`;
+    };
+
     return {
         capitalizeWord,
         formatDate,
@@ -94,5 +116,8 @@ export const useUtils = () => {
         formatMonthYear,
         formatRelativeDate,
         formatTimeAgo,
+        formatDateRangeLong,
+        formatDateRange,
+        months,
     };
 };
