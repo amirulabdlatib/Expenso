@@ -6,9 +6,11 @@ use App\Models\Budget;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreBudgetRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BudgetController extends Controller
 {
+    use AuthorizesRequests;
 
     public function index()
     {
@@ -55,6 +57,7 @@ class BudgetController extends Controller
 
     public function destroy(Budget $budget)
     {
+        $this->authorize('delete', $budget);
         $budget->delete();
 
         return response()->noContent();
