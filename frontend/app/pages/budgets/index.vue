@@ -80,7 +80,7 @@
                                 All
                             </button>
                         </div>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center space-x-2 mr-3">
                             <select v-model="selectedMonth" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                 <option v-for="(month, index) in months" :key="index" :value="index + 1">
                                     {{ month }}
