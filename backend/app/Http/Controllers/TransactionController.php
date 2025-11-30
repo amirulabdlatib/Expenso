@@ -230,10 +230,10 @@ class TransactionController extends Controller
 
         $type = $this->getTransactionType($transaction);
 
-        if ($type == TransactionType::Transfer->value) {
+        if ($type == TransactionType::Transfer->value || $type == TransactionType::Loan->value) {
             throw new HttpException(
                 Response::HTTP_FORBIDDEN,
-                'Transfer transactions cannot be edited.'
+                "{$type} transactions cannot be edited."
             );
         }
 
