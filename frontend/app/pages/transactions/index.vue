@@ -5,7 +5,7 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-3xl font-bold text-gray-900">Transactions</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">Transactions</h1>
                         <p class="text-gray-600 mt-2">Track all your income and expenses</p>
                     </div>
                     <NuxtLink to="/transactions/create" class="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">

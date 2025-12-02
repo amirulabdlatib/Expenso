@@ -5,7 +5,7 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-3xl font-bold text-gray-900">Accounts</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">Accounts</h1>
                         <p class="text-gray-600 mt-2">Manage your financial accounts and balances</p>
                     </div>
                     <div class="flex flex-col items-end space-y-2">
