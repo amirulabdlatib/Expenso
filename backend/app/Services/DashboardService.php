@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Budget;
 use App\Models\Account;
 use App\Enums\CategoryType;
 use App\Models\Transaction;
@@ -19,6 +20,7 @@ class DashboardService
             'monthly_income' => $this->getMonthlyIncome(),
             'monthly_expenses' => $this->getMonthlyExpenses(),
             'transactions' => $this->getRecentTransactions(),
+            'budgets' => $this->getBudgetOverview(),
         ];
     }
 
@@ -64,9 +66,47 @@ class DashboardService
             ->get();
     }
 
-    public function getMonthlySavingGoals() {}
+    public function getBudgetOverview()
+    {
+        $now = now();
 
-    public function getBudgetOverview() {}
+        return Budget::forCurrentUser()
+            ->where('month', $now->month)
+            ->where('year', $now->year)
+            ->get()
+            ->map(function ($budget) {
+                $spent = $this->calculateSpent($budget);
+                $percentage = $budget->amount > 0 ? round(($spent / $budget->amount) * 100) : 0;
 
-    public function getActiveSavingsGoals() {}
+                return [
+                    'id' => $budget->id,
+                    'spent' => (float) $spent,
+                    'budget_category' => $budget->category->name,
+                    'budget_amount' => (float) $budget->amount,
+                    'percentage' => $percentage,
+                ];
+            });
+    }
+
+    private function calculateSpent($budget)
+    {
+        if (!$budget->category) {
+            return 0;
+        }
+        if ($budget->category->children->isNotEmpty()) {
+            return Transaction::query()
+                ->where('user_id', $budget->user_id)
+                ->whereIn('category_id', $budget->category->children->pluck('id'))
+                ->whereYear('transaction_date', $budget->year)
+                ->whereMonth('transaction_date', $budget->month)
+                ->sum('debit');
+        }
+
+        return Transaction::query()
+            ->where('user_id', $budget->user_id)
+            ->where('category_id', $budget->category_id)
+            ->whereYear('transaction_date', $budget->year)
+            ->whereMonth('transaction_date', $budget->month)
+            ->sum('debit');
+    }
 }

@@ -37,7 +37,7 @@
                 <!-- Recent Transactions -->
                 <DashboardRecentTransactions :recent-transactions="recentTransactions" />
                 <!-- Budget Overview -->
-                <DashboardBudgetOverview />
+                <DashboardBudgetOverview :budgets="budgets" />
             </div>
         </template>
     </div>
@@ -58,6 +58,10 @@
     const { data, pending, error, refresh } = await useAsyncData("dashboard", () => client("/api/dashboard"));
 
     const recentTransactions = computed(() => data.value?.transactions || []);
+
+    const budgets = computed(() => data.value?.budgets || []);
+
+    console.log(data.value.budgets);
 
     const isStatsVisible = ref(false);
 </script>
