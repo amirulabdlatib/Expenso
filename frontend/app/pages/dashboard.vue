@@ -61,7 +61,5 @@
 
     const budgets = computed(() => data.value?.budgets || []);
 
-    console.log(data.value.budgets);
-
     const isStatsVisible = ref(false);
 </script>
