@@ -8,7 +8,7 @@
                         <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                     </NuxtLink>
                     <div>
-                        <h1 class="text-3xl font-bold text-gray-900">Create New Loan</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">Create New Loan</h1>
                         <p class="text-gray-600 mt-1">Add a new loan to track your borrowing or lending</p>
                     </div>
                 </div>
