@@ -27,12 +27,24 @@ class StoreAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required,
+                string,
+                max:255',
+                'unique:accounts,name,NULL,id,user_id' . Auth::id()
+            ],
             'type' => ['required', new Enum(AccountType::class)],
             'icon' => 'required|string',
             'initial_balance' => 'required|numeric',
             'currency' => 'required|string|max:7',
             'is_active' => 'required|boolean',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.unique' => 'You already have an account with this name.',
         ];
     }
 }
