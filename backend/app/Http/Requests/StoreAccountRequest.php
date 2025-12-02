@@ -28,10 +28,10 @@ class StoreAccountRequest extends FormRequest
     {
         return [
             'name' => [
-                'required,
-                string,
-                max:255',
-                'unique:accounts,name,NULL,id,user_id' . Auth::id()
+                'required',
+                'string',
+                'max:255',
+                'unique:accounts,name,NULL,id,user_id,' . Auth::id()
             ],
             'type' => ['required', new Enum(AccountType::class)],
             'icon' => 'required|string',
