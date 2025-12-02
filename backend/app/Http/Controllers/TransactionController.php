@@ -59,6 +59,11 @@ class TransactionController extends Controller
                     $q->where('name', $request->categoryName);
                 });
             })
+            ->when($request->accountName && $request->accountName !== 'all', function ($query) use ($request) {
+                return $query->whereHas('account', function ($q) use ($request) {
+                    $q->where('name', $request->accountName);
+                });
+            })
             ->when($request->filter && in_array($request->filter, ['today', 'week', 'month']), function ($q) use ($request) {
                 $now = now();
                 return match ($request->filter) {
