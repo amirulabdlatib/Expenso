@@ -99,7 +99,7 @@
                             <h3 class="text-lg font-semibold text-gray-900">Filters</h3>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
                             <!-- Search -->
                             <div class="md:col-span-2 relative">
                                 <Icon name="heroicons:magnifying-glass" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -108,9 +108,14 @@
                                     type="text"
                                     placeholder="Search transactions..."
                                     class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    @input="handleSearch"
-                                />
+                                    @input="handleSearch" />
                             </div>
+
+                            <!-- Account name Filter -->
+                            <select v-model="accountName" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="all">All Accounts</option>
+                                <option v-for="account in accounts" :key="account" :value="account">{{ account }}</option>
+                            </select>
 
                             <!-- Type Filter -->
                             <select v-model="transactionFilterType" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" @change="handletransactionFilterType">
@@ -276,8 +281,7 @@
                                 <button
                                     class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50"
                                     :disabled="transactionsData.pagination.current_page === 1"
-                                    @click="changePage(transactionsData.pagination.current_page - 1)"
-                                >
+                                    @click="changePage(transactionsData.pagination.current_page - 1)">
                                     Previous
                                 </button>
 
@@ -293,8 +297,7 @@
                                             'border-indigo-500 bg-indigo-50 text-indigo-600': pageNumber === transactionsData.pagination.current_page,
                                             'border-gray-300 text-gray-600 hover:bg-gray-50': pageNumber !== transactionsData.pagination.current_page,
                                         }"
-                                        @click="changePage(pageNumber)"
-                                    >
+                                        @click="changePage(pageNumber)">
                                         {{ pageNumber }}
                                     </button>
                                 </template>
@@ -302,8 +305,7 @@
                                 <button
                                     class="px-3 py-1 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-50"
                                     :disabled="transactionsData.pagination.current_page === transactionsData.pagination.last_page"
-                                    @click="changePage(transactionsData.pagination.current_page + 1)"
-                                >
+                                    @click="changePage(transactionsData.pagination.current_page + 1)">
                                     Next
                                 </button>
                             </div>
@@ -333,6 +335,7 @@
     const quickFilter = ref("all");
     const searchQuery = ref("");
     const transactionFilterType = ref("all");
+    const accountName = ref("all");
     const categoryName = ref("all");
     const sortBy = ref("date-desc");
     const isDeleting = ref(false);
@@ -389,6 +392,11 @@
     const categories = computed(() => {
         if (!transactionsData.value?.categories) return [];
         return transactionsData.value.categories.map((category) => category.name);
+    });
+
+    const accounts = computed(() => {
+        if (!transactionsData.value?.accounts) return [];
+        return transactionsData.value.accounts.map((account) => account.name);
     });
 
     // Computed property to check if any filter is active

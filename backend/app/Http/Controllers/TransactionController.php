@@ -95,6 +95,11 @@ class TransactionController extends Controller
             ->orderBy('name')
             ->get();
 
+        $accounts = Account::query()
+            ->forCurrentUser()
+            ->select(['id', 'name'])
+            ->get();
+
         return response()->json([
             'transactions' => $transactions->items(),
             'pagination' => [
@@ -106,6 +111,7 @@ class TransactionController extends Controller
                 'to' => $transactions->lastItem(),
             ],
             'categories' => $categories,
+            'accounts' => $accounts,
             'total_income' => Transaction::totalIncome(),
             'total_expenses' => Transaction::totalExpenses(),
         ], Response::HTTP_OK);
