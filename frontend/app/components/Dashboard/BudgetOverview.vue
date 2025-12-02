@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-gray-900">Budget Overview</h2>
+            <h2 class="text-lg font-bold text-gray-900">Budget Overview</h2>
             <NuxtLink to="/budgets" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> Manage → </NuxtLink>
         </div>
 

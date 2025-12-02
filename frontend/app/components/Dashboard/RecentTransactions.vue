@@ -1,7 +1,7 @@
 <template>
     <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-gray-900">Recent Transactions</h2>
+            <h2 class="text-lg font-bold text-gray-900">Recent Transactions</h2>
             <NuxtLink to="/transactions" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> View All → </NuxtLink>
         </div>
 
@@ -17,8 +17,8 @@
                         <p class="text-sm text-gray-500">{{ transaction.category?.name || "Uncategorized" }} • {{ formatRelativeDate(transaction.transaction_date) }}</p>
                     </div>
                 </div>
-                <p v-if="transaction.credit !== null && transaction.credit !== undefined" class="text-lg font-semibold text-green-600"> {{ formatCurrency(transaction.credit) }}</p>
-                <p v-else-if="transaction.debit !== null && transaction.debit !== undefined" class="text-lg font-semibold text-red-600"> {{ formatCurrency(transaction.debit) }}</p>
+                <p v-if="transaction.credit !== null && transaction.credit !== undefined" class="text-lg font-semibold text-green-600">{{ formatCurrency(transaction.credit) }}</p>
+                <p v-else-if="transaction.debit !== null && transaction.debit !== undefined" class="text-lg font-semibold text-red-600">{{ formatCurrency(transaction.debit) }}</p>
                 <p v-else class="text-lg font-semibold text-gray-600">RM 0.00</p>
             </NuxtLink>
         </div>
