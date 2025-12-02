@@ -59,46 +59,46 @@
                 <template v-else>
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-sm border border-green-200 p-6 hover:shadow-md transition-shadow">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="p-2 bg-green-500 rounded-lg">
-                                    <Icon name="heroicons:arrow-trending-up" class="w-6 h-6 text-white" />
+                                <div class="p-3 bg-green-100 rounded-xl">
+                                    <Icon name="heroicons:arrow-trending-up" class="w-6 h-6 text-green-600" />
                                 </div>
                             </div>
-                            <p class="text-sm font-medium text-green-700 mb-1">Total Income</p>
-                            <p class="text-xl font-bold text-green-900">{{ formatCurrency(transactionsData.total_income) }}</p>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Total Income</p>
+                            <p class="text-lg font-bold text-gray-900">{{ formatCurrency(transactionsData.total_income) }}</p>
                         </div>
 
-                        <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl shadow-sm border border-red-200 p-6 hover:shadow-md transition-shadow">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="p-2 bg-red-500 rounded-lg">
-                                    <Icon name="heroicons:arrow-trending-down" class="w-6 h-6 text-white" />
+                                <div class="p-3 bg-red-100 rounded-xl">
+                                    <Icon name="heroicons:arrow-trending-down" class="w-6 h-6 text-red-600" />
                                 </div>
                             </div>
-                            <p class="text-sm font-medium text-red-700 mb-1">Total Expenses</p>
-                            <p class="text-xl font-bold text-red-900">{{ formatCurrency(transactionsData.total_expenses) }}</p>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Total Expenses</p>
+                            <p class="text-lg font-bold text-gray-900">{{ formatCurrency(transactionsData.total_expenses) }}</p>
                         </div>
 
-                        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-sm border border-indigo-200 p-6 hover:shadow-md transition-shadow">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="p-2 bg-indigo-500 rounded-lg">
-                                    <Icon name="heroicons:banknotes" class="w-6 h-6 text-white" />
+                                <div class="p-3 bg-indigo-100 rounded-xl">
+                                    <Icon name="heroicons:banknotes" class="w-6 h-6 text-indigo-600" />
                                 </div>
                             </div>
-                            <p class="text-sm font-medium text-indigo-700 mb-1">Net Balance</p>
-                            <p :class="['text-xl font-bold', transactionsData.total_income - transactionsData.total_expenses >= 0 ? 'text-green-900' : 'text-red-900']">
+                            <p class="text-sm font-medium text-gray-600 mb-1">Net Balance</p>
+                            <p :class="['text-lg font-bold', transactionsData.total_income - transactionsData.total_expenses >= 0 ? 'text-green-600' : 'text-red-600']">
                                 {{ formatCurrency(transactionsData.total_income - transactionsData.total_expenses) }}
                             </p>
                         </div>
 
-                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-sm border border-purple-200 p-6 hover:shadow-md transition-shadow">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="p-2 bg-purple-500 rounded-lg">
-                                    <Icon name="heroicons:calculator" class="w-6 h-6 text-white" />
+                                <div class="p-3 bg-purple-100 rounded-xl">
+                                    <Icon name="heroicons:calculator" class="w-6 h-6 text-purple-600" />
                                 </div>
                             </div>
-                            <p class="text-sm font-medium text-purple-700 mb-1">Total Transactions</p>
-                            <p class="text-xl font-bold text-purple-900">{{ transactionsData.pagination.total }}</p>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Total Transactions</p>
+                            <p class="text-lg font-bold text-gray-900">{{ transactionsData.pagination.total }}</p>
                         </div>
                     </div>
 
