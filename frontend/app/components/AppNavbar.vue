@@ -51,25 +51,25 @@
                     <!-- Quick Add Dropdown -->
                     <div v-if="showQuickAdd" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                         <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3" @click="closeAllDropdowns">
-                            <Icon name="heroicons:arrow-trending-down" class="w-5 h-5 text-red-500" />
-                            <span class="text-gray-700">Add Expense</span>
+                            <Icon name="heroicons:arrow-trending-down" class="w-5 h-5 text-green-500" />
+                            <NuxtLink to="/transactions/create" class="text-gray-700">Add Transaction</NuxtLink>
                         </button>
                         <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3" @click="closeAllDropdowns">
-                            <Icon name="heroicons:arrow-trending-up" class="w-5 h-5 text-green-500" />
-                            <span class="text-gray-700">Add Income</span>
+                            <Icon name="heroicons:arrow-trending-up" class="w-5 h-5 text-red-500" />
+                            <NuxtLink to="/loans/create" class="text-gray-700">Add Loan</NuxtLink>
                         </button>
                         <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3" @click="closeAllDropdowns">
                             <Icon name="heroicons:arrow-path" class="w-5 h-5 text-blue-500" />
-                            <span class="text-gray-700">Transfer Money</span>
+                            <NuxtLink to="/accounts/create" class="text-gray-700">Add Account</NuxtLink>
                         </button>
                         <hr class="my-2 border-gray-200" />
                         <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3" @click="closeAllDropdowns">
                             <Icon name="heroicons:building-library" class="w-5 h-5 text-indigo-500" />
-                            <span class="text-gray-700">Add Account</span>
+                            <NuxtLink to="/budgets/create" class="text-gray-700">Add Budget</NuxtLink>
                         </button>
                         <button class="w-full px-4 py-2 text-left hover:bg-gray-50 transition-colors flex items-center space-x-3" @click="closeAllDropdowns">
                             <Icon name="heroicons:flag" class="w-5 h-5 text-purple-500" />
-                            <span class="text-gray-700">Create Goal</span>
+                            <NuxtLink to="/categories/create" class="text-gray-700">Add Categories</NuxtLink>
                         </button>
                     </div>
                 </div>
