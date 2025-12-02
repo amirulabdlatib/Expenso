@@ -59,6 +59,20 @@
                     </span>
                 </NuxtLink>
 
+                <!-- Loans -->
+                <NuxtLink
+                    to="/loans"
+                    class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors group"
+                    active-class="bg-indigo-50 text-indigo-600"
+                    :title="isCollapsed && !isMobile ? 'Loans' : ''"
+                    @click="handleLinkClick">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" x2="12" y1="2" y2="22" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                    <span v-if="!isCollapsed || isMobile" class="font-medium">Loans</span>
+                </NuxtLink>
+
                 <!-- Analytics -->
                 <!-- <NuxtLink
                     to="/analytics"
