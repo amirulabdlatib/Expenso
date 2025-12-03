@@ -13,7 +13,7 @@
     "start": "nuxt start",
     "serve": "node .output/server/index.mjs"
   },
-    "overrides": {
+  "overrides": {
     "glob": ">=11.1.0"
   },
   "dependencies": {

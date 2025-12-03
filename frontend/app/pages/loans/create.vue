@@ -90,14 +90,13 @@
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
                                 <input
-                                    v-model="form.totalAmount"
+                                    :value="displayAmount"
+                                    @input="handleAmountInput"
+                                    @keydown="handleKeydown"
                                     type="number"
-                                    step="0.01"
-                                    min="0"
                                     placeholder="0.00"
-                                    class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                    :class="{ 'border-red-500': errors.totalAmount }"
-                                    @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();" />
+                                    class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
+                                    :class="{ 'border-red-500': errors.totalAmount }" />
                             </div>
                             <p v-if="errors.totalAmount" class="mt-1 text-sm text-red-600">{{ errors.totalAmount }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Enter the total loan amount</p>
@@ -146,36 +145,6 @@
                     </div>
                 </div>
 
-                <!-- Summary Preview Card -->
-                <div v-if="form.totalAmount > 0" :class="['rounded-lg shadow-sm border-2 p-6', form.type === 'borrowed' ? 'bg-red-50 border-red-200' : form.type === 'lent' ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200']">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Summary</h2>
-
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Loan Type:</span>
-                            <span class="font-semibold text-gray-900 capitalize">
-                                {{ form.type || "Not selected" }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Total Amount:</span>
-                            <span class="font-semibold text-gray-900"> ${{ parseFloat(form.totalAmount || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </span>
-                        </div>
-                        <div v-if="form.initialPayment > 0" class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Initial Payment:</span>
-                            <span class="font-semibold text-gray-900"> ${{ parseFloat(form.initialPayment || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} </span>
-                        </div>
-                        <div class="border-t border-gray-300 pt-3">
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm font-medium text-gray-700">Outstanding Balance:</span>
-                                <span :class="['text-xl font-bold', form.type === 'borrowed' ? 'text-red-600' : 'text-green-600']">
-                                    ${{ calculateBalance().toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Action Buttons -->
                 <div class="flex items-center justify-end space-x-4 pt-4">
                     <NuxtLink to="/loans" class="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"> Cancel </NuxtLink>
@@ -207,92 +176,55 @@
         middleware: ["sanctum:auth"],
     });
 
-    const { success, error: toastError } = useToast();
-    const router = useRouter();
+    const errors = ref({});
+    const isSubmitting = ref(false);
 
-    const form = ref({
+    const { success, error: toastError } = useToast();
+
+    const form = reactive({
         type: "",
         name: "",
-        totalAmount: "",
+        totalAmount: 0,
         initialPayment: "",
         startDate: new Date().toISOString().split("T")[0],
         interestRate: "",
         description: "",
     });
 
-    const errors = ref({});
-    const isSubmitting = ref(false);
+    const amountCents = ref(0);
 
-    const calculateBalance = () => {
-        const total = parseFloat(form.value.totalAmount || 0);
-        const initial = parseFloat(form.value.initialPayment || 0);
-        return total - initial;
+    const displayAmount = computed(() => {
+        return (amountCents.value / 100).toFixed(2);
+    });
+
+    const handleAmountInput = (event) => {
+        const value = event.target.value.replace(/\D/g, "");
+        amountCents.value = parseInt(value || "0");
+        form.totalAmount = amountCents.value / 100;
     };
 
-    const validateForm = () => {
-        errors.value = {};
-        let isValid = true;
-
-        // Validate type
-        if (!form.value.type) {
-            errors.value.type = "Please select a loan type";
-            isValid = false;
+    const handleKeydown = (event) => {
+        if (["Backspace", "Delete", "Tab", "Escape", "Enter", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+            return;
         }
-
-        // Validate name
-        if (!form.value.name || form.value.name.trim() === "") {
-            errors.value.name = "Loan name is required";
-            isValid = false;
+        if (event.ctrlKey || event.metaKey) {
+            return;
         }
-
-        // Validate total amount
-        if (!form.value.totalAmount || parseFloat(form.value.totalAmount) <= 0) {
-            errors.value.totalAmount = "Please enter a valid amount greater than 0";
-            isValid = false;
+        if (!/^\d$/.test(event.key)) {
+            event.preventDefault();
         }
-
-        // Validate initial payment
-        if (form.value.initialPayment && parseFloat(form.value.initialPayment) > parseFloat(form.value.totalAmount)) {
-            errors.value.initialPayment = "Initial payment cannot exceed total amount";
-            isValid = false;
-        }
-
-        // Validate start date
-        if (!form.value.startDate) {
-            errors.value.startDate = "Start date is required";
-            isValid = false;
-        }
-
-        return isValid;
     };
 
     const handleSubmit = async () => {
-        if (!validateForm()) {
-            toastError("Please fix the errors in the form");
-            return;
-        }
-
         isSubmitting.value = true;
 
         try {
             // Simulate API call
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
-            const loanData = {
-                type: form.value.type,
-                name: form.value.name,
-                totalAmount: parseFloat(form.value.totalAmount),
-                totalPaid: parseFloat(form.value.initialPayment || 0),
-                balance: calculateBalance(),
-                startDate: form.value.startDate,
-                interestRate: form.value.interestRate ? parseFloat(form.value.interestRate) : null,
-                description: form.value.description,
-            };
-
             console.log("Creating loan:", loanData);
 
             success("Loan created successfully!");
-            router.push("/loans");
         } catch (err) {
             console.error("Error creating loan:", err);
             toastError("Failed to create loan. Please try again.");
