@@ -403,16 +403,16 @@ class TransactionController extends Controller
 
     private function getTransactionType(Transaction $transaction): string
     {
+        if ($transaction->loan_id) {
+            return 'loan';
+        }
+
         if ($transaction->transfer_pair_id) {
             return 'transfer';
         }
 
         if ($transaction->debit) {
             return 'expense';
-        }
-
-        if ($transaction->loan_id) {
-            return 'loan';
         }
 
         return 'income';
