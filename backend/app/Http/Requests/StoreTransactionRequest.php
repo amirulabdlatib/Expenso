@@ -34,7 +34,7 @@ class StoreTransactionRequest extends FormRequest
             'type' => ['required', 'string', Rule::in($this->types)],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'amount' => ['required', 'numeric', 'min:0.00',],
+            'amount' => ['required', 'numeric', 'min:0.01',],
             'receipt' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
             'transaction_date' => ['required', 'date_format:Y-m-d H:i:s'],
             'account_id' => [

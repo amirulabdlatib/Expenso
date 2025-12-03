@@ -150,21 +150,7 @@
                         <!-- Amount -->
                         <div>
                             <label for="amount" class="block text-sm font-medium text-gray-700 mb-2"> Amount <span class="text-red-500">*</span> </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-lg">MYR</span>
-                                <input
-                                    id="amount"
-                                    v-model.number="form.amount"
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    :max="maxLimit"
-                                    placeholder="0.00"
-                                    class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
-                                    :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                                    :disabled="isLoading"
-                                    @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();" />
-                            </div>
+                            <MoneyInput v-model="amount" :is-loading="isLoading" />
                             <p v-show="showCurrentBalance" class="text-gray-400 font-light">Current Balance: MYR {{ getCurrentAccount?.current_balance }}</p>
                             <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
@@ -258,6 +244,8 @@
         description: null,
         receipt_file: null,
     });
+
+    const amount = ref(0);
 
     const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
 
@@ -357,7 +345,7 @@
 
         formPayload.append("type", form.type);
         formPayload.append("name", form.name);
-        formPayload.append("amount", form.amount);
+        formPayload.append("amount", amount.value);
         formPayload.append("transaction_date", transaction_date);
         formPayload.append("account_id", form.account_id);
 
