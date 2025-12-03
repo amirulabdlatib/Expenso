@@ -256,7 +256,7 @@
 
                         <div class="overflow-x-auto">
                             <table class="w-full">
-                                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
+                                <thead class="bg-gradient-to from-gray-50 to-gray-100 border-b-2 border-gray-200">
                                     <tr>
                                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             <div class="flex items-center space-x-1">
@@ -328,7 +328,7 @@
                                         <!-- Date & Time -->
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center space-x-3">
-                                                <div class="flex-shrink-0">
+                                                <div class="shrink-0">
                                                     <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
                                                         <Icon name="heroicons:calendar" class="w-5 h-5 text-gray-600 group-hover:text-indigo-600" />
                                                     </div>
