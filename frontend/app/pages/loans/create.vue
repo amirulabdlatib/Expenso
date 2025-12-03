@@ -62,7 +62,6 @@
                                 </div>
                             </div>
                         </button>
-                        {{ form.totalAmount }}
                     </div>
 
                     <p v-if="errors.type" class="mt-2 text-sm text-red-600">{{ errors.type }}</p>
@@ -91,7 +90,9 @@
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
                                 <input
-                                    v-model="form.totalAmount"
+                                    :value="totalAmount.displayValue.value"
+                                    @input="totalAmount.handleInput"
+                                    @keydown="totalAmount.handleKeydown"
                                     type="text"
                                     inputmode="numeric"
                                     placeholder="0.00"
@@ -108,14 +109,14 @@
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
                                 <input
-                                    v-model="form.initialPayment"
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
+                                    :value="initialPayment.displayValue.value"
+                                    @input="initialPayment.handleInput"
+                                    @keydown="initialPayment.handleKeydown"
+                                    type="text"
+                                    inputmode="numeric"
                                     placeholder="0.00"
                                     class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                    :class="{ 'border-red-500': errors.initialPayment }"
-                                    @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();" />
+                                    :class="{ 'border-red-500': errors.initialPayment }" />
                             </div>
                             <p v-if="errors.initialPayment" class="mt-1 text-sm text-red-600">{{ errors.initialPayment }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Any amount already paid or received</p>
@@ -180,24 +181,30 @@
     const isSubmitting = ref(false);
 
     const { success, error: toastError } = useToast();
+    const { createBankingInput } = useBankingInput();
 
     const form = reactive({
         type: "",
         name: "",
-        totalAmount: 0,
-        initialPayment: "",
         startDate: new Date().toISOString().split("T")[0],
         description: "",
     });
+
+    // Create banking inputs
+    const totalAmount = createBankingInput(0);
+    const initialPayment = createBankingInput(0);
 
     const handleSubmit = async () => {
         isSubmitting.value = true;
 
         try {
-            // Simulate API call
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
-            console.log("Creating loan:", loanData);
+            console.log("Creating loan:", {
+                ...form,
+                totalAmount: totalAmount.decimalValue.value,
+                initialPayment: initialPayment.decimalValue.value,
+            });
 
             success("Loan created successfully!");
         } catch (err) {
