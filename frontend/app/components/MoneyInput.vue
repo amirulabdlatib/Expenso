@@ -12,6 +12,7 @@
             inputmode="numeric"
             :placeholder="props.placeholder"
             :disabled="isLoading"
+            :max="max"
             class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
     </div>
 </template>
@@ -22,6 +23,7 @@
         currency: { type: String, default: "MYR" },
         placeholder: { type: String, default: "0.00" },
         isLoading: { type: Boolean, default: false },
+        max: { type: Number, default: null },
     });
 
     const { createBankingInput } = useBankingInput();
@@ -30,6 +32,16 @@
     // When composable changes → update parent
     watch(
         () => bankInput.decimalValue.value,
-        (val) => (model.value = val)
+        (val) => {
+            if (props.max !== null && val > props.max) {
+                model.value = props.max;
+
+                bankInput.handleInput({
+                    target: { value: String(Math.round(props.max * 100)) },
+                });
+            } else {
+                model.value = val;
+            }
+        }
     );
 </script>
