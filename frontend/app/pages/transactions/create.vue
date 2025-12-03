@@ -150,7 +150,7 @@
                         <!-- Amount -->
                         <div>
                             <label for="amount" class="block text-sm font-medium text-gray-700 mb-2"> Amount <span class="text-red-500">*</span> </label>
-                            <MoneyInput v-model="amount" :is-loading="isLoading" :max="maxLimit" />
+                            <MoneyInput v-model="form.amount" :is-loading="isLoading" :max="maxLimit" />
                             <p v-show="showCurrentBalance" class="text-gray-400 font-light">Current Balance: MYR {{ getCurrentAccount?.current_balance }}</p>
                             <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
@@ -244,8 +244,6 @@
         description: null,
         receipt_file: null,
     });
-
-    const amount = ref(0);
 
     const transferredAccounts = computed(() => accounts.value.filter((a) => a.id !== form.account_id));
 
@@ -345,7 +343,7 @@
 
         formPayload.append("type", form.type);
         formPayload.append("name", form.name);
-        formPayload.append("amount", amount.value);
+        formPayload.append("amount", form.amount);
         formPayload.append("transaction_date", transaction_date);
         formPayload.append("account_id", form.account_id);
 

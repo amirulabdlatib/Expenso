@@ -64,7 +64,7 @@
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
                                 {{ form.currency }}
                             </span>
-                            <MoneyInput v-model="initial_balance" :currency="form.currency" />
+                            <MoneyInput v-model="form.initial_balance" :currency="form.currency" :is-loading="isLoading" />
                         </div>
                         <p v-if="errors.initial_balance" class="text-red-400">{{ errors.initial_balance[0] }}</p>
                     </div>
@@ -134,11 +134,10 @@
         name: "",
         type: "",
         icon: "",
+        initial_balance: 0,
         currency: "MYR",
         is_active: true,
     });
-
-    const initial_balance = ref(0);
 
     const handleSubmit = async () => {
         isLoading.value = true;
