@@ -105,7 +105,10 @@
 
                         <!-- Initial Payment (Optional) -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2"> Initial Payment (Optional) </label>
+                            <label class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                                Initial Payment (Optional)
+                                <LoanInitialAmountTooltip />
+                            </label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
                                 <input
@@ -118,6 +121,7 @@
                                     class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                     :class="{ 'border-red-500': errors.initialPayment }" />
                             </div>
+
                             <p v-if="errors.initialPayment" class="mt-1 text-sm text-red-600">{{ errors.initialPayment }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Any amount already paid or received</p>
                         </div>
