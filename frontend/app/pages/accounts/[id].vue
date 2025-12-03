@@ -60,8 +60,7 @@
                             type="text"
                             placeholder="e.g., Maybank Savings, CIMB Credit Card"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            :disabled="isLoading"
-                        />
+                            :disabled="isLoading" />
                         <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                     </div>
 
@@ -82,8 +81,7 @@
                                 @click="
                                     form.type = type.value;
                                     form.icon = type.icon;
-                                "
-                            >
+                                ">
                                 <Icon :name="type.icon" class="w-8 h-8 mb-2" :class="form.type === type.value ? 'text-indigo-600' : 'text-gray-600'" />
                                 <span class="text-xs md:text-sm font-medium text-center" :class="form.type === type.value ? 'text-indigo-900' : 'text-gray-700'">
                                     {{ type.label }}
@@ -97,19 +95,7 @@
                     <div>
                         <label for="balance" class="block text-sm font-medium text-gray-700 mb-2"> Initial Balance <span class="text-red-500">*</span> </label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
-                                {{ form.currency }}
-                            </span>
-                            <input
-                                id="balance"
-                                v-model.number="form.initial_balance"
-                                type="number"
-                                step="0.01"
-                                placeholder="0.00"
-                                class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :disabled="isLoading"
-                                @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
-                            />
+                            <MoneyInput v-model="form.initial_balance" :currency="form.currency" :is-loading="isLoading" />
                         </div>
                         <p v-if="errors.initial_balance" class="text-red-400">{{ errors.initial_balance[0] }}</p>
                     </div>
@@ -142,15 +128,13 @@
                         <NuxtLink
                             to="/accounts"
                             class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                            :class="isLoading ? 'pointer-events-none opacity-50' : ''"
-                        >
+                            :class="isLoading ? 'pointer-events-none opacity-50' : ''">
                             Cancel
                         </NuxtLink>
                         <button
                             type="submit"
                             :disabled="isLoading"
-                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
+                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
                             <span v-if="!isLoading" class="flex items-center space-x-2">
                                 <span>Update</span>
                             </span>

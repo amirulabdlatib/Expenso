@@ -66,15 +66,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2"> Budget Amount (MYR) <span class="text-red-500">*</span> </label>
-                        <input
-                            v-model="form.amount"
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            placeholder="1500.00"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
-                        />
+                        <MoneyInput v-model="form.amount" :is-loading="loading" />
                         <p v-if="errors.amount" class="text-red-500 text-sm mt-1">{{ errors.amount[0] }}</p>
                     </div>
 

@@ -5,7 +5,7 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-3xl font-bold text-gray-900">Analytics</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">Analytics</h1>
                         <p class="text-gray-600 mt-2">Insights into your financial health</p>
                     </div>
                     <div class="flex items-center space-x-3">

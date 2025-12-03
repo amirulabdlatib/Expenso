@@ -7,6 +7,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Transaction extends Model
@@ -23,6 +24,7 @@ class Transaction extends Model
         'credit',
         'transaction_date',
         'receipt',
+        'loan_id',
     ];
 
     public function user(): BelongsTo
@@ -50,6 +52,11 @@ class Transaction extends Model
         return $this->hasOne(Transaction::class, 'transfer_pair_id', 'transfer_pair_id')
             ->whereNotNull('transfer_pair_id')
             ->where('id', '!=', $this->id);
+    }
+
+    public function loanPayments(): HasMany
+    {
+        return $this->hasMany(LoanPayment::class);
     }
 
     /**

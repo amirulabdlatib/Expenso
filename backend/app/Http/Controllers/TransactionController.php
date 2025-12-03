@@ -59,6 +59,11 @@ class TransactionController extends Controller
                     $q->where('name', $request->categoryName);
                 });
             })
+            ->when($request->accountName && $request->accountName !== 'all', function ($query) use ($request) {
+                return $query->whereHas('account', function ($q) use ($request) {
+                    $q->where('name', $request->accountName);
+                });
+            })
             ->when($request->filter && in_array($request->filter, ['today', 'week', 'month']), function ($q) use ($request) {
                 $now = now();
                 return match ($request->filter) {
@@ -95,6 +100,11 @@ class TransactionController extends Controller
             ->orderBy('name')
             ->get();
 
+        $accounts = Account::query()
+            ->forCurrentUser()
+            ->select(['id', 'name'])
+            ->get();
+
         return response()->json([
             'transactions' => $transactions->items(),
             'pagination' => [
@@ -106,6 +116,7 @@ class TransactionController extends Controller
                 'to' => $transactions->lastItem(),
             ],
             'categories' => $categories,
+            'accounts' => $accounts,
             'total_income' => Transaction::totalIncome(),
             'total_expenses' => Transaction::totalExpenses(),
         ], Response::HTTP_OK);
@@ -230,10 +241,10 @@ class TransactionController extends Controller
 
         $type = $this->getTransactionType($transaction);
 
-        if ($type == TransactionType::Transfer->value) {
+        if ($type == TransactionType::Transfer->value || $type == TransactionType::Loan->value) {
             throw new HttpException(
                 Response::HTTP_FORBIDDEN,
-                'Transfer transactions cannot be edited.'
+                "{$type} transactions cannot be edited."
             );
         }
 
@@ -392,6 +403,10 @@ class TransactionController extends Controller
 
     private function getTransactionType(Transaction $transaction): string
     {
+        if ($transaction->loan_id) {
+            return 'loan';
+        }
+
         if ($transaction->transfer_pair_id) {
             return 'transfer';
         }

@@ -35,8 +35,7 @@
                                 placeholder="e.g., Grocery Shopping"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                 :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                                :disabled="isLoading"
-                            />
+                                :disabled="isLoading" />
                             <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                         </div>
 
@@ -50,8 +49,7 @@
                                 placeholder="Add any notes about this transaction..."
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
                                 :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                                :disabled="isLoading"
-                            />
+                                :disabled="isLoading" />
                             <p v-if="errors.description" class="text-red-400">{{ errors.description[0] }}</p>
                         </div>
 
@@ -63,8 +61,7 @@
                                     type="button"
                                     class="relative p-4 border-2 rounded-lg transition-all hover:border-red-500"
                                     :class="form.type === 'expense' ? 'border-red-500 bg-red-50' : 'border-gray-200'"
-                                    @click="form.type = 'expense'"
-                                >
+                                    @click="form.type = 'expense'">
                                     <Icon name="heroicons:arrow-trending-down" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'expense' ? 'text-red-500' : 'text-gray-400'" />
                                     <span class="text-sm font-medium block" :class="form.type === 'expense' ? 'text-red-700' : 'text-gray-700'">Expense</span>
                                 </button>
@@ -73,8 +70,7 @@
                                     type="button"
                                     class="relative p-4 border-2 rounded-lg transition-all hover:border-green-500"
                                     :class="form.type === 'income' ? 'border-green-500 bg-green-50' : 'border-gray-200'"
-                                    @click="form.type = 'income'"
-                                >
+                                    @click="form.type = 'income'">
                                     <Icon name="heroicons:arrow-trending-up" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'income' ? 'text-green-500' : 'text-gray-400'" />
                                     <span class="text-sm font-medium block" :class="form.type === 'income' ? 'text-green-700' : 'text-gray-700'">Income</span>
                                 </button>
@@ -84,8 +80,7 @@
                                     class="relative p-4 border-2 rounded-lg transition-all"
                                     :class="[form.type === 'transfer' ? 'border-blue-500 bg-blue-50' : 'border-gray-200', accounts.length > 1 && form.account_id ? 'hover:border-blue-500 cursor-pointer' : 'opacity-50 cursor-not-allowed']"
                                     :disabled="accounts.length <= 1 || !form.account_id"
-                                    @click="accounts.length > 1 && form.account_id && (form.type = 'transfer')"
-                                >
+                                    @click="accounts.length > 1 && form.account_id && (form.type = 'transfer')">
                                     <Icon name="heroicons:arrow-path" class="w-6 h-6 mx-auto mb-2" :class="form.type === 'transfer' ? 'text-blue-500' : 'text-gray-400'" />
                                     <span class="text-sm font-medium block" :class="form.type === 'transfer' ? 'text-blue-700' : 'text-gray-700'">Transfer</span>
                                 </button>
@@ -112,8 +107,7 @@
                                     class="vue-select-custom"
                                     :clearable="true"
                                     :disabled="isLoading"
-                                    @update:model-value="onParentCategoryChange"
-                                >
+                                    @update:model-value="onParentCategoryChange">
                                     <template #no-options>No categories found</template>
                                 </VSelect>
 
@@ -128,8 +122,7 @@
                                         placeholder="Select a subcategory"
                                         class="vue-select-custom"
                                         :clearable="true"
-                                        :disabled="isLoading"
-                                    >
+                                        :disabled="isLoading">
                                         <template #no-options>No subcategories found</template>
                                     </VSelect>
                                 </div>
@@ -147,8 +140,7 @@
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                 :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
                                 :required="form.type === 'transfer'"
-                                :disabled="isLoading"
-                            >
+                                :disabled="isLoading">
                                 <option value="null" disabled>Select destination account</option>
                                 <option v-for="account in transferredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                             </select>
@@ -158,22 +150,7 @@
                         <!-- Amount -->
                         <div>
                             <label for="amount" class="block text-sm font-medium text-gray-700 mb-2"> Amount <span class="text-red-500">*</span> </label>
-                            <div class="relative">
-                                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-lg">MYR</span>
-                                <input
-                                    id="amount"
-                                    v-model.number="form.amount"
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    :max="maxLimit"
-                                    placeholder="0.00"
-                                    class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
-                                    :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                                    :disabled="isLoading"
-                                    @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
-                                />
-                            </div>
+                            <MoneyInput v-model="form.amount" :is-loading="isLoading" :max="maxLimit" />
                             <p v-show="showCurrentBalance" class="text-gray-400 font-light">Current Balance: MYR {{ getCurrentAccount?.current_balance }}</p>
                             <p v-if="errors.amount" class="text-red-400">{{ errors.amount[0] }}</p>
                         </div>
@@ -194,8 +171,7 @@
                                     type="date"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                     :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                                    :disabled="isLoading"
-                                />
+                                    :disabled="isLoading" />
                             </div>
 
                             <div>
@@ -206,8 +182,7 @@
                                     type="time"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                     :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                                    :disabled="isLoading"
-                                />
+                                    :disabled="isLoading" />
                             </div>
                         </div>
 
@@ -218,8 +193,7 @@
                                 type="submit"
                                 :disabled="isLoading"
                                 class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2"
-                                :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }"
-                            >
+                                :class="{ 'bg-gray-50 cursor-not-allowed opacity-60': isLoading }">
                                 <span v-if="!isLoading">Create </span>
                                 <span v-else class="flex items-center space-x-2">
                                     <span>Creating...</span>

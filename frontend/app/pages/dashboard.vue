@@ -23,15 +23,13 @@
         <template v-else>
             <DashboardHeader v-model="isStatsVisible" />
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <!-- Total Balance -->
                 <DashboardStatsTotalBalance :total-balance="Number(data?.total_balance ?? 0)" :is-visible="isStatsVisible" />
                 <!-- Income -->
                 <DashboardStatsIncome :monthly-income="Number(data?.monthly_income ?? 0)" :is-visible="isStatsVisible" />
                 <!-- Expenses -->
                 <DashboardStatsExpenses :monthly-expenses="Number(data?.monthly_expenses ?? 0)" :is-visible="isStatsVisible" />
-                <!-- Savings -->
-                <DashboardStatsSavings :is-visible="isStatsVisible" />
             </div>
 
             <!-- Charts and Recent Transactions -->
@@ -39,10 +37,8 @@
                 <!-- Recent Transactions -->
                 <DashboardRecentTransactions :recent-transactions="recentTransactions" />
                 <!-- Budget Overview -->
-                <DashboardBudgetOverview />
+                <DashboardBudgetOverview :budgets="budgets" />
             </div>
-
-            <DashboardSavingGoals />
         </template>
     </div>
 </template>
@@ -61,7 +57,11 @@
 
     const { data, pending, error, refresh } = await useAsyncData("dashboard", () => client("/api/dashboard"));
 
+    console.log(data.value);
+
     const recentTransactions = computed(() => data.value?.transactions || []);
+
+    const budgets = computed(() => data.value?.budgets || []);
 
     const isStatsVisible = ref(false);
 </script>

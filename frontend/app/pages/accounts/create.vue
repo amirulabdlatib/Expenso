@@ -8,7 +8,7 @@
                         <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                     </NuxtLink>
                     <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">Create New Account</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">Create New Account</h1>
                         <p class="text-gray-600 text-sm md:text-base mt-1">Add a new financial account to track your money</p>
                     </div>
                 </div>
@@ -26,8 +26,7 @@
                             type="text"
                             placeholder="e.g., Maybank Savings, CIMB Credit Card"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            :disabled="isLoading"
-                        />
+                            :disabled="isLoading" />
                         <p v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</p>
                     </div>
 
@@ -48,8 +47,7 @@
                                 @click="
                                     form.type = type.value;
                                     form.icon = type.icon;
-                                "
-                            >
+                                ">
                                 <Icon :name="type.icon" class="w-8 h-8 mb-2" :class="form.type === type.value ? 'text-indigo-600' : 'text-gray-600'" />
                                 <span class="text-xs md:text-sm font-medium text-center" :class="form.type === type.value ? 'text-indigo-900' : 'text-gray-700'">
                                     {{ type.label }}
@@ -66,26 +64,9 @@
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
                                 {{ form.currency }}
                             </span>
-                            <input
-                                id="balance"
-                                v-model.number="form.initial_balance"
-                                type="number"
-                                step="0.01"
-                                placeholder="0.00"
-                                class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :disabled="isLoading"
-                                @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();"
-                            />
+                            <MoneyInput v-model="form.initial_balance" :currency="form.currency" :is-loading="isLoading" />
                         </div>
                         <p v-if="errors.initial_balance" class="text-red-400">{{ errors.initial_balance[0] }}</p>
-                    </div>
-
-                    <!-- Currency -->
-                    <div>
-                        <label for="currency" class="block text-sm font-medium text-gray-700 mb-2"> Currency <span class="text-red-500">*</span> </label>
-                        <select id="currency" v-model="form.currency" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" :disabled="isLoading">
-                            <option v-for="curr in currencies" :key="curr.code" :value="curr.code">{{ curr.code }} - {{ curr.name }}</option>
-                        </select>
                     </div>
 
                     <!-- Status -->
@@ -108,15 +89,13 @@
                         <NuxtLink
                             to="/accounts"
                             class="w-full md:w-auto px-6 py-3 text-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                            :class="isLoading ? 'pointer-events-none opacity-50' : ''"
-                        >
+                            :class="isLoading ? 'pointer-events-none opacity-50' : ''">
                             Cancel
                         </NuxtLink>
                         <button
                             type="submit"
                             :disabled="isLoading"
-                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
+                            class="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
                             <span v-if="!isLoading" class="flex items-center space-x-2">
                                 <span>Create Account</span>
                             </span>
@@ -144,7 +123,7 @@
         middleware: ["sanctum:auth"],
     });
 
-    const { accountTypes, currencies } = useAccountConstants();
+    const { accountTypes } = useAccountConstants();
     const { createAccount, errors } = useAccount();
     const { success, error } = useToast();
     const accountsStore = useAccountsStore();
