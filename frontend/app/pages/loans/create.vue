@@ -88,16 +88,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Total Amount <span class="text-red-500">*</span> </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
-                                <input
-                                    :value="totalAmount.displayValue.value"
-                                    @input="totalAmount.handleInput"
-                                    @keydown="totalAmount.handleKeydown"
-                                    type="text"
-                                    inputmode="numeric"
-                                    placeholder="0.00"
-                                    class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
-                                    :class="{ 'border-red-500': errors.totalAmount }" />
+                                <MoneyInput v-model="form.totalAmount" :is-loading="isSubmitting" />
                             </div>
                             <p v-if="errors.totalAmount" class="mt-1 text-sm text-red-600">{{ errors.totalAmount }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Enter the total loan amount</p>
@@ -111,15 +102,7 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
-                                <input
-                                    :value="initialPayment.displayValue.value"
-                                    @input="initialPayment.handleInput"
-                                    @keydown="initialPayment.handleKeydown"
-                                    type="text"
-                                    inputmode="numeric"
-                                    placeholder="0.00"
-                                    class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                    :class="{ 'border-red-500': errors.initialPayment }" />
+                                <MoneyInput v-model="form.initialPayment" :is-loading="isSubmitting" />
                             </div>
 
                             <p v-if="errors.initialPayment" class="mt-1 text-sm text-red-600">{{ errors.initialPayment }}</p>
@@ -185,18 +168,15 @@
     const isSubmitting = ref(false);
 
     const { success, error: toastError } = useToast();
-    const { createBankingInput } = useBankingInput();
 
     const form = reactive({
         type: "",
         name: "",
+        totalAmount: 0,
+        initialPayment: 0,
         startDate: new Date().toISOString().split("T")[0],
         description: "",
     });
-
-    // Create banking inputs
-    const totalAmount = createBankingInput(0);
-    const initialPayment = createBankingInput(0);
 
     const handleSubmit = async () => {
         isSubmitting.value = true;
@@ -205,9 +185,7 @@
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
             console.log("Creating loan:", {
-                ...form,
-                totalAmount: totalAmount.decimalValue.value,
-                initialPayment: initialPayment.decimalValue.value,
+                form,
             });
 
             success("Loan created successfully!");
