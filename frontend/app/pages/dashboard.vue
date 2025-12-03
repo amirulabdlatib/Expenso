@@ -57,6 +57,8 @@
 
     const { data, pending, error, refresh } = await useAsyncData("dashboard", () => client("/api/dashboard"));
 
+    console.log(data.value);
+
     const recentTransactions = computed(() => data.value?.transactions || []);
 
     const budgets = computed(() => data.value?.budgets || []);

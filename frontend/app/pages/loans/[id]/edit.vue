@@ -8,8 +8,8 @@
                         <Icon name="heroicons:arrow-left" class="w-5 h-5 text-gray-600" />
                     </NuxtLink>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Create New Loan</h1>
-                        <p class="text-gray-600 mt-1">Add a new loan to track your borrowing or lending</p>
+                        <h1 class="text-2xl font-bold text-gray-900">Edit New Loan</h1>
+                        <p class="text-gray-600 mt-1">Update your loan details</p>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Total Amount <span class="text-red-500">*</span> </label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
-                                <MoneyInput v-model="form.initialPayment" :is-loading="isSubmitting" />
+                                <MoneyInput v-model="form.totalAmount" :is-loading="isSubmitting" />
                             </div>
                             <p v-if="errors.totalAmount" class="mt-1 text-sm text-red-600">{{ errors.totalAmount }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Enter the total loan amount</p>
@@ -103,15 +103,7 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
-                                <input
-                                    :value="initialPayment.displayValue.value"
-                                    @input="initialPayment.handleInput"
-                                    @keydown="initialPayment.handleKeydown"
-                                    type="text"
-                                    inputmode="numeric"
-                                    placeholder="0.00"
-                                    class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                    :class="{ 'border-red-500': errors.initialPayment }" />
+                                <MoneyInput v-model="form.initialPayment" :is-loading="isSubmitting" />
                             </div>
                             <p v-if="errors.initialPayment" class="mt-1 text-sm text-red-600">{{ errors.initialPayment }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Any amount already paid or received</p>
@@ -153,9 +145,9 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Creating...
+                            Updating...
                         </span>
-                        <span v-else>Create Loan</span>
+                        <span v-else>Update Loan</span>
                     </button>
                 </div>
             </form>
@@ -181,13 +173,11 @@
     const form = reactive({
         type: "",
         name: "",
+        totalAmount: 0,
+        initialPayment: 0,
         startDate: new Date().toISOString().split("T")[0],
         description: "",
     });
-
-    // Create banking inputs
-    const totalAmount = createBankingInput(0);
-    const initialPayment = createBankingInput(0);
 
     const handleSubmit = async () => {
         isSubmitting.value = true;

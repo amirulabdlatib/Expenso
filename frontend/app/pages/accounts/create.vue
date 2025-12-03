@@ -143,12 +143,7 @@
         isLoading.value = true;
 
         try {
-            const formData = {
-                ...form,
-                initial_balance: initial_balance.value,
-            };
-
-            await createAccount(formData);
+            await createAccount(form);
             await accountsStore.getActiveAccountsCount();
             success("Account created successfully.");
             navigateTo("/accounts");

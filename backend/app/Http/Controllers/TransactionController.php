@@ -411,6 +411,10 @@ class TransactionController extends Controller
             return 'expense';
         }
 
+        if ($transaction->loan_id) {
+            return 'loan';
+        }
+
         return 'income';
     }
 

@@ -101,10 +101,8 @@
                                 <LoanInitialAmountTooltip />
                             </label>
                             <div class="relative">
-                                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
                                 <MoneyInput v-model="form.initialPayment" :is-loading="isSubmitting" />
                             </div>
-
                             <p v-if="errors.initialPayment" class="mt-1 text-sm text-red-600">{{ errors.initialPayment }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Any amount already paid or received</p>
                         </div>

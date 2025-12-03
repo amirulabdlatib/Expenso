@@ -71,6 +71,7 @@ class DashboardService
         $now = now();
 
         return Budget::forCurrentUser()
+            ->with(['category.children'])
             ->where('month', $now->month)
             ->where('year', $now->year)
             ->get()

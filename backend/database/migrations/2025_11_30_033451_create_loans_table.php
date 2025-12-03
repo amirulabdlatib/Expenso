@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('initial_paid_amount')->default(0.00);
             $table->decimal('total_balance');
             $table->text('description')->nullable();
-            $table->decimal('start_date');
+            $table->date('start_date');
             $table->timestamps();
         });
     }
