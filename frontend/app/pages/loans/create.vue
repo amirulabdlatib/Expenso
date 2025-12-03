@@ -62,6 +62,7 @@
                                 </div>
                             </div>
                         </button>
+                        {{ form.totalAmount }}
                     </div>
 
                     <p v-if="errors.type" class="mt-2 text-sm text-red-600">{{ errors.type }}</p>
@@ -90,10 +91,9 @@
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">MYR</span>
                                 <input
-                                    :value="displayAmount"
-                                    @input="handleAmountInput"
-                                    @keydown="handleKeydown"
-                                    type="number"
+                                    v-model="form.totalAmount"
+                                    type="text"
+                                    inputmode="numeric"
                                     placeholder="0.00"
                                     class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-medium"
                                     :class="{ 'border-red-500': errors.totalAmount }" />
@@ -187,33 +187,8 @@
         totalAmount: 0,
         initialPayment: "",
         startDate: new Date().toISOString().split("T")[0],
-        interestRate: "",
         description: "",
     });
-
-    const amountCents = ref(0);
-
-    const displayAmount = computed(() => {
-        return (amountCents.value / 100).toFixed(2);
-    });
-
-    const handleAmountInput = (event) => {
-        const value = event.target.value.replace(/\D/g, "");
-        amountCents.value = parseInt(value || "0");
-        form.totalAmount = amountCents.value / 100;
-    };
-
-    const handleKeydown = (event) => {
-        if (["Backspace", "Delete", "Tab", "Escape", "Enter", "ArrowLeft", "ArrowRight"].includes(event.key)) {
-            return;
-        }
-        if (event.ctrlKey || event.metaKey) {
-            return;
-        }
-        if (!/^\d$/.test(event.key)) {
-            event.preventDefault();
-        }
-    };
 
     const handleSubmit = async () => {
         isSubmitting.value = true;
