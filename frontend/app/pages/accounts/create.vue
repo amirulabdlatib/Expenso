@@ -64,25 +64,9 @@
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
                                 {{ form.currency }}
                             </span>
-                            <input
-                                id="balance"
-                                v-model.number="form.initial_balance"
-                                type="number"
-                                step="0.01"
-                                placeholder="0.00"
-                                class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :disabled="isLoading"
-                                @keydown="if (['-', '+', 'e', 'E'].includes($event.key)) $event.preventDefault();" />
+                            <MoneyInput v-model="initial_balance" :currency="form.currency" />
                         </div>
                         <p v-if="errors.initial_balance" class="text-red-400">{{ errors.initial_balance[0] }}</p>
-                    </div>
-
-                    <!-- Currency -->
-                    <div>
-                        <label for="currency" class="block text-sm font-medium text-gray-700 mb-2"> Currency <span class="text-red-500">*</span> </label>
-                        <select id="currency" v-model="form.currency" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" :disabled="isLoading">
-                            <option v-for="curr in currencies" :key="curr.code" :value="curr.code">{{ curr.code }} - {{ curr.name }}</option>
-                        </select>
                     </div>
 
                     <!-- Status -->
@@ -139,7 +123,7 @@
         middleware: ["sanctum:auth"],
     });
 
-    const { accountTypes, currencies } = useAccountConstants();
+    const { accountTypes } = useAccountConstants();
     const { createAccount, errors } = useAccount();
     const { success, error } = useToast();
     const accountsStore = useAccountsStore();
@@ -150,16 +134,22 @@
         name: "",
         type: "",
         icon: "",
-        initial_balance: 0,
         currency: "MYR",
         is_active: true,
     });
+
+    const initial_balance = ref(0);
 
     const handleSubmit = async () => {
         isLoading.value = true;
 
         try {
-            await createAccount(form);
+            const formData = {
+                ...form,
+                initial_balance: initial_balance.value,
+            };
+
+            await createAccount(formData);
             await accountsStore.getActiveAccountsCount();
             success("Account created successfully.");
             navigateTo("/accounts");

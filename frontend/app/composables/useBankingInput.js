@@ -9,6 +9,8 @@ export const useBankingInput = () => {
         };
 
         const displayValue = computed(() => {
+            if (cents.value === 0) return "";
+
             const rawValue = (cents.value / 100).toFixed(2);
             return formatWithThousands(rawValue);
         });
