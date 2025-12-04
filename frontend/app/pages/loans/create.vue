@@ -24,18 +24,18 @@
                         <!-- Borrowed Option -->
                         <button
                             type="button"
-                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrowed' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
-                            @click="form.type = 'borrowed'"
+                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrow' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
+                            @click="form.type = 'borrow'"
                         >
                             <div class="flex flex-col items-center text-center space-y-3">
-                                <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'borrowed' ? 'bg-red-100' : 'bg-gray-100']">
-                                    <Icon name="heroicons:arrow-trending-down" :class="['w-8 h-8', form.type === 'borrowed' ? 'text-red-600' : 'text-gray-400']" />
+                                <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'borrow' ? 'bg-red-100' : 'bg-gray-100']">
+                                    <Icon name="heroicons:arrow-trending-down" :class="['w-8 h-8', form.type === 'borrow' ? 'text-red-600' : 'text-gray-400']" />
                                 </div>
                                 <div>
                                     <h3 class="font-semibold text-gray-900">I Borrowed</h3>
                                     <p class="text-sm text-gray-600 mt-1">Money I need to repay</p>
                                 </div>
-                                <div v-if="form.type === 'borrowed'" class="absolute top-3 right-3">
+                                <div v-if="form.type === 'borrow'" class="absolute top-3 right-3">
                                     <div class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
                                         <Icon name="heroicons:check" class="w-4 h-4 text-white" />
                                     </div>
@@ -66,7 +66,7 @@
                         </button>
                     </div>
 
-                    <p v-if="errors.type" class="mt-2 text-sm text-red-600">{{ errors.type }}</p>
+                    <p v-if="errors.type" class="mt-2 text-sm text-red-600">{{ errors.type[0] }}</p>
                 </div>
 
                 <!-- Loan Details Card -->
@@ -82,18 +82,17 @@
                                 type="text"
                                 placeholder="e.g., Personal Loan - Bank XYZ, Loan to John"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :class="{ 'border-red-500': errors.name }"
                             />
-                            <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name }}</p>
+                            <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name[0] }}</p>
                         </div>
 
                         <!-- Total Amount -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Total Amount <span class="text-red-500">*</span> </label>
                             <div class="relative">
-                                <MoneyInput v-model="form.totalAmount" :is-loading="isSubmitting" />
+                                <MoneyInput v-model="form.total_amount" :is-loading="isSubmitting" />
                             </div>
-                            <p v-if="errors.totalAmount" class="mt-1 text-sm text-red-600">{{ errors.totalAmount }}</p>
+                            <p v-if="errors.total_amount" class="mt-1 text-sm text-red-600">{{ errors.total_amount[0] }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Enter the total loan amount</p>
                         </div>
 
@@ -104,9 +103,9 @@
                                 <LoanInitialAmountTooltip />
                             </label>
                             <div class="relative">
-                                <MoneyInput v-model="form.initialPayment" :is-loading="isSubmitting" />
+                                <MoneyInput v-model="form.initial_paid_amount" :is-loading="isSubmitting" />
                             </div>
-                            <p v-if="errors.initialPayment" class="mt-1 text-sm text-red-600">{{ errors.initialPayment }}</p>
+                            <p v-if="errors.initial_paid_amount" class="mt-1 text-sm text-red-600">{{ errors.initial_paid_amount[0] }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">Any amount already paid or received</p>
                         </div>
 
@@ -114,12 +113,12 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Start Date <span class="text-red-500">*</span> </label>
                             <input
-                                v-model="form.startDate"
+                                v-model="form.start_date"
                                 type="date"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :class="{ 'border-red-500': errors.startDate }"
+                                :class="{ 'border-red-500': errors.start_date }"
                             />
-                            <p v-if="errors.startDate" class="mt-1 text-sm text-red-600">{{ errors.startDate }}</p>
+                            <p v-if="errors.start_date" class="mt-1 text-sm text-red-600">{{ errors.start_date[0] }}</p>
                         </div>
 
                         <!-- Description/Notes -->
@@ -168,17 +167,16 @@
         middleware: ["sanctum:auth"],
     });
 
-    const errors = ref({});
-    const isSubmitting = ref(false);
-
+    const { errors, createLoan } = useLoan();
     const { success, error: toastError } = useToast();
+    const isSubmitting = ref(false);
 
     const form = reactive({
         type: "",
         name: "",
-        totalAmount: 0,
-        initialPayment: 0,
-        startDate: new Date().toISOString().split("T")[0],
+        total_amount: 0,
+        initial_paid_amount: 0.0,
+        start_date: new Date().toISOString().split("T")[0],
         description: "",
     });
 
@@ -186,13 +184,9 @@
         isSubmitting.value = true;
 
         try {
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-
-            console.log("Creating loan:", {
-                form,
-            });
-
+            await createLoan(form);
             success("Loan created successfully!");
+            navigateTo("/loans");
         } catch (err) {
             console.error("Error creating loan:", err);
             toastError("Failed to create loan. Please try again.");

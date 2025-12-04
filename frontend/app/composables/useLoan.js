@@ -2,9 +2,12 @@ export const useLoan = () => {
     const errors = ref({});
     const sanctumClient = useSanctumClient();
 
-    const createLoan = async () => {
+    const createLoan = async (form) => {
         try {
-            const response = await sanctumClient("/api");
+            const response = await sanctumClient("/api/loans", {
+                method: "POST",
+                body: form,
+            });
             return response;
         } catch (err) {
             if (err.statusCode === 422) {

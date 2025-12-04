@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Loan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreLoanRequest;
 
 class LoanController extends Controller
 {
@@ -17,9 +20,18 @@ class LoanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLoanRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $data['user_id'] = Auth::id();
+        $data['total_balance'] = $data['total_amount'] - $data['initial_paid_amount'];
+
+        Loan::create($data);
+
+        return response()->json([
+            'message' => 'Loan created successfully'
+        ]);
     }
 
     /**

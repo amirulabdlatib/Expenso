@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\LoanPaymentType;
+use App\Enums\LoanType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,7 +21,7 @@ class Loan extends Model
     ];
 
     protected $casts = [
-        'type' => LoanPaymentType::class
+        'type' => LoanType::class
     ];
 
     public function user(): BelongsTo
