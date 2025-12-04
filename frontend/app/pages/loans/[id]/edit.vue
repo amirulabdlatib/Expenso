@@ -15,7 +15,7 @@
             </div>
 
             <!-- Form -->
-            <form @submit.prevent="handleSubmit" class="space-y-6">
+            <form class="space-y-6" @submit.prevent="handleSubmit">
                 <!-- Loan Type Card -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Loan Type</h2>
@@ -24,8 +24,8 @@
                         <!-- Borrowed Option -->
                         <button
                             type="button"
-                            @click="form.type = 'borrowed'"
-                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrowed' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']">
+                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrowed' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
+                            @click="form.type = 'borrowed'">
                             <div class="flex flex-col items-center text-center space-y-3">
                                 <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'borrowed' ? 'bg-red-100' : 'bg-gray-100']">
                                     <Icon name="heroicons:arrow-trending-down" :class="['w-8 h-8', form.type === 'borrowed' ? 'text-red-600' : 'text-gray-400']" />
@@ -45,8 +45,8 @@
                         <!-- Lent Option -->
                         <button
                             type="button"
-                            @click="form.type = 'lent'"
-                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'lent' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300 bg-white']">
+                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'lent' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
+                            @click="form.type = 'lent'">
                             <div class="flex flex-col items-center text-center space-y-3">
                                 <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'lent' ? 'bg-green-100' : 'bg-gray-100']">
                                     <Icon name="heroicons:arrow-trending-up" :class="['w-8 h-8', form.type === 'lent' ? 'text-green-600' : 'text-gray-400']" />

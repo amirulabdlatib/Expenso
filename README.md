@@ -70,6 +70,7 @@ Expenso/
 -   [x] Profile update functionality
 -   [x] Receipt upload
 -   [ ] Loan repayment progress module
+-   [ ] Bill splitter
 -   [ ] Monthly/Yearly statement reports
 -   [ ] Income tax calculation
 -   [ ] Tax relief management

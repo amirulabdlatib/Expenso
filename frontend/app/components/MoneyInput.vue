@@ -6,14 +6,14 @@
 
         <input
             :value="bankInput.displayValue.value"
-            @input="bankInput.handleInput"
-            @keydown="bankInput.handleKeydown"
             type="text"
             inputmode="numeric"
             :placeholder="props.placeholder"
             :disabled="isLoading"
             :max="max"
-            class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+            class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            @input="bankInput.handleInput"
+            @keydown="bankInput.handleKeydown" />
     </div>
 </template>
 

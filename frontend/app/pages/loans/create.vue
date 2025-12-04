@@ -15,7 +15,7 @@
             </div>
 
             <!-- Form -->
-            <form @submit.prevent="handleSubmit" class="space-y-6">
+            <form class="space-y-6" @submit.prevent="handleSubmit">
                 <!-- Loan Type Card -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Loan Type</h2>
@@ -24,8 +24,9 @@
                         <!-- Borrowed Option -->
                         <button
                             type="button"
+                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrowed' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
                             @click="form.type = 'borrowed'"
-                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrowed' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']">
+                        >
                             <div class="flex flex-col items-center text-center space-y-3">
                                 <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'borrowed' ? 'bg-red-100' : 'bg-gray-100']">
                                     <Icon name="heroicons:arrow-trending-down" :class="['w-8 h-8', form.type === 'borrowed' ? 'text-red-600' : 'text-gray-400']" />
@@ -45,8 +46,9 @@
                         <!-- Lent Option -->
                         <button
                             type="button"
+                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'lent' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
                             @click="form.type = 'lent'"
-                            :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'lent' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300 bg-white']">
+                        >
                             <div class="flex flex-col items-center text-center space-y-3">
                                 <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'lent' ? 'bg-green-100' : 'bg-gray-100']">
                                     <Icon name="heroicons:arrow-trending-up" :class="['w-8 h-8', form.type === 'lent' ? 'text-green-600' : 'text-gray-400']" />
@@ -80,7 +82,8 @@
                                 type="text"
                                 placeholder="e.g., Personal Loan - Bank XYZ, Loan to John"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :class="{ 'border-red-500': errors.name }" />
+                                :class="{ 'border-red-500': errors.name }"
+                            />
                             <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name }}</p>
                         </div>
 
@@ -114,7 +117,8 @@
                                 v-model="form.startDate"
                                 type="date"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :class="{ 'border-red-500': errors.startDate }" />
+                                :class="{ 'border-red-500': errors.startDate }"
+                            />
                             <p v-if="errors.startDate" class="mt-1 text-sm text-red-600">{{ errors.startDate }}</p>
                         </div>
 
@@ -125,7 +129,8 @@
                                 v-model="form.description"
                                 rows="3"
                                 placeholder="Add any additional notes or details about this loan..."
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                            ></textarea>
                             <p class="mt-1 text-xs text-gray-500">Optional: Add context or repayment terms</p>
                         </div>
                     </div>
@@ -137,7 +142,8 @@
                     <button
                         type="submit"
                         :disabled="isSubmitting"
-                        :class="['px-6 py-2.5 rounded-lg font-medium transition-colors', isSubmitting ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700']">
+                        :class="['px-6 py-2.5 rounded-lg font-medium transition-colors', isSubmitting ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700']"
+                    >
                         <span v-if="isSubmitting" class="flex items-center">
                             <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

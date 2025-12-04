@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AccountController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -36,6 +37,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('budgets', BudgetController::class);
     Route::get('/budgets/{budget}/edit', [BudgetController::class, 'edit']);
+
+    Route::apiResource('loans', LoanController::class);
 
     Route::get('profile', [ProfileController::class, 'index']);
     Route::put('profile', [ProfileController::class, 'update']);

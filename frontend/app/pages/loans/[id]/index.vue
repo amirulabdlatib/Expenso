@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button @click="showAddPaymentModal = true" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium">
+                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium" @click="showAddPaymentModal = true">
                             <Icon name="heroicons:plus" class="w-4 h-4 inline mr-1" />
                             Add Payment
                         </button>
@@ -132,7 +132,7 @@
                         <Icon name="heroicons:banknotes" class="w-12 h-12 text-gray-300 mx-auto mb-4" />
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">No payments yet</h3>
                         <p class="text-gray-600 mb-4">Start tracking payments for this loan</p>
-                        <button @click="showAddPaymentModal = true" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium">
+                        <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium" @click="showAddPaymentModal = true">
                             <Icon name="heroicons:plus" class="w-4 h-4 inline mr-1" />
                             Add First Payment
                         </button>
