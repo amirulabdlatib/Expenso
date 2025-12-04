@@ -1,6 +1,18 @@
 # Expenso
 
-A full-stack expense tracking application built with modern web technologies.
+A comprehensive personal finance management solution designed to help you take control of your financial life. Expenso provides powerful tools for tracking expenses, managing budgets, and gaining insights into your spending habits.
+
+## Project Overview
+
+Expenso is a full-featured financial management platform that combines intuitive expense tracking with advanced budgeting tools. Built with modern web technologies, it offers a seamless experience for managing personal and household finances. The application helps users track their income and expenses, set and monitor budgets, and gain valuable insights through detailed analytics.
+
+Key aspects of the project include:
+
+-   **User-Centric Design**: Clean, intuitive interface for managing financial data
+-   **Comprehensive Financial Tracking**: Monitor all your financial activities in one place
+-   **Smart Budgeting**: Set and track budgets with intelligent alerts and projections
+-   **Secure & Private**: Your financial data remains private and protected
+-   **Extensible Platform**: Built with scalability in mind for future enhancements
 
 ## Tech Stack
 
