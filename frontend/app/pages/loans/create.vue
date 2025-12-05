@@ -80,7 +80,7 @@
                             </label>
                             <select v-model="form.account_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 <option value="">Select an account</option>
-                                <option v-for="account in accounts" :key="account.id" :value="account.id">{{ account.name }} ({{ formatCurrency(account.current_balance) }})</option>
+                                <option v-for="account in accounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                             </select>
                             <p v-if="errors.account_id" class="mt-1 text-sm text-red-600">{{ errors.account_id[0] }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">
@@ -103,10 +103,12 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Total Amount <span class="text-red-500">*</span> </label>
                             <div class="relative">
-                                <MoneyInput v-model="form.total_amount" :is-loading="isSubmitting" />
+                                <MoneyInput v-model="form.total_amount" :is-loading="isSubmitting" :max="maxLoanLimit" />
                             </div>
                             <p v-if="errors.total_amount" class="mt-1 text-sm text-red-600">{{ errors.total_amount[0] }}</p>
-                            <p v-else class="mt-1 text-xs text-gray-500">Enter the total loan amount</p>
+                            <p v-else class="mt-1 text-xs text-gray-500">
+                                Enter the total loan amount <span v-show="form.type == 'lent'">({{ formatCurrency(displayMaxAmount) }})</span>
+                            </p>
                         </div>
 
                         <!-- Initial Payment (Optional) -->
@@ -204,6 +206,24 @@
         initial_paid_amount: 0.0,
         start_date: new Date().toISOString().split("T")[0],
         description: "",
+    });
+
+    const maxLoanLimit = computed(() => {
+        if (!form.account_id || form.type !== "lent") {
+            return undefined;
+        }
+
+        const selectedAccount = accounts.value.find((acc) => acc.id === form.account_id);
+
+        if (!selectedAccount) {
+            return undefined;
+        }
+
+        return parseFloat(selectedAccount.current_balance);
+    });
+
+    const displayMaxAmount = computed(() => {
+        return maxLoanLimit.value ?? 0;
     });
 
     const handleSubmit = async () => {
