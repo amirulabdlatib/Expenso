@@ -80,7 +80,7 @@
                             </label>
                             <select v-model="form.account_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                 <option value="">Select an account</option>
-                                <option v-for="account in accounts" :key="account.id" :value="account.id">{{ account.name }}</option>
+                                <option v-for="account in filteredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
                             </select>
                             <p v-if="errors.account_id" class="mt-1 text-sm text-red-600">{{ errors.account_id[0] }}</p>
                             <p v-else class="mt-1 text-xs text-gray-500">
@@ -189,9 +189,7 @@
     onMounted(async () => {
         try {
             const response = await getLoanAccounts();
-            accounts.value = response.accounts.filter((account) => {
-                return parseFloat(account.current_balance) !== 0;
-            });
+            accounts.value = response.accounts;
         } catch (err) {
             console.error("Error fetching accounts:", err);
             toastError("Failed to load accounts");
@@ -208,12 +206,21 @@
         description: "",
     });
 
+    const filteredAccounts = computed(() => {
+        if (form.type === "lent") {
+            return accounts.value.filter((account) => parseFloat(account.current_balance) > 0);
+        } else if (form.type === "borrow") {
+            return accounts.value;
+        }
+        return [];
+    });
+
     const maxLoanLimit = computed(() => {
         if (!form.account_id || form.type !== "lent") {
             return undefined;
         }
 
-        const selectedAccount = accounts.value.find((acc) => acc.id === form.account_id);
+        const selectedAccount = filteredAccounts.value.find((acc) => acc.id === form.account_id);
 
         if (!selectedAccount) {
             return undefined;

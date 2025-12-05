@@ -61,7 +61,6 @@ export const useAccount = () => {
         errors,
         createAccount,
         getAccount,
-        getActiveAccount,
         updateAccount,
         deleteAccount,
     };
