@@ -18,7 +18,20 @@ class LoanController extends Controller
      */
     public function index()
     {
-        //
+        $loans = Loan::forCurrentUser();
+
+        $totalBorrowed = Loan::forCurrentUser()
+            ->where('type', LoanType::Borrow->value)
+            ->sum('total_balance');
+        $totalLent = Loan::forCurrentUser()
+            ->where('type', LoanType::Lent->value)
+            ->sum('total_balance');
+
+        return response()->json([
+            'loans' => $loans,
+            'totalBorrowed' => $totalBorrowed,
+            'totalLent' => $totalLent,
+        ]);
     }
 
     /**
