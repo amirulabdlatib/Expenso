@@ -24,6 +24,7 @@
                         <!-- Borrowed Option -->
                         <button
                             type="button"
+                            class="hover:cursor-pointer"
                             :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrow' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
                             @click="form.type = 'borrow'">
                             <div class="flex flex-col items-center text-center space-y-3">
@@ -45,6 +46,7 @@
                         <!-- Lent Option -->
                         <button
                             type="button"
+                            class="hover:cursor-pointer"
                             :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'lent' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
                             @click="form.type = 'lent'">
                             <div class="flex flex-col items-center text-center space-y-3">
