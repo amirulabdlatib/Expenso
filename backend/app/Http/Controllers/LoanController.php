@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Loan;
 use App\Enums\LoanType;
 use App\Models\Account;
-use App\Models\LoanPayment;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Enums\LoanPaymentType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreLoanRequest;
@@ -28,43 +26,39 @@ class LoanController extends Controller
      */
     public function store(StoreLoanRequest $request)
     {
-        $data = $request->validated();
+        $isMoneyTransferred = $request['is_money_transferred'];
+        unset($request['is_money_transferred']);
 
+        $data = $request->validated();
         $data['user_id'] = Auth::id();
         $data['description'] = $data['description'] ?? null;
         $data['total_balance'] = $data['total_amount'] - ($data['initial_paid_amount'] ?? 0);
 
-        DB::transaction(function () use ($data) {
+        DB::transaction(function () use ($data, $isMoneyTransferred) {
+
             $loan = Loan::create($data);
 
-            $account = Account::find($data['account_id']);
+            if (!$isMoneyTransferred) {
+                $account = Account::find($data['account_id']);
 
-            if ($data['type'] === LoanType::Borrow->value) {
-                $account->increment('current_balance', $data['total_amount']);
-            } elseif ($data['type'] === LoanType::Lent->value) {  // ✅ Fixed
-                $account->decrement('current_balance', $data['total_amount']);
+                Transaction::create([
+                    'user_id' => Auth::id(),
+                    'account_id' => $data['account_id'],
+                    'category_id' => null,
+                    'name' => $data['name'],
+                    'description' => $data['description'],
+                    'debit' => $data['type'] === LoanType::Lent->value ? $data['total_balance'] : null,
+                    'credit' => $data['type'] === LoanType::Borrow->value ? $data['total_balance'] : null,
+                    'transaction_date' => $data['start_date'],
+                    'loan_id' => $loan->id,
+                ]);
+
+                if ($data['type'] === LoanType::Borrow->value) {
+                    $account->increment('current_balance', $data['total_balance']);
+                } elseif ($data['type'] === LoanType::Lent->value) {
+                    $account->decrement('current_balance', $data['total_balance']);
+                }
             }
-
-            $transaction = Transaction::create([
-                'user_id' => Auth::id(),
-                'account_id' => $data['account_id'],
-                'category_id' => null,
-                'name' => $data['name'],
-                'description' => $data['description'],
-                'debit' => $data['type'] === LoanType::Lent->value ? $data['total_amount'] : null,
-                'credit' => $data['type'] === LoanType::Borrow->value ? $data['total_amount'] : null,
-                'transaction_date' => $data['start_date'],
-                'loan_id' => $loan->id,
-            ]);
-
-
-            LoanPayment::create([
-                'loan_id' => $loan->id,
-                'transaction_id' => $transaction->id,
-                'amount' => $data['total_amount'],
-                'direction' => $data['type'] === LoanType::Borrow->value ? LoanPaymentType::IN->value : LoanPaymentType::OUT->value,
-                'date' => $data['start_date'],
-            ]);
         });
 
         return response()->json([

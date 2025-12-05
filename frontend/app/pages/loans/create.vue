@@ -124,6 +124,15 @@
                             <p v-else class="mt-1 text-xs text-gray-500">Any amount already paid or received</p>
                         </div>
 
+                        <!-- Money Transferred Checkbox -->
+                        <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <input id="is_money_transferred" v-model="form.is_money_transferred" type="checkbox" class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                            <div class="flex-1">
+                                <label for="is_money_transferred" class="text-sm font-medium text-gray-700 cursor-pointer"> Money has already been transferred </label>
+                                <p class="text-xs text-gray-500 mt-1">Check this if the money has already moved in/out of your account. Leave unchecked if the transfer hasn't happened yet.</p>
+                            </div>
+                        </div>
+
                         <!-- Start Date -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Start Date <span class="text-red-500">*</span> </label>
@@ -202,6 +211,7 @@
         name: "",
         total_amount: 0,
         initial_paid_amount: 0.0,
+        is_money_transferred: false,
         start_date: new Date().toISOString().split("T")[0],
         description: "",
     });
