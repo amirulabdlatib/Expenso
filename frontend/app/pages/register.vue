@@ -195,7 +195,7 @@
             await doRegister(form);
             await refreshIdentity();
             success("Account created successfully.");
-            navigateTo("/dashboard");
+            navigateTo("/verify-email");
         } catch (err) {
             console.log(err);
             error("Registration failed. Please try again.");

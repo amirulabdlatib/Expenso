@@ -101,9 +101,9 @@
             errorMessage.value = "";
             successMessage.value = "";
 
-            // await sanctumClient("/api/email/verification-notification", {
-            //     method: "POST",
-            // });
+            await sanctumClient("/api/email/resend", {
+                method: "POST",
+            });
 
             successMessage.value = "Verification email sent successfully! Please check your inbox.";
 
