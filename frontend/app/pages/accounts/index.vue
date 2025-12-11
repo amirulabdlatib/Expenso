@@ -221,7 +221,7 @@
     });
 
     definePageMeta({
-        middleware: ["sanctum:auth"],
+        middleware: ["sanctum:auth", "verified"],
     });
 
     const { formatCurrency } = useCurrency();

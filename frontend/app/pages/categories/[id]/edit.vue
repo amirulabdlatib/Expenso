@@ -171,7 +171,7 @@
     });
 
     definePageMeta({
-        middleware: ["sanctum:auth"],
+        middleware: ["sanctum:auth", "verified"],
     });
 
     const { updateCategory, errors } = useCategory();
