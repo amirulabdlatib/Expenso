@@ -26,8 +26,7 @@
                                 type="text"
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="John Doe"
-                                autocomplete="name"
-                            />
+                                autocomplete="name" />
                             <span v-if="errors.name" class="text-red-400">{{ errors.name[0] }}</span>
                         </div>
                     </div>
@@ -49,8 +48,7 @@
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="you@example.com"
                                 inputmode="email"
-                                autocomplete="email"
-                            />
+                                autocomplete="email" />
                             <span v-if="errors.email" class="text-red-400">{{ errors.email[0] }}</span>
                         </div>
                     </div>
@@ -71,8 +69,7 @@
                                 :type="showPassword ? 'text' : 'password'"
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="••••••••"
-                                autocomplete="new-password"
-                            />
+                                autocomplete="new-password" />
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" @click="showPassword = !showPassword">
                                 <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
@@ -105,8 +102,7 @@
                                 :type="showConfirmPassword ? 'text' : 'password'"
                                 class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="••••••••"
-                                autocomplete="new-password"
-                            />
+                                autocomplete="new-password" />
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" @click="showConfirmPassword = !showConfirmPassword">
                                 <svg v-if="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
@@ -139,8 +135,7 @@
                     <button
                         type="submit"
                         :disabled="isLoading"
-                        class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
-                    >
+                        class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center">
                         <span v-if="!isLoading">Create Account</span>
                         <span v-else class="flex items-center">
                             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -199,7 +194,7 @@
         try {
             await doRegister(form);
             await refreshIdentity();
-            success("Account created successfully! Welcome to Expenso");
+            success("Account created successfully.");
             navigateTo("/dashboard");
         } catch (err) {
             console.log(err);
