@@ -69,7 +69,7 @@
                             <input id="remember" v-model="form.remember" type="checkbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-600" />
                             <label for="remember" class="ml-2 text-sm text-gray-600"> Remember me </label>
                         </div>
-                        <a href="#" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> Forgot password? </a>
+                        <NuxtLink to="/forgot-password" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium"> Forgot password? </NuxtLink>
                     </div>
 
                     <!-- Submit Button -->
