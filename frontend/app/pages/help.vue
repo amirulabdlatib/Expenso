@@ -13,7 +13,7 @@
                         v-model="searchQuery"
                         type="text"
                         placeholder="Search for help articles..."
-                        class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg shadow-sm" >
+                        class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg shadow-sm" />
                 </div>
             </div>
 
@@ -157,7 +157,7 @@
                             <Icon name="heroicons:envelope" class="w-5 h-5" />
                             <span>Email Support</span>
                         </button>
-                        <button class="w-full sm:w-auto px-8 py-3 bg-white bg-opacity-20 text-white rounded-lg hover:bg-opacity-30 transition-colors font-semibold flex items-center justify-center space-x-2">
+                        <button class="w-full sm:w-auto px-8 py-3 bg-white bg-opacity-20 text-indigo-600 rounded-lg hover:bg-opacity-30 transition-colors font-semibold flex items-center justify-center space-x-2">
                             <Icon name="heroicons:chat-bubble-left-ellipsis" class="w-5 h-5" />
                             <span>Live Chat</span>
                         </button>
