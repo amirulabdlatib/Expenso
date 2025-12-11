@@ -41,8 +41,7 @@
                                 required
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-colors"
                                 placeholder="you@example.com"
-                                autocomplete="email"
-                            />
+                                autocomplete="email" />
                         </div>
                         <span v-if="errors?.email" class="text-red-400 text-sm mt-1 block">{{ errors.email[0] }}</span>
                     </div>
@@ -51,8 +50,7 @@
                     <button
                         type="submit"
                         :disabled="isLoading"
-                        class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
-                    >
+                        class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center">
                         <span v-if="!isLoading">Send Reset Instructions</span>
                         <span v-else class="flex items-center">
                             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -66,12 +64,7 @@
 
                 <!-- Back to Login Button (shown after email sent) -->
                 <div v-if="emailSent">
-                    <NuxtLink
-                        to="/login"
-                        class="w-full inline-flex items-center justify-center bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 font-medium"
-                    >
-                        Back to Login
-                    </NuxtLink>
+                    <NuxtLink to="/login" class="w-full inline-flex items-center justify-center bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 font-medium"> Back to Login </NuxtLink>
                 </div>
             </div>
 
@@ -100,6 +93,7 @@
     });
 
     const { success, error } = useToast();
+    const client = useSanctumClient();
 
     const form = reactive({
         email: "",
@@ -114,23 +108,17 @@
         errors.value = {};
 
         try {
-            // TODO: Replace with actual API call when backend is ready
-            // Example: await $fetch('/api/forgot-password', { method: 'POST', body: form })
-
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1500));
+            await client("/forgot-password", {
+                method: "POST",
+                body: { email: form.email },
+            });
 
             emailSent.value = true;
-            success("Password reset instructions sent to your email!");
+            success("Password reset instructions sent!");
         } catch (err) {
-            console.error(err);
-
-            // Handle validation errors
-            if (err.data?.errors) {
-                errors.value = err.data.errors;
-            }
-
-            error("Failed to send reset instructions. Please try again.");
+            console.error("Forgot password error:", err);
+            if (err.data?.errors) errors.value = err.data.errors;
+            error("Cannot send reset link.");
         } finally {
             isLoading.value = false;
         }
