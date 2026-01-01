@@ -13,12 +13,13 @@
             :max="max"
             class="w-full pl-16 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             @input="bankInput.handleInput"
-            @keydown="bankInput.handleKeydown" />
+            @keydown="bankInput.handleKeydown"
+        />
     </div>
 </template>
 
 <script setup>
-    const model = defineModel({ type: Number, default: 0 });
+    const model = defineModel({ type: [Number, String], default: 0 });
     const props = defineProps({
         currency: { type: String, default: "MYR" },
         placeholder: { type: String, default: "0.00" },
