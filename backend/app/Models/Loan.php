@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Enums\LoanType;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -32,5 +34,10 @@ class Loan extends Model
     public function loanPayments(): HasMany
     {
         return $this->hasMany(LoanPayment::class);
+    }
+
+    public function scopeForCurrentUser(Builder $query)
+    {
+        return $query->where('user_id', Auth::id());
     }
 }

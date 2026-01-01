@@ -46,7 +46,7 @@
 <script setup>
     definePageMeta({
         layout: "default",
-        middleware: ["sanctum:auth"],
+        middleware: ["sanctum:auth", "verified"],
     });
 
     useHead({

@@ -24,9 +24,9 @@
                         <!-- Borrowed Option -->
                         <button
                             type="button"
+                            class="hover:cursor-pointer"
                             :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'borrow' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
-                            @click="form.type = 'borrow'"
-                        >
+                            @click="form.type = 'borrow'">
                             <div class="flex flex-col items-center text-center space-y-3">
                                 <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'borrow' ? 'bg-red-100' : 'bg-gray-100']">
                                     <Icon name="heroicons:arrow-trending-down" :class="['w-8 h-8', form.type === 'borrow' ? 'text-red-600' : 'text-gray-400']" />
@@ -46,9 +46,9 @@
                         <!-- Lent Option -->
                         <button
                             type="button"
+                            class="hover:cursor-pointer"
                             :class="['relative p-6 border-2 rounded-lg transition-all', form.type === 'lent' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300 bg-white']"
-                            @click="form.type = 'lent'"
-                        >
+                            @click="form.type = 'lent'">
                             <div class="flex flex-col items-center text-center space-y-3">
                                 <div :class="['w-16 h-16 rounded-full flex items-center justify-center', form.type === 'lent' ? 'bg-green-100' : 'bg-gray-100']">
                                     <Icon name="heroicons:arrow-trending-up" :class="['w-8 h-8', form.type === 'lent' ? 'text-green-600' : 'text-gray-400']" />
@@ -74,6 +74,22 @@
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Loan Details</h2>
 
                     <div class="space-y-4">
+                        <!-- Account Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Account
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <select v-model="form.account_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <option value="">Select an account</option>
+                                <option v-for="account in filteredAccounts" :key="account.id" :value="account.id">{{ account.name }}</option>
+                            </select>
+                            <p v-if="errors.account_id" class="mt-1 text-sm text-red-600">{{ errors.account_id[0] }}</p>
+                            <p v-else class="mt-1 text-xs text-gray-500">
+                                {{ form.type === "borrow" ? "Account where borrowed money will be deposited" : "Account from which you lent the money" }}
+                            </p>
+                        </div>
+
                         <!-- Loan Name -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Loan Name <span class="text-red-500">*</span> </label>
@@ -81,8 +97,7 @@
                                 v-model="form.name"
                                 type="text"
                                 placeholder="e.g., Personal Loan - Bank XYZ, Loan to John"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                            />
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
                             <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name[0] }}</p>
                         </div>
 
@@ -90,10 +105,12 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Total Amount <span class="text-red-500">*</span> </label>
                             <div class="relative">
-                                <MoneyInput v-model="form.total_amount" :is-loading="isSubmitting" />
+                                <MoneyInput v-model="form.total_amount" :is-loading="isSubmitting" :max="maxLoanLimit" />
                             </div>
                             <p v-if="errors.total_amount" class="mt-1 text-sm text-red-600">{{ errors.total_amount[0] }}</p>
-                            <p v-else class="mt-1 text-xs text-gray-500">Enter the total loan amount</p>
+                            <p v-else class="mt-1 text-xs text-gray-500">
+                                Enter the total loan amount <span v-show="form.type == 'lent'">({{ formatCurrency(displayMaxAmount) }})</span>
+                            </p>
                         </div>
 
                         <!-- Initial Payment (Optional) -->
@@ -109,6 +126,15 @@
                             <p v-else class="mt-1 text-xs text-gray-500">Any amount already paid or received</p>
                         </div>
 
+                        <!-- Money Transferred Checkbox -->
+                        <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <input id="is_money_transferred" v-model="form.is_money_transferred" type="checkbox" class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                            <div class="flex-1">
+                                <label for="is_money_transferred" class="text-sm font-medium text-gray-700 cursor-pointer"> Money has already been transferred </label>
+                                <p class="text-xs text-gray-500 mt-1">Check this if the money has already moved in/out of your account. Leave unchecked if the transfer hasn't happened yet.</p>
+                            </div>
+                        </div>
+
                         <!-- Start Date -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2"> Start Date <span class="text-red-500">*</span> </label>
@@ -116,8 +142,7 @@
                                 v-model="form.start_date"
                                 type="date"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                :class="{ 'border-red-500': errors.start_date }"
-                            />
+                                :class="{ 'border-red-500': errors.start_date }" />
                             <p v-if="errors.start_date" class="mt-1 text-sm text-red-600">{{ errors.start_date[0] }}</p>
                         </div>
 
@@ -128,8 +153,7 @@
                                 v-model="form.description"
                                 rows="3"
                                 placeholder="Add any additional notes or details about this loan..."
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
-                            ></textarea>
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
                             <p class="mt-1 text-xs text-gray-500">Optional: Add context or repayment terms</p>
                         </div>
                     </div>
@@ -141,8 +165,7 @@
                     <button
                         type="submit"
                         :disabled="isSubmitting"
-                        :class="['px-6 py-2.5 rounded-lg font-medium transition-colors', isSubmitting ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700']"
-                    >
+                        :class="['px-6 py-2.5 rounded-lg font-medium transition-colors', isSubmitting ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700']">
                         <span v-if="isSubmitting" class="flex items-center">
                             <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -164,20 +187,62 @@
     });
 
     definePageMeta({
-        middleware: ["sanctum:auth"],
+        middleware: ["sanctum:auth", "verified"],
     });
 
-    const { errors, createLoan } = useLoan();
+    const { errors, createLoan, getLoanAccounts } = useLoan();
     const { success, error: toastError } = useToast();
+    const { formatCurrency } = useCurrency();
     const isSubmitting = ref(false);
 
+    const accounts = ref([]);
+
+    onMounted(async () => {
+        try {
+            const response = await getLoanAccounts();
+            accounts.value = response.accounts;
+        } catch (err) {
+            console.error("Error fetching accounts:", err);
+            toastError("Failed to load accounts");
+        }
+    });
+
     const form = reactive({
+        account_id: "",
         type: "",
         name: "",
         total_amount: 0,
         initial_paid_amount: 0.0,
+        is_money_transferred: false,
         start_date: new Date().toISOString().split("T")[0],
         description: "",
+    });
+
+    const filteredAccounts = computed(() => {
+        if (form.type === "lent") {
+            return accounts.value.filter((account) => parseFloat(account.current_balance) > 0);
+        } else if (form.type === "borrow") {
+            return accounts.value;
+        }
+        return [];
+    });
+
+    const maxLoanLimit = computed(() => {
+        if (!form.account_id || form.type !== "lent") {
+            return undefined;
+        }
+
+        const selectedAccount = filteredAccounts.value.find((acc) => acc.id === form.account_id);
+
+        if (!selectedAccount) {
+            return undefined;
+        }
+
+        return parseFloat(selectedAccount.current_balance);
+    });
+
+    const displayMaxAmount = computed(() => {
+        return maxLoanLimit.value ?? 0;
     });
 
     const handleSubmit = async () => {

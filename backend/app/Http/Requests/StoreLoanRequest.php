@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\LoanType;
+use App\Models\Account;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,8 +26,18 @@ class StoreLoanRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'account_id' => [
+                'required',
+                'exists:accounts,id',
+                function ($attribute, $value, $fail) {
+                    $account = Account::find($value);
+                    if (!$account || $account->user_id !== Auth::id()) {
+                        $fail('The selected account does not belong to you.');
+                    }
+                },
+            ],
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'max:100', new enum(LoanType::class)],
+            'type' => ['required', 'string', 'max:100', new Enum(LoanType::class)],
             'total_amount' => ['required', 'numeric', 'min:0.01'],
             'initial_paid_amount' => ['nullable', 'numeric', 'min:0', 'lt:total_amount'],
             'description' => ['nullable', 'string'],
@@ -37,7 +48,9 @@ class StoreLoanRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'initial_paid_amount.lt' => 'The initial paid amount must be less than the total amount.',
+            'account_id.required' => 'Please select an account.',
+            'account_id.exists' => 'The selected account does not exist.',
+            'initial_paid_amount.lte' => 'The initial paid amount must be less than or equal to the total amount.',
         ];
     }
 }

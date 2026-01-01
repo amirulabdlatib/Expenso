@@ -2,6 +2,16 @@ export const useLoan = () => {
     const errors = ref({});
     const sanctumClient = useSanctumClient();
 
+    async function getLoanAccounts() {
+        try {
+            let response = await sanctumClient("api/lookup/accounts");
+            return response;
+        } catch (error) {
+            console.error("Account fetch error:", error);
+            throw error;
+        }
+    }
+
     const createLoan = async (form) => {
         try {
             const response = await sanctumClient("/api/loans", {
@@ -20,5 +30,6 @@ export const useLoan = () => {
     return {
         errors,
         createLoan,
+        getLoanAccounts,
     };
 };

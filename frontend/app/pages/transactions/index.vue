@@ -473,7 +473,7 @@
     });
 
     definePageMeta({
-        middleware: ["sanctum:auth"],
+        middleware: ["sanctum:auth", "verified"],
     });
 
     const { deleteTransaction: deleteAction } = useTransactions();

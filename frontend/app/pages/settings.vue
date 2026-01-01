@@ -10,7 +10,6 @@
             <!-- Settings Sections -->
             <div class="space-y-6">
                 <SettingsProfile />
-                <SettingsSecurity />
                 <SettingsDangerZone />
                 <SettingsAppInfo />
             </div>

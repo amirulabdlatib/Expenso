@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\Lookup\AccountLookupController;
 use App\Http\Controllers\Lookup\CategoryLookupController;
 use App\Http\Controllers\Lookup\ParentCategoryLookupController;
@@ -18,6 +19,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::post('/email/resend', [EmailVerificationController::class, 'resend']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
