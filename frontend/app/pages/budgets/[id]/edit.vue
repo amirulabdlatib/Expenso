@@ -112,7 +112,7 @@
 
     const years = computed(() => {
         const currentYear = new Date().getFullYear();
-        return Array.from({ length: 2 }, (_, i) => currentYear + i);
+        return Array.from({ length: 4 }, (_, i) => currentYear - 1 + i);
     });
 
     const loadCategories = async () => {
