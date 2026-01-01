@@ -152,7 +152,6 @@
         middleware: ["sanctum:auth", "verified"],
     });
 
-    const route = useRoute();
     const isLoading = ref(true);
     const showAddPaymentModal = ref(false);
 

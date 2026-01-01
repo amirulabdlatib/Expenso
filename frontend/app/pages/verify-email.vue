@@ -31,15 +31,15 @@
                 <!-- Actions -->
                 <div class="space-y-3">
                     <button
-                        @click="resendVerification"
                         :disabled="isResending || cooldownTime > 0"
-                        class="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        @click="resendVerification">
                         <span v-if="cooldownTime > 0">Resend in {{ cooldownTime }}s</span>
                         <span v-else-if="isResending">Sending...</span>
                         <span v-else>Resend Verification Email</span>
                     </button>
 
-                    <button @click="handleLogout" class="w-full text-gray-600 hover:text-red-600 py-2 font-medium transition-colors">Logout</button>
+                    <button class="w-full text-gray-600 hover:text-red-600 py-2 font-medium transition-colors" @click="handleLogout">Logout</button>
                 </div>
             </div>
         </div>

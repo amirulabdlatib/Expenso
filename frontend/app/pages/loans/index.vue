@@ -51,7 +51,8 @@
                 <div class="flex border-b border-gray-200">
                     <button
                         :class="[activeTab === 'all' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700', 'px-6 py-4 border-b-2 font-medium text-sm transition-colors']"
-                        @click="activeTab = 'all'">
+                        @click="activeTab = 'all'"
+                    >
                         All
                         <span class="ml-2 px-2 py-1 text-xs rounded-full" :class="activeTab === 'all' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'">
                             {{ loans?.length || 0 }}
@@ -69,7 +70,8 @@
                             v-model="searchQuery"
                             type="text"
                             placeholder="Search loans..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        />
                     </div>
                 </div>
             </div>
@@ -260,6 +262,7 @@
                 success("Loan deleted successfully.");
             }
         } catch (err) {
+            console.log(err);
             toastError("Failed to delete loan.");
         }
     };

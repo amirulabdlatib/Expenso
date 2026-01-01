@@ -17,7 +17,7 @@
                     <!-- Password -->
                     <div>
                         <label class="block text-sm font-medium text-gray-900 mb-2">New Password</label>
-                        <input type="password" v-model="form.password" required class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" />
+                        <input v-model="form.password" type="password" required class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" />
                         <span v-if="errors?.password" class="text-red-400 text-sm mt-1 block">
                             {{ errors.password[0] }}
                         </span>
@@ -26,7 +26,7 @@
                     <!-- Password Confirmation -->
                     <div>
                         <label class="block text-sm font-medium text-gray-900 mb-2">Confirm Password</label>
-                        <input type="password" v-model="form.password_confirmation" required class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" />
+                        <input v-model="form.password_confirmation" type="password" required class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" />
                     </div>
 
                     <!-- Button -->

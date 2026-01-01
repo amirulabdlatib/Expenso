@@ -19,7 +19,7 @@
 
         <!-- Budget Items -->
         <div v-else class="space-y-6">
-            <div v-for="budget in budgets" :key="budget.id">
+            <div v-for="budget in props.budgets" :key="budget.id">
                 <div class="flex items-center justify-between mb-2">
                     <span class="font-light text-sm text-gray-900">{{ budget.budget_category }}</span>
                     <span class="text-sm font-medium text-gray-900"> {{ formatCurrency(budget.spent) }} / {{ formatCurrency(budget.budget_amount) }} </span>

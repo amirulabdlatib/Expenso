@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(() => {
     const { user } = useSanctumAuth();
     if (user?.value.email_verified_at) {
         return navigateTo("/dashboard");
