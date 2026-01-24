@@ -32,15 +32,8 @@
 
                 <!-- Mobile Menu Button -->
                 <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" @click="isOpen = !isOpen">
-                    <svg v-if="!isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="4" x2="20" y1="12" y2="12" />
-                        <line x1="4" x2="20" y1="6" y2="6" />
-                        <line x1="4" x2="20" y1="18" y2="18" />
-                    </svg>
-                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 6 6 18" />
-                        <path d="m6 6 12 12" />
-                    </svg>
+                    <Icon v-if="!isOpen" name="heroicons:bars-3" class="w-6 h-6 text-gray-600" />
+                    <Icon v-else name="heroicons:x-mark" class="w-6 h-6 text-gray-600" />
                 </button>
             </div>
         </div>

@@ -46,7 +46,7 @@
 <script setup>
     definePageMeta({
         layout: "default",
-        middleware: ["sanctum:auth"],
+        middleware: ["sanctum:auth", "verified"],
     });
 
     useHead({
@@ -56,8 +56,6 @@
     const client = useSanctumClient();
 
     const { data, pending, error, refresh } = await useAsyncData("dashboard", () => client("/api/dashboard"));
-
-    console.log(data.value);
 
     const recentTransactions = computed(() => data.value?.transactions || []);
 

@@ -29,7 +29,7 @@
     });
 
     useHead({
-        title: "Expenso - Never Lose Track of Your Money Again",
+        title: "Expenso - Track Your Financial",
         meta: [
             {
                 name: "description",
