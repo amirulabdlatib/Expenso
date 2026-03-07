@@ -14,7 +14,8 @@
     "serve": "node .output/server/index.mjs"
   },
   "overrides": {
-    "glob": ">=11.1.0"
+    "glob": ">=11.1.0",
+    "serialize-javascript": "^7.0.3"
   },
   "dependencies": {
     "@nuxt/eslint": "^1.9.0",
